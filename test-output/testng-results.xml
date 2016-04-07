@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="1" passed="1">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="37274" started-at="2016-04-07T07:33:32Z" finished-at="2016-04-07T07:34:09Z">
+    <groups>
+    </groups>
+    <test name="Default test" duration-ms="37274" started-at="2016-04-07T07:33:32Z" finished-at="2016-04-07T07:34:09Z">
+      <class name="com.terry.springjpa.repository.UnitedBoardRepositoryTest">
+        <test-method status="PASS" signature="springTestContextBeforeTestClass()[pri:0, instance:com.terry.springjpa.repository.UnitedBoardRepositoryTest@5be7ef2c]" name="springTestContextBeforeTestClass" is-config="true" duration-ms="23" started-at="2016-04-07T16:33:32Z" finished-at="2016-04-07T16:33:32Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- springTestContextBeforeTestClass -->
+        <test-method status="PASS" signature="springTestContextPrepareTestInstance()[pri:0, instance:com.terry.springjpa.repository.UnitedBoardRepositoryTest@5be7ef2c]" name="springTestContextPrepareTestInstance" is-config="true" duration-ms="5299" started-at="2016-04-07T16:33:32Z" depends-on-methods="org.springframework.test.context.testng.AbstractTestNGSpringContextTests.springTestContextBeforeTestClass" finished-at="2016-04-07T16:33:37Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- springTestContextPrepareTestInstance -->
+        <test-method status="PASS" signature="initTest()[pri:0, instance:com.terry.springjpa.repository.UnitedBoardRepositoryTest@5be7ef2c]" name="initTest" is-config="true" duration-ms="76" started-at="2016-04-07T16:33:37Z" finished-at="2016-04-07T16:33:37Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- initTest -->
+        <test-method status="PASS" signature="springTestContextBeforeTestMethod(java.lang.reflect.Method)[pri:0, instance:com.terry.springjpa.repository.UnitedBoardRepositoryTest@5be7ef2c]" name="springTestContextBeforeTestMethod" is-config="true" duration-ms="40" started-at="2016-04-07T16:33:37Z" finished-at="2016-04-07T16:33:37Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void com.terry.springjpa.repository.UnitedBoardRepositoryTest.동영상게시판_사용자1_글수정() throws java.lang.Exception]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- springTestContextBeforeTestMethod -->
+        <test-method status="PASS" signature="동영상게시판_사용자1_글수정()[pri:0, instance:com.terry.springjpa.repository.UnitedBoardRepositoryTest@5be7ef2c]" name="동영상게시판_사용자1_글수정" duration-ms="31769" started-at="2016-04-07T16:33:37Z" finished-at="2016-04-07T16:34:09Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- 동영상게시판_사용자1_글수정 -->
+        <test-method status="PASS" signature="springTestContextAfterTestMethod(java.lang.reflect.Method)[pri:0, instance:com.terry.springjpa.repository.UnitedBoardRepositoryTest@5be7ef2c]" name="springTestContextAfterTestMethod" is-config="true" duration-ms="18" started-at="2016-04-07T16:34:09Z" finished-at="2016-04-07T16:34:09Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void com.terry.springjpa.repository.UnitedBoardRepositoryTest.동영상게시판_사용자1_글수정() throws java.lang.Exception]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- springTestContextAfterTestMethod -->
+        <test-method status="PASS" signature="finalizeTest()[pri:0, instance:com.terry.springjpa.repository.UnitedBoardRepositoryTest@5be7ef2c]" name="finalizeTest" is-config="true" duration-ms="18" started-at="2016-04-07T16:34:09Z" finished-at="2016-04-07T16:34:09Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- finalizeTest -->
+        <test-method status="PASS" signature="springTestContextAfterTestClass()[pri:0, instance:com.terry.springjpa.repository.UnitedBoardRepositoryTest@5be7ef2c]" name="springTestContextAfterTestClass" is-config="true" duration-ms="0" started-at="2016-04-07T16:34:09Z" finished-at="2016-04-07T16:34:09Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- springTestContextAfterTestClass -->
+      </class> <!-- com.terry.springjpa.repository.UnitedBoardRepositoryTest -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>

@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- Context 태그에 antiResourceLocking="true" 옵션을 걸면 jsp 수정시 바로 반영이 되질 않는다. 주의할것 -->
+<Context antiJARLocking="true">
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+    <!-- Connection Pool 설정 -->
+    <!-- HikariCP 버전 -->
+    <!-- 
+    <Resource name="jdbc/mytest" 
+    		auth="Container"
+      		factory="com.zaxxer.hikari.HikariJNDIFactory"
+      		type="javax.sql.DataSource"
+      		minimumIdle="5" 
+      		maximumPoolSize="10"
+      		connectionTimeout="300000"
+      		dataSourceClassName="oracle.jdbc.pool.OracleDataSource"
+      		dataSource.implicitCachingEnabled="true" 
+      		dataSource.user="hibernate"
+      		dataSource.password="hibernate"
+      		dataSource.url="jdbc:oracle:thin:@localhost:1521:XE"/>
+    -->
+    <!-- Tomcat Jdbc Pool 버전 -->
+    <!-- 
+	<Resource
+            name="jdbc/mytest"
+            auth="Container"
+            factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+            type="javax.sql.DataSource"
+            maxActive="10"
+            minIdle="5"
+            maxWait="10000"
+            initialSize="5"
+            validationQuery="SELECT 1 FROM DUAL"
+            driverClassName="oracle.jdbc.driver.OracleDriver"
+            defaultAutoCommit="false"
+            username="hibernate"
+            password="hibernate"
+            url="jdbc:oracle:thin:@localhost:1521:XE"/>
+     -->
+</Context>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [configTestSuite]">
+  <test name="configTest(failed)">
+    <classes>
+      <class name="com.terry.springconfig.test.config.ProfileAndPropertiesTest">
+        <methods>
+          <include name="springTestContextAfterTestClass"/>
+          <include name="springTestContextBeforeTestClass"/>
+          <include name="springTestContextBeforeTestMethod"/>
+          <include name="springTestContextPrepareTestInstance"/>
+          <include name="springTestContextAfterTestMethod"/>
+          <include name="production_Profile_Property_체크"/>
+        </methods>
+      </class> <!-- com.terry.springconfig.test.config.ProfileAndPropertiesTest -->
+      <class name="com.terry.springconfig.config.TestNGTestConfig">
+        <methods>
+          <include name="beforeSuite"/>
+          <include name="afterSuite"/>
+        </methods>
+      </class> <!-- com.terry.springconfig.config.TestNGTestConfig -->
+    </classes>
+  </test> <!-- configTest(failed) -->
+</suite> <!-- Failed suite [configTestSuite] -->
