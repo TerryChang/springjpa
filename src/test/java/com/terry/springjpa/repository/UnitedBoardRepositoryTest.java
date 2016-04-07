@@ -204,7 +204,7 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 	}
 	
 	@Test
-	public void 동영상게시판_사용자1_글수정_실패() throws Exception {
+	public void 동영상게시판_사용자1_글수정_실패() throws Exception {   
 		BoardType boardType = em.getReference(BoardType.class, 2L);
 		Member member = em.getReference(Member.class, 1L);
 		UnitedBoard unitedBoard = new UnitedBoard();
