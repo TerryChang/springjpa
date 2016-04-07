@@ -182,10 +182,9 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 	}
 	
 	@Test
-	public void 동영상게시판_사용자1_글수정() throws Exception {		
+	public void 동영상게시판_사용자1_글수정() throws Exception {
 		// Given
 		UnitedBoard selectBoard = repository.findUnitedBoard(20L);
-		
 		BoardType boardType = em.getReference(BoardType.class, 2L);
 		Member member = em.getReference(Member.class, 1L);
 		UnitedBoard unitedBoard = new UnitedBoard();
@@ -201,6 +200,27 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 		repository.saveAndFlush(unitedBoard);
 		
 		// Then
+		assertEquals(selectBoard, unitedBoard, "동영상게시판_사용자1_글수정 실패");
+	}
+	
+	@Test
+	public void 동영상게시판_사용자1_글수정_실패() throws Exception {
+		BoardType boardType = em.getReference(BoardType.class, 2L);
+		Member member = em.getReference(Member.class, 1L);
+		UnitedBoard unitedBoard = new UnitedBoard();
+		unitedBoard.setIdx(20L);
+		unitedBoard.setBoardType(boardType);
+		unitedBoard.setMember(member);
+		unitedBoard.setTitle("동영상 게시판 제목8 수정");
+		unitedBoard.setContents("동영상 게시판 내용8 수정");
+		unitedBoard.setViewCnt(0);
+		unitedBoard.setInsertUpdateDT(new InsertUpdateDT());
+		
+		// When
+		repository.saveAndFlush(unitedBoard);
+		
+		// Then
+		UnitedBoard selectBoard = repository.findUnitedBoard(20L);
 		assertEquals(selectBoard, unitedBoard, "동영상게시판_사용자1_글수정 실패");
 	}
 	
