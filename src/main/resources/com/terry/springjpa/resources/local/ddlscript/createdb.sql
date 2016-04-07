@@ -1,6 +1,9 @@
 create memory table boardtype(
 	idx bigint primary key
 	, name varchar(255) not null
+	, url varchar(255) not null
+	, insertdt timestamp not null
+	, updatedt timestamp
 );
 create memory table member(
 	idx bigint primary key

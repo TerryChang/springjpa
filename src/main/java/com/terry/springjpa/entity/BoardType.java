@@ -1,12 +1,19 @@
 package com.terry.springjpa.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import org.joda.time.LocalDateTime;
+
+import com.terry.springjpa.entity.embed.InsertUpdateDT;
 
 @Entity
 @Table(name="BOARDTYPE")
@@ -18,8 +25,14 @@ public class BoardType {
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="BoardTypeSequenceGenerator")
 	private Long idx;
 	
-	@Column(name="NAME")
+	@Column(name="NAME", nullable=false)
 	private String boardTypeName;
+	
+	@Column(name="URL", nullable=false)
+	private String url;
+	
+	@Embedded
+	private InsertUpdateDT insertUpdateDT;
 	
 	public BoardType(){
 		
@@ -40,6 +53,25 @@ public class BoardType {
 	public void setBoardTypeName(String boardTypeName) {
 		this.boardTypeName = boardTypeName;
 	}
+	
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	
+	@PrePersist
+	public void onCreate(){
+		insertUpdateDT = new InsertUpdateDT();
+		insertUpdateDT.setInsertDateTime(LocalDateTime.now());
+	}
+	
+	@PreUpdate
+	public void onUpdate(){
+		insertUpdateDT.setUpdateDateTime(LocalDateTime.now());
+	}
 
 	@Override
 	public int hashCode() {
@@ -47,6 +79,7 @@ public class BoardType {
 		int result = 1;
 		result = prime * result + ((boardTypeName == null) ? 0 : boardTypeName.hashCode());
 		result = prime * result + ((idx == null) ? 0 : idx.hashCode());
+		result = prime * result + ((url == null) ? 0 : url.hashCode());
 		return result;
 	}
 
@@ -69,8 +102,12 @@ public class BoardType {
 				return false;
 		} else if (!idx.equals(other.idx))
 			return false;
+		if (url == null) {
+			if (other.url != null)
+				return false;
+		} else if (!url.equals(other.url))
+			return false;
 		return true;
 	}
-
 	
 }

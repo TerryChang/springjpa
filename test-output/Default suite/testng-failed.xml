@@ -3,18 +3,21 @@
 <suite name="Failed suite [Default suite]">
   <test name="Default test(failed)">
     <classes>
-      <class name="com.terry.springjpa.repository.UnitedBoardRepositoryTest">
+      <class name="com.terry.springjpa.repository.BoardTypeRepositoryTest">
         <methods>
           <include name="springTestContextAfterTestClass"/>
           <include name="springTestContextBeforeTestClass"/>
-          <include name="finalizeTest"/>
-          <include name="springTestContextBeforeTestMethod"/>
+          <include name="게시판타입수정"/>
+          <include name="게시판타입상세조회"/>
+          <include name="게시판타입목록조회_idx정순"/>
           <include name="springTestContextPrepareTestInstance"/>
           <include name="initTest"/>
           <include name="springTestContextAfterTestMethod"/>
-          <include name="동영상게시판_사용자1_글수정_실패"/>
+          <include name="게시판타입등록"/>
+          <include name="게시판타입삭제"/>
+          <include name="게시판타입목록조회_idx역순"/>
         </methods>
-      </class> <!-- com.terry.springjpa.repository.UnitedBoardRepositoryTest -->
+      </class> <!-- com.terry.springjpa.repository.BoardTypeRepositoryTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

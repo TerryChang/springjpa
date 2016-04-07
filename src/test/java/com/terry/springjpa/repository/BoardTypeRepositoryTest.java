@@ -43,13 +43,14 @@ public class BoardTypeRepositoryTest extends AbstractTransactionalTestNGSpringCo
 	
 	@BeforeClass
 	public void initTest(){
+		String sql = "insert into boardtype(idx, name, url, insertdt, updatedt) values (boardtype_sequence.nextval, ?, ?, current_timestamp(), null)";
 		for(int i=0; i < 12; i++){
 			/*
 			BoardType bt = new BoardType();
 			bt.setBoardTypeName("테스트 Board 타입" + i);
 			em.persist(bt);
 			*/
-			jdbcTemplate.update("insert into boardtype(idx, name) values (boardtype_sequence.nextval, ?)","테스트 Board 타입" + i);
+			jdbcTemplate.update(sql,"테스트 Board 타입" + i, "http://localhost:8080/testboard"+i+".do");
 		}
 	}
 	
@@ -58,6 +59,7 @@ public class BoardTypeRepositoryTest extends AbstractTransactionalTestNGSpringCo
 		// Given
 		BoardType bt = new BoardType();
 		bt.setBoardTypeName("테스트 Board 타입");
+		bt.setUrl("http://localhost:8080/testboardtype.do");
 		
 		// When
 		repository.saveAndFlush(bt);
@@ -73,10 +75,12 @@ public class BoardTypeRepositoryTest extends AbstractTransactionalTestNGSpringCo
 		BoardType bt = new BoardType();
 		bt.setIdx(2L);
 		bt.setBoardTypeName("테스트 Board 타입1_수정");
+		bt.setUrl("http://localhost:8080/testboardtypemodify.do");
 		
 		// When
 		BoardType selectbt = em.find(BoardType.class, 2L);
 		selectbt.setBoardTypeName("테스트 Board 타입1_수정");
+		selectbt.setUrl("http://localhost:8080/testboardtypemodify.do");
 		repository.saveAndFlush(selectbt);
 		
 		// Then
@@ -102,13 +106,13 @@ public class BoardTypeRepositoryTest extends AbstractTransactionalTestNGSpringCo
 	
 	@Test
 	public void 게시판타입목록조회_idx정순() throws Exception {
-		
 		// Given
 		List<BoardType> list = new ArrayList<BoardType>();
 		for(int i=10; i < 12; i++){
 			BoardType bt = new BoardType();
 			bt.setIdx((long)i+1);
 			bt.setBoardTypeName("테스트 Board 타입" + i);
+			bt.setUrl("http://localhost:8080/testboard" + i + ".do");
 			list.add(bt);
 		}
 		
@@ -133,6 +137,7 @@ public class BoardTypeRepositoryTest extends AbstractTransactionalTestNGSpringCo
 			BoardType bt = new BoardType();
 			bt.setIdx((long)i);
 			bt.setBoardTypeName("테스트 Board 타입" + (i-1));
+			bt.setUrl("http://localhost:8080/testboard" + (i-1) + ".do");
 			list.add(bt);
 		}
 		
@@ -154,6 +159,7 @@ public class BoardTypeRepositoryTest extends AbstractTransactionalTestNGSpringCo
 		BoardType bt = new BoardType();
 		bt.setIdx(2L);
 		bt.setBoardTypeName("테스트 Board 타입1");
+		bt.setUrl("http://localhost:8080/testboard1.do");
 		
 		// When
 		BoardType selectBt = repository.findOne(2L);

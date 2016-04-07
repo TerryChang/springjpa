@@ -18,6 +18,9 @@
 	
 	</script>
 </head>
+
+
+
 <body>
 	<!-- Page Header Start -->
 	<div class="page-header">
@@ -25,21 +28,34 @@
 	</div>
 	<form:form id="listfrm" method="get" cssClass="form-horizontal" role="form">
 	<!-- Page Header End -->
-	<table class="table table-hover table-bordered">
+	<table class="table table-hover table-bordered">  
 		<thead>
 			<tr>
 				<th class="col-md-1 text-center">번호</th>
-				<th class="col-md-10 text-center">제목</th>
-				<th class="col-md-1 text-center">작성일</th>
+				<th class="col-md-4 text-center">제목</th>
+				<th class="col-md-6 text-center">URL</th>
+				<th class="col-md-1 text-center">등록일시</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-				<td class="text-center">1</td>
-				<td>제목</td>
-				<td>2016-01-01</td>
-			</tr>
-			
+			<c:choose>
+				<c:when test="${empty result}">			
+					<tr>
+						<td colspan="4" class="text-center">검색된 결과가 없습니다</td>
+					</tr>
+				</c:when>
+				<c:otherwise>
+					<c:set var="boardStartNo" value="${fn:length(result)}" />
+					<c:forEach var="item" items="${result}" varStatus="status">
+						<tr>
+							<td class="text-center">${boardStartNo-status.index}</td>
+							<td><c:out value="${item.boardTypeName}" escapeXml="false"/></td>
+							<td><c:out value="${item.url}" escapeXml="false"/></td>
+							<td><c:out value="${item.insertUpdateDT.insertDateTime}" escapeXml="false"/></td>
+						</tr>
+					</c:forEach>
+				</c:otherwise>
+			</c:choose>
 		</tbody>
 	</table>
 	<!-- Pager Start --> 
@@ -47,5 +63,6 @@
 		<button id="btnRegist" type="button" class="btn btn-default">등록</button>
 	</div>
 	</form:form>
+	
 </body>
 </html>
