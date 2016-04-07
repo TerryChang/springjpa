@@ -46,15 +46,15 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@BeforeClass
 	public void initTest(){
-		String sql1 = "insert into boardtype(idx, name) values (boardtype_sequence.nextval, ?)";
+		String sql1 = "insert into boardtype(idx, name, url, insertdt, updatedt) values (boardtype_sequence.nextval, ?, ?, current_timestamp(), null)";
 		String sql2 = "insert into member(idx, loginid, password, name, insertdt, updatedt) "
 				+ "values (member_sequence.nextval, ?, ?, ?, current_timestamp(), null)";
 		String sql3 = "insert into unitedboard(idx, boardtype_idx, member_idx, title, contents, viewcnt, insertdt, updatedt)"
 				+ "values (unitedboard_sequence.nextval, ?, ?, ?, ?, ?, current_timestamp(), null)";
 		// 게시판 타입1 등록
-		jdbcTemplate.update(sql1,"자유게시판");
+		jdbcTemplate.update(sql1,"자유게시판", "http://localhost/sampleboard1.do");
 		// 게시판 타입2 등록
-		jdbcTemplate.update(sql1,"동영상 게시판");
+		jdbcTemplate.update(sql1,"동영상 게시판", "http://localhost/sampleboard1.do");
 		
 		// 사용자1 등록
 		jdbcTemplate.update(sql2, "loginId1", "loginPassword1", "이름1");
@@ -152,14 +152,11 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Test
 	public void 자유게시판_사용자2_글수정() throws Exception {
 		// Given
-		BoardType boardType = new BoardType();
-		boardType.setIdx(1L);
-		boardType.setBoardTypeName("자유게시판");
-		Member member = new Member();
-		member.setIdx(2L);
-		member.setLoginId("loginId2");
-		member.setPassword("loginPassword2");
-		member.setName("이름2");
+		UnitedBoard selectBoard = repository.findUnitedBoard(4L);
+		
+		BoardType boardType = em.getReference(BoardType.class, 1L);
+		Member member = em.getReference(Member.class, 2L);
+		
 		UnitedBoard unitedBoard = new UnitedBoard();
 		unitedBoard.setIdx(4L);
 		unitedBoard.setBoardType(boardType);
@@ -168,13 +165,7 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 		unitedBoard.setContents("자유게시판 내용4 수정");
 		unitedBoard.setViewCnt(0);
 		
-		
-		// UnitedBoard selectBoard = em.find(UnitedBoard.class, 4L);
-		UnitedBoard selectBoard = repository.findUnitedBoard(4L);
-		
 		// When
-		selectBoard.setTitle("자유게시판 제목4 수정");
-		selectBoard.setContents("자유게시판 내용4 수정");
 		repository.saveAndFlush(selectBoard);
 		
 		// Then
@@ -247,9 +238,8 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Test
 	public void 자유게시판_사용자1_글목록조회() throws Exception {
 		// Given
-		BoardType boardType = new BoardType();
-		boardType.setIdx(1L);
-		boardType.setBoardTypeName("자유게시판");
+		BoardType boardType = em.find(BoardType.class, 1L); 
+				
 		Member member = new Member();
 		member.setIdx(1L);
 		member.setLoginId("loginId1");
@@ -293,9 +283,8 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Test
 	public void 동영상게시판_사용자3_글목록조회() throws Exception {
 		// Given
-		BoardType boardType = new BoardType();
-		boardType.setIdx(2L);
-		boardType.setBoardTypeName("동영상 게시판");
+		BoardType boardType = em.find(BoardType.class, 2L);
+		
 		Member member = new Member();
 		member.setIdx(3L);
 		member.setLoginId("loginId3");
@@ -355,14 +344,9 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Test
 	public void 자유게시판_사용자3_글조회() throws Exception {
 		// Given
-		BoardType boardType = new BoardType();
-		boardType.setIdx(1L);
-		boardType.setBoardTypeName("자유게시판");
-		Member member = new Member();
-		member.setIdx(3L);
-		member.setLoginId("loginId3");
-		member.setPassword("loginPassword3");
-		member.setName("이름3");
+		BoardType boardType = em.find(BoardType.class, 1L);
+		Member member = em.find(Member.class, 3L);
+		
 		UnitedBoard unitedBoard = new UnitedBoard();
 		unitedBoard.setIdx(10L);
 		unitedBoard.setBoardType(boardType);
@@ -384,9 +368,8 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Test
 	public void 동영상게시판_사용자2_글조회() throws Exception {
 		// Given
-		BoardType boardType = new BoardType();
-		boardType.setIdx(2L);
-		boardType.setBoardTypeName("동영상 게시판");
+		BoardType boardType = em.find(BoardType.class, 2L);
+		
 		Member member = new Member();
 		member.setIdx(2L);
 		member.setLoginId("loginId2");
@@ -413,9 +396,7 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Test
 	public void 자유게시판_제목_글목록조회() throws Exception {
 		// Given
-		BoardType boardType = new BoardType();
-		boardType.setIdx(1L);
-		boardType.setBoardTypeName("자유게시판");
+		BoardType boardType = em.find(BoardType.class, 1L);
 		
 		List<UnitedBoard> compareList = new ArrayList<UnitedBoard>();
 		
@@ -496,9 +477,7 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 		jdbcTemplate.update(sql3, 2, 2, "동영상 게시판 제목15", "동영상 게시판 내용15", 0);
 		 */
 		// Given
-		BoardType boardType = new BoardType();
-		boardType.setIdx(2L);
-		boardType.setBoardTypeName("동영상 게시판");
+		BoardType boardType = em.find(BoardType.class, 2L);
 		
 		List<UnitedBoard> compareList = new ArrayList<UnitedBoard>();
 		
