@@ -12,7 +12,7 @@
           <include name="springTestContextPrepareTestInstance"/>
           <include name="initTest"/>
           <include name="springTestContextAfterTestMethod"/>
-          <include name="동영상게시판_사용자1_글수정"/>
+          <include name="동영상게시판_사용자1_글수정_실패"/>
         </methods>
       </class> <!-- com.terry.springjpa.repository.UnitedBoardRepositoryTest -->
     </classes>
