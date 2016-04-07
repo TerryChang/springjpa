@@ -182,7 +182,7 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 	}
 	
 	@Test
-	public void 동영상게시판_사용자1_글수정() throws Exception {
+	public void 동영상게시판_사용자1_글수정() throws Exception {  
 		// Given
 		UnitedBoard selectBoard = repository.findUnitedBoard(20L);
 		BoardType boardType = em.getReference(BoardType.class, 2L);
