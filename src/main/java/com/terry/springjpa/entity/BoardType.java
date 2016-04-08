@@ -16,26 +16,26 @@ import org.joda.time.LocalDateTime;
 import com.terry.springjpa.entity.embed.InsertUpdateDT;
 
 @Entity
-@Table(name="BOARDTYPE")
-@SequenceGenerator(name="BoardTypeSequenceGenerator", sequenceName="BOARDTYPE_SEQUENCE", initialValue=1, allocationSize=1)
+@Table(name = "BOARDTYPE")
+@SequenceGenerator(name = "BoardTypeSequenceGenerator", sequenceName = "BOARDTYPE_SEQUENCE", initialValue = 1, allocationSize = 1)
 public class BoardType {
 
 	@Id
-	@Column(name="IDX")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="BoardTypeSequenceGenerator")
+	@Column(name = "IDX")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BoardTypeSequenceGenerator")
 	private Long idx;
-	
-	@Column(name="NAME", nullable=false)
+
+	@Column(name = "NAME", nullable = false)
 	private String boardTypeName;
-	
-	@Column(name="URL", nullable=false)
+
+	@Column(name = "URL", nullable = false)
 	private String url;
-	
+
 	@Embedded
 	private InsertUpdateDT insertUpdateDT;
-	
-	public BoardType(){
-		
+
+	public BoardType() {
+
 	}
 
 	public Long getIdx() {
@@ -53,7 +53,7 @@ public class BoardType {
 	public void setBoardTypeName(String boardTypeName) {
 		this.boardTypeName = boardTypeName;
 	}
-	
+
 	public String getUrl() {
 		return url;
 	}
@@ -61,15 +61,15 @@ public class BoardType {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
+
 	@PrePersist
-	public void onCreate(){
+	public void onCreate() {
 		insertUpdateDT = new InsertUpdateDT();
 		insertUpdateDT.setInsertDateTime(LocalDateTime.now());
 	}
-	
+
 	@PreUpdate
-	public void onUpdate(){
+	public void onUpdate() {
 		insertUpdateDT.setUpdateDateTime(LocalDateTime.now());
 	}
 
@@ -89,25 +89,29 @@ public class BoardType {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof BoardType))
 			return false;
 		BoardType other = (BoardType) obj;
 		if (boardTypeName == null) {
-			if (other.boardTypeName != null)
+			if (other.getBoardTypeName() != null)
 				return false;
-		} else if (!boardTypeName.equals(other.boardTypeName))
+		} else if (!boardTypeName.equals(other.getBoardTypeName()))
 			return false;
 		if (idx == null) {
-			if (other.idx != null)
+			if (other.getIdx() != null)
 				return false;
-		} else if (!idx.equals(other.idx))
+		} else if (!idx.equals(other.getIdx()))
 			return false;
 		if (url == null) {
-			if (other.url != null)
+			if (other.getUrl() != null)
 				return false;
-		} else if (!url.equals(other.url))
+		} else if (!url.equals(other.getUrl()))
 			return false;
 		return true;
 	}
+
 	
+
+	
+
 }

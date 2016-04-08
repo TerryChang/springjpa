@@ -103,29 +103,33 @@ public class UnitedBoardComment {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof UnitedBoardComment))
 			return false;
 		UnitedBoardComment other = (UnitedBoardComment) obj;
 		if (comment == null) {
-			if (other.comment != null)
+			if (other.getComment() != null)
 				return false;
-		} else if (!comment.equals(other.comment))
+		} else if (!comment.equals(other.getComment()))
 			return false;
 		if (idx == null) {
-			if (other.idx != null)
+			if (other.getIdx() != null)
 				return false;
-		} else if (!idx.equals(other.idx))
+		} else if (!idx.equals(other.getIdx()))
 			return false;
 		if (member == null) {
-			if (other.member != null)
+			if (other.getMember() != null)
 				return false;
-		} else if (!member.equals(other.member))
+		} else if (!member.equals(other.getMember()))
 			return false;
 		if (unitedBoard == null) {
-			if (other.unitedBoard != null)
+			if (other.getUnitedBoard() != null)
 				return false;
-		} else if (!unitedBoard.equals(other.unitedBoard))
+		} else if (!unitedBoard.equals(other.getUnitedBoard()))
 			return false;
 		return true;
 	}
+
+	
+
+	
 }

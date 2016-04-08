@@ -115,29 +115,33 @@ public class Member {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof Member))
 			return false;
 		Member other = (Member) obj;
 		if (idx == null) {
-			if (other.idx != null)
+			if (other.getIdx() != null)
 				return false;
-		} else if (!idx.equals(other.idx))
+		} else if (!idx.equals(other.getIdx()))
 			return false;
 		if (loginId == null) {
-			if (other.loginId != null)
+			if (other.getLoginId() != null)
 				return false;
-		} else if (!loginId.equals(other.loginId))
+		} else if (!loginId.equals(other.getLoginId()))
 			return false;
 		if (name == null) {
-			if (other.name != null)
+			if (other.getName() != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!name.equals(other.getName()))
 			return false;
 		if (password == null) {
-			if (other.password != null)
+			if (other.getPassword() != null)
 				return false;
-		} else if (!password.equals(other.password))
+		} else if (!password.equals(other.getPassword()))
 			return false;
 		return true;
 	}
+
+	
+
+	
 }

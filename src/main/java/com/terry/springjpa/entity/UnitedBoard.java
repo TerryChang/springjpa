@@ -87,7 +87,7 @@ public class UnitedBoard extends Board {
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
+		int result = super.hashCode();
 		result = prime * result + ((boardType == null) ? 0 : boardType.hashCode());
 		result = prime * result + ((idx == null) ? 0 : idx.hashCode());
 		result = prime * result + ((member == null) ? 0 : member.hashCode());
@@ -98,28 +98,26 @@ public class UnitedBoard extends Board {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof UnitedBoard))
 			return false;
 		UnitedBoard other = (UnitedBoard) obj;
 		if (boardType == null) {
-			if (other.boardType != null)
+			if (other.getBoardType() != null)
 				return false;
-		} else if (!boardType.equals(other.boardType))
+		} else if (!boardType.equals(other.getBoardType()))
 			return false;
 		if (idx == null) {
-			if (other.idx != null)
+			if (other.getIdx() != null)
 				return false;
-		} else if (!idx.equals(other.idx))
+		} else if (!idx.equals(other.getIdx()))
 			return false;
 		if (member == null) {
-			if (other.member != null)
+			if (other.getMember() != null)
 				return false;
-		} else if (!member.equals(other.member))
+		} else if (!member.equals(other.getMember()))
 			return false;
 		return true;
-	}
-	
-	
+	}	
 }
