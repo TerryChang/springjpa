@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.ViewResolver;
@@ -73,7 +74,7 @@ public class ServletContextMain extends WebMvcConfigurerAdapter{
 	@Bean
 	public ReloadableResourceBundleMessageSource messageSource() { 
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:com/terry/springhibernate/resources/messages/validation_messages");
+        messageSource.setBasename("classpath:com/terry/springjpa/resources/messages/validation_messages");
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setUseCodeAsDefaultMessage(true);
         messageSource.setCacheSeconds(1);
@@ -103,5 +104,13 @@ public class ServletContextMain extends WebMvcConfigurerAdapter{
 	public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
 		return new PropertySourcesPlaceholderConfigurer();
 	}
+
+	@Override
+	public Validator getValidator() {
+		// TODO Auto-generated method stub
+		return validator();
+	}
+	
+	
 	
 }

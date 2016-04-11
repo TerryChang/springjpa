@@ -10,7 +10,9 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.LocalDateTime;
 
 import com.terry.springjpa.entity.embed.InsertUpdateDT;
@@ -26,9 +28,13 @@ public class BoardType {
 	private Long idx;
 
 	@Column(name = "NAME", nullable = false)
+	@NotBlank
+	@Size(min=3, max=10)
 	private String boardTypeName;
 
 	@Column(name = "URL", nullable = false)
+	@NotBlank
+	@Size(min=10, max=100)
 	private String url;
 
 	@Embedded
@@ -60,6 +66,14 @@ public class BoardType {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public InsertUpdateDT getInsertUpdateDT() {
+		return insertUpdateDT;
+	}
+
+	public void setInsertUpdateDT(InsertUpdateDT insertUpdateDT) {
+		this.insertUpdateDT = insertUpdateDT;
 	}
 
 	@PrePersist

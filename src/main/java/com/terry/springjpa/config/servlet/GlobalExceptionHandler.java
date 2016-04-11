@@ -51,6 +51,9 @@ public class GlobalExceptionHandler {
     }
 	
 	/*
+	Ajax를 이용해서 값을 전송할 경우에는 form submit 개념이 아니기 때문에
+	@Valid 어노테이션을 사용할 경우 Validate에서 문제가 발생하면 MethodArgumentNotValidExcetion이 발생한다
+	그러나 form submit을 통해 데이터를 전송할 경우 Validate에서 문제가 발생하면 BindException이 발생한다 
 	ExceptionHandler 어노테이션 사용시 함수의 파라미터로 Model 객체를 사용하지 말것
 	Model을 사용하지 말고 함수 내부에서 ModelAndView 객체를 생성해서 거기에 값을 셋팅할것
 	 */

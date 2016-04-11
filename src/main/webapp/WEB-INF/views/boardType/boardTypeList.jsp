@@ -22,47 +22,49 @@
 
 
 <body>
-	<!-- Page Header Start -->
-	<div class="page-header">
- 		<h1>게시판 종류 목록</h1>
-	</div>
-	<form:form id="listfrm" method="get" cssClass="form-horizontal" role="form">
-	<!-- Page Header End -->
-	<table class="table table-hover table-bordered">  
-		<thead>
-			<tr>
-				<th class="col-md-1 text-center">번호</th>
-				<th class="col-md-4 text-center">제목</th>
-				<th class="col-md-6 text-center">URL</th>
-				<th class="col-md-1 text-center">등록일시</th>
-			</tr>
-		</thead>
-		<tbody>
-			<c:choose>
-				<c:when test="${empty result}">			
-					<tr>
-						<td colspan="4" class="text-center">검색된 결과가 없습니다</td>
-					</tr>
-				</c:when>
-				<c:otherwise>
-					<c:set var="boardStartNo" value="${fn:length(result)}" />
-					<c:forEach var="item" items="${result}" varStatus="status">
+	<div class="container">
+		<!-- Page Header Start -->
+		<div class="page-header">
+	 		<h1>게시판 종류 목록</h1>
+		</div>
+		
+		<form:form id="listfrm" method="get" cssClass="form-horizontal" role="form">
+		<!-- Page Header End -->
+		<table class="table table-hover table-bordered">  
+			<thead>
+				<tr>
+					<th class="col-md-1 text-center">번호</th>
+					<th class="col-md-3 text-center">제목</th>
+					<th class="col-md-6 text-center">URL</th>
+					<th class="col-md-2 text-center">등록일시</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:choose>
+					<c:when test="${empty result}">			
 						<tr>
-							<td class="text-center">${boardStartNo-status.index}</td>
-							<td><c:out value="${item.boardTypeName}" escapeXml="false"/></td>
-							<td><c:out value="${item.url}" escapeXml="false"/></td>
-							<td><c:out value="${item.insertUpdateDT.insertDateTime}" escapeXml="false"/></td>
+							<td colspan="4" class="text-center">검색된 결과가 없습니다</td>
 						</tr>
-					</c:forEach>
-				</c:otherwise>
-			</c:choose>
-		</tbody>
-	</table>
-	<!-- Pager Start --> 
-	<div class="pull-right">
-		<button id="btnRegist" type="button" class="btn btn-default">등록</button>
-	</div>
+					</c:when>
+					<c:otherwise>
+						<c:set var="boardStartNo" value="${fn:length(result)}" />
+						<c:forEach var="item" items="${result}" varStatus="status">
+							<tr>
+								<td class="text-center">${boardStartNo-status.index}</td>
+								<td><c:out value="${item.boardTypeName}" escapeXml="false"/></td>
+								<td><c:out value="${item.url}" escapeXml="false"/></td>
+								<td><spring:eval expression="item.insertUpdateDT.insertDateTime" /></td>
+							</tr>
+						</c:forEach>
+					</c:otherwise>
+				</c:choose>
+			</tbody>
+		</table>
+		<!-- Pager Start --> 
+		<div class="pull-right">
+			<button id="btnRegist" type="button" class="btn btn-default">등록</button>
+		</div>
 	</form:form>
-	
+	</div>
 </body>
 </html>
