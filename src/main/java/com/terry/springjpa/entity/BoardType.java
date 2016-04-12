@@ -20,7 +20,7 @@ import com.terry.springjpa.entity.embed.InsertUpdateDT;
 @Entity
 @Table(name = "BOARDTYPE")
 @SequenceGenerator(name = "BoardTypeSequenceGenerator", sequenceName = "BOARDTYPE_SEQUENCE", initialValue = 1, allocationSize = 1)
-public class BoardType {
+public class BoardType implements UpdateEntity<BoardType>{
 
 	@Id
 	@Column(name = "IDX")
@@ -124,6 +124,14 @@ public class BoardType {
 		return true;
 	}
 
+	@Override
+	public void entityUpdate(BoardType boardType) throws UnsupportedOperationException{
+		// TODO Auto-generated method stub
+		this.boardTypeName = boardType.getBoardTypeName();
+		this.url = boardType.getUrl();
+	}
+
+	
 	
 
 	

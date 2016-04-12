@@ -57,7 +57,7 @@ public class BoardTypeServiceImpl implements BoardTypeService {
 	public void update(BoardType t) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
 		BoardType updateBoardType = view(t.getIdx()); // update 대상이 되는 엔티티 객체를 먼저 조회한다.
-		updateBoardType.setBoardTypeName(t.getBoardTypeName());
+		updateBoardType.entityUpdate(t);
 		repository.saveAndFlush(updateBoardType);
 	}
 

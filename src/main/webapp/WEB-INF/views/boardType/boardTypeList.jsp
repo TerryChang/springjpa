@@ -51,7 +51,7 @@
 						<c:forEach var="item" items="${result}" varStatus="status">
 							<tr>
 								<td class="text-center">${boardStartNo-status.index}</td>
-								<td><c:out value="${item.boardTypeName}" escapeXml="false"/></td>
+								<td><a href="/boardType/boardTypeInsertUpdate.do?idx=<c:out value='${item.idx}' escapeXml='false'/>"><c:out value="${item.boardTypeName}" escapeXml="false"/></a></td>
 								<td><c:out value="${item.url}" escapeXml="false"/></td>
 								<td><spring:eval expression="item.insertUpdateDT.insertDateTime" /></td>
 							</tr>

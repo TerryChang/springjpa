@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.terry.springjpa.common.vo.CommonResultVO;
@@ -31,16 +32,22 @@ public class BoardTypeController {
 		return "/boardType/boardTypeList";
 	}
 	
-	@RequestMapping(value="/boardType/boardTypeInsert", method=RequestMethod.GET)
-	public String boardTypeInsert(){
-		return "/boardType/boardTypeInsert";
+	@RequestMapping(value="/boardType/boardTypeInsertUpdate", method=RequestMethod.GET)
+	public String boardTypeInsert(@RequestParam(value="idx", required=false) BoardType boardType, Model model){
+		model.addAttribute("result", boardType);
+		return "/boardType/boardTypeInsertUpdate";
 	}
 	
-	@RequestMapping(value="/boardType/boardTypeInsert", method=RequestMethod.POST)
+	@RequestMapping(value="/boardType/boardTypeInsertUpdate", method=RequestMethod.POST)
 	@ResponseBody
-	public CommonResultVO boardTypeInsert(@RequestBody @Valid BoardType boardType){
+	public CommonResultVO boardTypeInsertUpdate(@RequestBody @Valid BoardType boardType){
 		CommonResultVO result = new CommonResultVO();
-		service.insert(boardType);
+		
+		if(boardType.getIdx() == null){
+			service.insert(boardType);
+		}else{
+			service.update(boardType);
+		}
 
 		return result;
 	}

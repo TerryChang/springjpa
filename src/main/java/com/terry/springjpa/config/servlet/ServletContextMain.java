@@ -3,11 +3,11 @@ package com.terry.springjpa.config.servlet;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -19,8 +19,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
-@Import({ProductionConfig.class, DevConfig.class})
+@Import({LocalConfig.class, ProductionConfig.class, DevConfig.class})
 @EnableWebMvc
+@EnableSpringDataWebSupport
 @ComponentScan(
 		basePackages="com.terry.springjpa",
 		useDefaultFilters = false,
