@@ -36,11 +36,47 @@
 		});
 		
 		$("#btnReset").click(function(){
-			$("#regfrm").reset();
+			$("#regfrm")[0].reset();
+		});
+		
+		$("#btnDelete").click(function(){
+			var idx = $("#idx").val();
+			$.ajax({
+	        	url : "/boardType/boardTypeDelete.do",
+	        	type : "POST",
+	        	// data : JSON.stringify({"idx" : idx}),
+	        	data : {"idx" : idx},
+	        	// contentType: "application/json",	// contentType으로 지정하면 Request Body로 전달되기 때문에 Spring에서 받을때 다르게 접근해야 한다
+	        	dataType : "json",
+	        	success:function(data, textStatus, jqXHR){
+	        		alert("<spring:message code='deleteOK' />");
+	        		location.href="/boardType/boardTypeList.do";
+	        	},
+	        	error:function(jqXHR, textStatus, errorThrown){
+	        		// alert("<spring:message code='errorFail' />");
+        			var responseJSON = jqXHR.responseJSON;
+        			if(responseJSON.hasOwnProperty("result")){		// result property가 있다는 것은 Spring에서 return한 결과 Object이므로 이에 대한 작업을 진행한다
+        				var alertMsg = "";
+	        			if(responseJSON.hasOwnProperty("result")){
+	        				var errorMessageMap = responseJSON.errorMessageMap;
+	        				$.each(errorMessageMap, function(k, v){
+	        					alertMsg += v + "\n";
+		        			});
+	        			}
+	        			var pattern = /\n$/;
+	        			alertMsg = alertMsg.replace(pattern, "");		// 에러 문자열을 결합하면 마지막 행 끝에 개행문자(\n)가 붙기 때문에 이를 제거하기 위해 정규표현식을 이용해서 마지막에 붙은 개행문자를 제거한다
+	        			console.log(alertMsg);
+	        			alert(alertMsg);
+        			}else{
+        				alert("<spring:message code='errorFail' />");
+        			}	
+	        		
+	        	}
+	        });
 		});
 		
 		$("#btnList").click(function(){
-			// location.href="/notmember/insertUpdateNotMemberBoard.do?idx=" + $("#idx").val()+"&replyYN=Y";
+			location.href="/boardType/boardTypeList.do";
 		});
 		
 		$("#regfrm").submit(function(event){
@@ -194,6 +230,7 @@
 					</c:when>
 					<c:otherwise>
 						<button id="btnUpdate" type="button" class="btn btn-default">수정</button>
+						<button id="btnDelete" type="button" class="btn btn-default">삭제</button>
 					</c:otherwise>
 				</c:choose>
 				<button id="btnReset" type="button" class="btn btn-default">재작성</button>

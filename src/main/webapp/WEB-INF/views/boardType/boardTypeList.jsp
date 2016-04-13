@@ -15,7 +15,11 @@
 	<script src="/js/jquery-1.11.2.min.js"></script>
 	<script src="/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
-	
+	$(document).ready(function(){
+		$("#btnRegist").click(function(){
+			location.href="/boardType/boardTypeInsertUpdate.do";
+		});
+	});
 	</script>
 </head>
 
