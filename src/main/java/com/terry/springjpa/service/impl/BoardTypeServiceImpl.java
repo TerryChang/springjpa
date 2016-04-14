@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.terry.springjpa.entity.BoardType;
 import com.terry.springjpa.repository.BoardTypeRepository;
 import com.terry.springjpa.service.BoardTypeService;
+import com.terry.springjpa.vo.SearchVO;
 
 /**
  * 게시판 타입 관련 서비스 클래스이다.
@@ -28,14 +29,14 @@ public class BoardTypeServiceImpl implements BoardTypeService {
 
 	@Override
 	@Transactional(readOnly=true)
-	public Page<BoardType> list(Pageable pageable) throws UnsupportedOperationException, DataAccessException {
+	public Page<BoardType> list(SearchVO searchVO, Pageable pageable) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("요청하신 메소드는 지원하지 않습니다");
 	}
 
 	@Override
 	@Transactional(readOnly=true)
-	public List<BoardType> listAll() throws UnsupportedOperationException, DataAccessException {
+	public List<BoardType> listAll(SearchVO searchVO) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
 		return repository.findAll();
 	}

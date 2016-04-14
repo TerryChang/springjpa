@@ -18,7 +18,7 @@ import com.terry.springjpa.entity.embed.InsertUpdateDT;
 @Entity
 @Table(name="MEMBER")
 @SequenceGenerator(name="MemberSequenceGenerator", sequenceName="MEMBER_SEQUENCE", initialValue=1, allocationSize=1)
-public class Member {
+public class Member implements UpdateEntity<Member>{
 
 	@Id
 	@Column(name="IDX")
@@ -141,7 +141,11 @@ public class Member {
 		return true;
 	}
 
-	
-
-	
+	@Override
+	public void entityUpdate(Member member) throws UnsupportedOperationException {
+		// TODO Auto-generated method stub
+		loginId = member.getLoginId();
+		password = member.getPassword();
+		name = member.getName();
+	}
 }

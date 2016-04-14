@@ -38,3 +38,17 @@ create sequence boardtype_sequence start with 1 increment by 1;
 create sequence member_sequence start with 1 increment by 1;
 create sequence unitedboard_sequence start with 1 increment by 1;
 create sequence unitedboard_comment_sequence start with 1 increment by 1;
+
+-- test data insert query boardtype_sequence.nextval, ?, ?, current_timestamp(), null
+insert into member(idx, loginid, password, name, insertdt) values(member_sequence.nextval, 'loginid1', '1password', '가나다1', current_timestamp());
+insert into member(idx, loginid, password, name, insertdt) values(member_sequence.nextval, 'loginid2', '2password', '가나다2', current_timestamp());
+insert into member(idx, loginid, password, name, insertdt) values(member_sequence.nextval, 'loginid3', '3password', '가나라', current_timestamp());
+insert into member(idx, loginid, password, name, insertdt) values(member_sequence.nextval, 'loginid4', '4password', '가나마', current_timestamp());
+insert into member(idx, loginid, password, name, insertdt) values(member_sequence.nextval, 'loginid5', '5password', '사나다', current_timestamp());
+insert into member(idx, loginid, password, name, insertdt) values(member_sequence.nextval, 'loginid6', '6password', '아나다', current_timestamp());
+insert into member(idx, loginid, password, name, insertdt) values(member_sequence.nextval, 'loginid7', '7password', '가자다', current_timestamp());
+insert into member(idx, loginid, password, name, insertdt) values(member_sequence.nextval, 'loginid8', '8password', '가타다', current_timestamp());
+insert into member(idx, loginid, password, name, insertdt) values(member_sequence.nextval, 'loginid9', '9password', '가파다', current_timestamp());
+insert into member(idx, loginid, password, name, insertdt) values(member_sequence.nextval, '1loginid', 'password1', '가나하', current_timestamp());
+insert into member(idx, loginid, password, name, insertdt) values(member_sequence.nextval, '2loginid', 'password2', '1가나다', current_timestamp());
+insert into member(idx, loginid, password, name, insertdt) values(member_sequence.nextval, '3loginid', 'password3', '2가나다', current_timestamp());

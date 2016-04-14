@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.terry.springjpa.entity.UnitedBoard;
 import com.terry.springjpa.repository.UnitedBoardRepository;
 import com.terry.springjpa.service.UnitedBoardService;
+import com.terry.springjpa.vo.SearchVO;
 
 @Service
 @Transactional
@@ -22,14 +23,14 @@ public class UnitedBoardServiceImpl implements UnitedBoardService {
 	
 	@Override
 	@Transactional(readOnly=true)
-	public Page<UnitedBoard> list(Pageable pageable) throws UnsupportedOperationException, DataAccessException {
+	public Page<UnitedBoard> list(SearchVO searchVO, Pageable pageable) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	@Transactional(readOnly=true)
-	public List<UnitedBoard> listAll() throws UnsupportedOperationException, DataAccessException {
+	public List<UnitedBoard> listAll(SearchVO searchVO) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
 		return null;
 	}

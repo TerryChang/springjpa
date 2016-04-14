@@ -9,5 +9,6 @@ import com.terry.springjpa.entity.Member;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
 	Page<Member> findByLoginIdContaining(String containing, Pageable pageable);
+	Page<Member> findByNameContaining(String containing, Pageable pageable);
 
 }

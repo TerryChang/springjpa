@@ -27,7 +27,7 @@ public class BoardTypeController {
 	
 	@RequestMapping(value="/boardType/boardTypeList")
 	public String boardTypeList(Model model){
-		List<BoardType> list = service.listAll();
+		List<BoardType> list = service.listAll(null);
 		model.addAttribute("result", list);
 		return "/boardType/boardTypeList";
 	}

@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.terry.springjpa.entity.UnitedBoardComment;
 import com.terry.springjpa.repository.UnitedBoardCommentRepository;
 import com.terry.springjpa.service.UnitedBoardCommentService;
+import com.terry.springjpa.vo.SearchVO;
 
 @Service
 @Transactional
@@ -22,14 +23,14 @@ public class UnitedBoardCommentServiceImpl implements UnitedBoardCommentService 
 	
 	@Override
 	@Transactional(readOnly=true)
-	public Page<UnitedBoardComment> list(Pageable pageable) throws UnsupportedOperationException, DataAccessException {
+	public Page<UnitedBoardComment> list(SearchVO searchVO, Pageable pageable) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	@Transactional(readOnly=true)
-	public List<UnitedBoardComment> listAll() throws UnsupportedOperationException, DataAccessException {
+	public List<UnitedBoardComment> listAll(SearchVO searchVO) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
 		return null;
 	}
