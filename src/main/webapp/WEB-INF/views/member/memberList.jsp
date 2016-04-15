@@ -17,7 +17,11 @@
 	<script type="text/javascript">
 	$(document).ready(function(){
 		$("#btnRegist").click(function(){
-			location.href="/boardType/boardTypeInsertUpdate.do";
+			location.href="/member/memberInsertUpdate.do";
+		});
+		
+		$("#searchBtn").click(function(){
+			$("#listfrm")[0].submit();
 		});
 	});
 	</script>
@@ -32,7 +36,18 @@
 	 		<h1>회원 목록</h1>
 		</div>
 		
-		<form:form id="listfrm" method="get" cssClass="form-horizontal" role="form">
+		<form:form id="listfrm" method="get" cssClass="form-inline" commandName="searchVO" role="form">
+		
+		<div class="form-group pull-right">
+       		<form:select id="searchCnd" class="form-control" path="searchCnd">
+       			<option value="">전체</option>
+       			<option value="1">아이디</option>
+       			<option value="2">이름</option>
+       		</form:select>
+      		<form:input type="text" class="form-control" id="searchWrd" path="searchWrd" />
+      		<button id="searchBtn" class="form-control">검색</button>
+		</div>
+		
 		<!-- Page Header End -->
 		<table class="table table-hover table-bordered">  
 			<thead>
@@ -72,6 +87,8 @@
 		<div class="pull-right">
 			<button id="btnRegist" type="button" class="btn btn-default">등록</button>
 		</div>
+		<form:hidden id="pageNo" path="pageNo" value="" />
+		<form:hidden id="pageSize" path="pageSize" value="" />
 	</form:form>
 	</div>
 </body>
