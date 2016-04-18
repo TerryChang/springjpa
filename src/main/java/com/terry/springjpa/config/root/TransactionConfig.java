@@ -8,7 +8,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EnableTransactionManagement(proxyTargetClass=true)
+@EnableTransactionManagement
 public class TransactionConfig {
 
 	@Bean

@@ -29,13 +29,17 @@ public class MemberServiceImpl implements MemberService {
 		Page<Member> result = null;
 		
 		String searchCnd = searchVO.getSearchCnd();
-		if(!StringUtils.hasText(searchCnd)){
+		String searchWrd = searchVO.getSearchWrd() == null ? "" : searchVO.getSearchWrd();
+		
+		if(!StringUtils.hasText(searchWrd)){				// 검색어가 없으면
 			result = repository.findAll(pageable);
-		}else{
-			if(searchVO.getSearchCnd().equals("1")){			// loginid
-				result = repository.findByLoginIdContaining(searchVO.getSearchWrd(), pageable);
-			}else if(searchVO.getSearchCnd().equals("2")){		// 이름으로 검색
-				result = repository.findByNameContaining(searchVO.getSearchWrd(), pageable);
+		}else{											// 검색어가 있으면
+			if(searchCnd.equals("0")){					// loginId or 이름 검색
+				result = repository.findByLoginIdContainingOrNameContaining(searchWrd, searchWrd, pageable);
+			}else if(searchCnd.equals("1")){			// loginId 검색
+				result = repository.findByLoginIdContaining(searchWrd, pageable);
+			}else if(searchCnd.equals("2")){			// 이름으로 검색
+				result = repository.findByNameContaining(searchWrd, pageable);
 			}
 		}
 		

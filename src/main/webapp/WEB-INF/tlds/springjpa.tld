@@ -7,7 +7,7 @@
     <tag>
         <description>Pagination Tag</description>
         <name>pagination</name>
-        <tag-class>com.terry.springhibernate.common.tld.PaginationTag</tag-class>
+        <tag-class>com.terry.springjpa.common.tld.PaginationTag</tag-class>
         <body-content>empty</body-content>
         <attribute>
             <name>page_no</name>
@@ -31,6 +31,11 @@
         </attribute>
         <attribute>
             <name>jsFunction</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>zerobased</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

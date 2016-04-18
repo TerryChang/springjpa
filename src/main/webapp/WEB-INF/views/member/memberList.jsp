@@ -21,9 +21,26 @@
 		});
 		
 		$("#searchBtn").click(function(){
-			$("#listfrm")[0].submit();
+			var frm = $("#listfrm")[0];
+			if($("#searchWrd1").val() == ""){
+				location.href="/member/memberList.do";
+			}else{
+				$("#searchCnd").val($("#searchCnd1").val());
+				$("#searchWrd").val($("#searchWrd1").val());
+				$("#pageNo").val(1);
+				frm.submit();
+			}
+		});
+		
+		$("#listfrm").submit(function(event){
+			event.preventDefault();
 		});
 	});
+	
+	function go_page(page_no){
+		$("#pageNo").val(page_no);
+		$("#listfrm")[0].submit();
+	}
 	</script>
 </head>
 
@@ -39,30 +56,35 @@
 		<form:form id="listfrm" method="get" cssClass="form-inline" commandName="searchVO" role="form">
 		
 		<div class="form-group pull-right">
-       		<form:select id="searchCnd" class="form-control" path="searchCnd">
-       			<option value="">전체</option>
-       			<option value="1">아이디</option>
-       			<option value="2">이름</option>
+       		<form:select id="searchCnd1" class="form-control" path="searchCnd1">
+       			<form:option value="0">전체</form:option>
+       			<form:option value="1">아이디</form:option>
+       			<form:option value="2">이름</form:option>
        		</form:select>
-      		<form:input type="text" class="form-control" id="searchWrd" path="searchWrd" />
+      		<form:input type="text" class="form-control" id="searchWrd1" path="searchWrd1" />
       		<button id="searchBtn" class="form-control">검색</button>
 		</div>
 		
 		<!-- Page Header End -->
+		<!-- 
+		result.number : ${result.number}
+		result.size : ${result.size}
+		result.totalElements : ${result.totalElements}
+		 -->
+		<c:set var="pageno" value="${result.number}" />
+		<c:set var="pagesize" value="${result.size}" />
+		<c:set var="page" value="${result.content}" />
+		<c:set var="totcnt" value="${result.totalElements}" />
 		<table class="table table-hover table-bordered">  
 			<thead>
 				<tr>
 					<th class="col-md-1 text-center">번호</th>
-					<th class="col-md-4 text-center">아이디</th>
-					<th class="col-md-5 text-center">이름</th>
+					<th class="col-md-3 text-center">아이디</th>
+					<th class="col-md-6 text-center">이름</th>
 					<th class="col-md-2 text-center">등록일시</th>
 				</tr>
 			</thead>
 			<tbody>
-				<c:set var="pageno" value="${result.number}" />
-				<c:set var="pagesize" value="${result.size}" />
-				<c:set var="page" value="${result.content}" />
-				<c:set var="totcnt" value="${result.totalElements}" />
 				<c:choose>	
 					<c:when test="${totcnt == 0}">			
 						<tr>
@@ -83,13 +105,17 @@
 				</c:choose>
 			</tbody>
 		</table>
-		<!-- Pager Start --> 
+		<!-- Pager Start -->
+		<springjpa:pagination page_no="${pageno}" total_cnt="${totcnt}" page_size="${pagesize}" page_group_size="10" jsFunction="go_page" zerobased="true"></springjpa:pagination>
+		<!-- Page End --> 
 		<div class="pull-right">
 			<button id="btnRegist" type="button" class="btn btn-default">등록</button>
 		</div>
-		<form:hidden id="pageNo" path="pageNo" value="" />
-		<form:hidden id="pageSize" path="pageSize" value="" />
-	</form:form>
+		<form:hidden id="searchCnd" path="searchCnd" value="" />
+		<form:hidden id="searchWrd" path="searchWrd" value="" />
+		<form:hidden id="pageNo" path="pageNo" value="1" />
+		<form:hidden id="pageSize" path="pageSize" value="10" />
+		</form:form>
 	</div>
 </body>
 </html>

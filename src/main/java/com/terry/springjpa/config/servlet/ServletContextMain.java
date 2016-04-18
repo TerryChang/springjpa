@@ -1,5 +1,7 @@
 package com.terry.springjpa.config.servlet;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -7,11 +9,14 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.data.web.SortHandlerMethodArgumentResolver;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -110,6 +115,28 @@ public class ServletContextMain extends WebMvcConfigurerAdapter{
 	public Validator getValidator() {
 		// TODO Auto-generated method stub
 		return validator();
+	}
+	
+	@Bean
+	public PageableHandlerMethodArgumentResolver pageableResolver(){
+		PageableHandlerMethodArgumentResolver phmar = new PageableHandlerMethodArgumentResolver(sortResolver());
+		phmar.setOneIndexedParameters(true);
+		phmar.setPageParameterName("pageNo");
+		phmar.setSizeParameterName("pageSize");
+		return phmar;
+	}
+	
+	@Bean
+	public SortHandlerMethodArgumentResolver sortResolver() {
+		return new SortHandlerMethodArgumentResolver();
+	}
+
+	@Override
+	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+		// TODO Auto-generated method stub
+		argumentResolvers.add(pageableResolver());
+		argumentResolvers.add(sortResolver());
+		super.addArgumentResolvers(argumentResolvers);
 	}
 	
 	
