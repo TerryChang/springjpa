@@ -24,9 +24,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
-@Import({LocalConfig.class, ProductionConfig.class, DevConfig.class})
+@Import({LocalConfig.class, ProductionConfig.class, DevConfig.class, SpringDataWebConfiguration.class})
 @EnableWebMvc
-@EnableSpringDataWebSupport
 @ComponentScan(
 		basePackages="com.terry.springjpa",
 		useDefaultFilters = false,

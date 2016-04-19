@@ -42,7 +42,7 @@
 		$("#btnDelete").click(function(){
 			var idx = $("#idx").val();
 			$.ajax({
-	        	url : "/boardType/boardTypeDelete.do",
+	        	url : "/member/memberDelete.do",
 	        	type : "POST",
 	        	// data : JSON.stringify({"idx" : idx}),
 	        	data : {"idx" : idx},
@@ -50,7 +50,7 @@
 	        	dataType : "json",
 	        	success:function(data, textStatus, jqXHR){
 	        		alert("<spring:message code='deleteOK' />");
-	        		location.href="/boardType/boardTypeList.do";
+	        		location.href="/member/memberList.do";
 	        	},
 	        	error:function(jqXHR, textStatus, errorThrown){
 	        		// alert("<spring:message code='errorFail' />");
@@ -76,7 +76,7 @@
 		});
 		
 		$("#btnList").click(function(){
-			location.href="/boardType/boardTypeList.do";
+			location.href="/member/memberList.do";
 		});
 		
 		$("#regfrm").submit(function(event){
@@ -86,19 +86,22 @@
 	
 	function processjob(blInsert){
 		
-		var boardTypeName = $("#boardTypeName").val();
-		var url = $("#url").val();
+		var loginId = $("#loginId").val();
+		var password = $("#password").val();
+		var cfpassword = $("#cfpassword").val();
+		var name = $("#name").val();
+		var email = $("#email").val();
 		
 		var sendData = null;
 		if(blInsert){
-			sendData = JSON.stringify({"boardTypeName" : boardTypeName, "url" : url});
+			sendData = JSON.stringify({"loginId" : loginId, "password" : password, "name" : name});
 		}else{
 			var idx = $("#idx").val();
-			sendData = JSON.stringify({"idx" : idx, "boardTypeName" : boardTypeName, "url" : url});
+			sendData = JSON.stringify({"idx" : idx, "loginId" : loginId, "password" : password, "name" : name});
 		}
 		
 		$.ajax({
-        	url : "/boardType/boardTypeInsertUpdate.do",
+        	url : "/member/memberInsertUpdate.do",
         	type : "POST",
         	// data : JSON.stringify({"idx" : idx, "boardTypeName" : boardTypeName, "url" : url}),
         	data : sendData,
@@ -108,27 +111,39 @@
         	dataType : "json",
         	beforeSend : function(xhr){
         		var validationResult = true;
-        		if($.trim($("#boardTypeName").val()) == ""){
-					alert("<spring:message code='NotBlank.boardType.boardTypeName' />");
-					$("#boardTypeName").focus();
+        		if($.trim(loginId) == ""){
+					alert("<spring:message code='NotBlank.member.loginId' />");
+					$("#loginId").focus();
 					validationResult = false;
-        		}else if(($("#boardTypeName").val().length < 3) || ($("#boardTypeName").val().length > 10)){
-					var alertMsg = "<spring:message code='Size.boardType.boardTypeName' />";
+        		}else if((loginId.length < 3) || (loginId.length > 10)){
+					var alertMsg = "<spring:message code='Size.member.loginId' />";
 					alertMsg = alertMsg.replace("\{2\}", "3");
 					alertMsg = alertMsg.replace("\{1\}", "10");
 					alert(alertMsg);
-					$("#boardTypeName").focus();
+					$("#loginId").focus();
 					validationResult = false;
-				}else if($.trim($("#url").val()) == ""){
-					alert("<spring:message code='NotBlank.boardType.url' />");
-					$("#url").focus();
+        		}else if((password.length < 3) || (password.length > 10)){
+					var alertMsg = "<spring:message code='Size.member.password' />";
+					alertMsg = alertMsg.replace("\{2\}", "3");
+					alertMsg = alertMsg.replace("\{1\}", "10");
+					alert(alertMsg);
+					$("#password").focus();
 					validationResult = false;
-				}else if(($("#url").val().length < 10) || ($("#url").val().length > 100)){
-					var alertMsg = "<spring:message code='Size.boardType.url' />";
+        		}else if(password != cfpassword){
+					var alertMsg = "패스워드와 패스워드 확인 입력값이 다릅니다";
+					alert(alertMsg);
+					$("#password").focus();
+					validationResult = false;
+				}else if($.trim(name) == ""){
+					alert("<spring:message code='NotBlank.member.name' />");
+					$("#name").focus();
+					validationResult = false;
+				}else if((name.length < 10) || (name.length > 100)){
+					var alertMsg = "<spring:message code='Size.member.name' />";
 					alertMsg = alertMsg.replace("\{2\}", "10");
 					alertMsg = alertMsg.replace("\{1\}", "100");
 					alert(alertMsg);
-					$("#url").focus();
+					$("#name").focus();
 					validationResult = false;
 				}
         		return validationResult;
@@ -202,24 +217,45 @@
 		<div class="page-header">
 			<c:choose>
 				<c:when test="${result eq null}">
-					<h1>게시판 종류 등록</h1>
+					<h1>회원 등록</h1>
 				</c:when>
 				<c:otherwise>
-					<h1>게시판 종류 수정</h1>
+					<h1>회원 수정</h1>
 				</c:otherwise>
 			</c:choose>
 		</div>
-		<form id="regfrm" method="post" class="form-horizontal" role="form">
+		<form:form id="regfrm" method="post" cssClass="form-horizontal" role="form">
 		<div class="form-group">
-			<label for="name" class="col-xs-2 col-lg-2 control-label">게시판 이름</label>
-			<div class="col-xs-10 col-lg-10">
-				<input id="boardTypeName" name="boardTypeName" class="form-control" placeholder="이름" value="<c:out value='${result.boardTypeName}' />" />
+			<label for="name" class="col-xs-2 col-lg-2 control-label">로그인 ID</label>
+			<div class="col-xs-8 col-lg-8">
+				<form:input id="loginId" path="loginId" cssClass="form-control" placeholder="로그인 ID" />
+			</div>
+			<div class="col-xs-2 col-lg-2">
+				<button id="boardTypeName" class="btn btn-default">중복확인</button>
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="url" class="col-xs-2 col-lg-2 control-label">URL</label>
+			<label for="password" class="col-xs-2 col-lg-2 control-label">패스워드</label>
 			<div class="col-xs-10 col-lg-10">
-				<input id="url" name="url" class="form-control" placeholder="URL" value="<c:out value='${result.url}' />" />
+				<form:password id="password" path="password" cssClass="form-control" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="cfpassword" class="col-xs-2 col-lg-2 control-label">패스워드 확인</label>
+			<div class="col-xs-10 col-lg-10">
+				<input type="password" id="cfpassword" name="cfpassword" class="form-control" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="name" class="col-xs-2 col-lg-2 control-label">이름</label>
+			<div class="col-xs-10 col-lg-10">
+				<form:input id="name" path="name" cssClass="form-control" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="email" class="col-xs-2 col-lg-2 control-label">이메일</label>
+			<div class="col-xs-10 col-lg-10">
+				<form:input id="email" path="email" cssClass="form-control" />
 			</div>
 		</div>
 		<div class="form-group text-center">
@@ -237,8 +273,8 @@
 				<button id="btnList" type="button" class="btn btn-default">목록</button>
 			</div>
 		</div>
-		<input type="hidden" id="idx" name="idx" value="<c:out value='${result.idx}' />" />
-		</form>
+		<form:hidden id="idx" path="idx" />
+		</form:form>
 	</div>
 </body>
 </html>

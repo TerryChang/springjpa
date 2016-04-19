@@ -66,12 +66,18 @@
 		</div>
 		
 		<!-- Page Header End -->
-		<!-- 
+		<!--
+		Spring Data에서 제공하는 페이징의 경우에는 1페이지는 0으로 시작한다. 
+		물론 페이지 번호를 서버에 전송할때 1페이지를 0이 아닌 1로 보내도 작동할 수 있게끔
+		PageableHandlerMethodArgumentResolver bean 을 설정할 수는 있겠으나
+		조회된 데이터가 몇 페이지에 속하는 데이터인지를 나타내는 의미에서는 1페이지는 0으로 나타낸다.
+		즉 현재 페이지 번호는 1 페이지는 0 페이지로 보여준다.
+		  
 		result.number : ${result.number}
 		result.size : ${result.size}
 		result.totalElements : ${result.totalElements}
 		 -->
-		<c:set var="pageno" value="${result.number}" />
+		<c:set var="pageno" value="${result.number + 1}" />
 		<c:set var="pagesize" value="${result.size}" />
 		<c:set var="page" value="${result.content}" />
 		<c:set var="totcnt" value="${result.totalElements}" />
@@ -92,7 +98,7 @@
 						</tr>
 					</c:when>
 					<c:otherwise>
-						<c:set var="startNo" value="${totcnt-((pageno) * pagesize) }" />
+						<c:set var="startNo" value="${totcnt-((pageno-1) * pagesize) }" />
 						<c:forEach var="item" items="${page}" varStatus="status">
 							<tr>
 								<td class="text-center">${startNo-status.index}</td>
@@ -106,7 +112,7 @@
 			</tbody>
 		</table>
 		<!-- Pager Start -->
-		<springjpa:pagination page_no="${pageno}" total_cnt="${totcnt}" page_size="${pagesize}" page_group_size="10" jsFunction="go_page" zerobased="true"></springjpa:pagination>
+		<springjpa:pagination page_no="${pageno}" total_cnt="${totcnt}" page_size="${pagesize}" page_group_size="10" jsFunction="go_page" zerobased="false"></springjpa:pagination>
 		<!-- Page End --> 
 		<div class="pull-right">
 			<button id="btnRegist" type="button" class="btn btn-default">등록</button>

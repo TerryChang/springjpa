@@ -35,7 +35,7 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value="/member/memberInsertUpdate", method=RequestMethod.GET)
-	public String boardTypeInsert(@RequestParam(value="idx", required=false) Member member, Model model){
+	public String memberInsertUpdate(@RequestParam(value="idx", required=false) Member member, Model model){
 		model.addAttribute("result", member);
 		return "/member/memberInsertUpdate";
 	}

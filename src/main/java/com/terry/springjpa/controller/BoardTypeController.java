@@ -41,7 +41,7 @@ public class BoardTypeController {
 	 * @return
 	 */
 	@RequestMapping(value="/boardType/boardTypeInsertUpdate", method=RequestMethod.GET)
-	public String boardTypeInsert(@RequestParam(value="idx", required=false) BoardType boardType, Model model){
+	public String boardTypeInsertUpdate(@RequestParam(value="idx", required=false) BoardType boardType, Model model){
 		model.addAttribute("result", boardType);
 		return "/boardType/boardTypeInsertUpdate";
 	}
