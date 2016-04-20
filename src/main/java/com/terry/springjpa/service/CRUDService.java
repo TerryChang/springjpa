@@ -8,13 +8,13 @@ import org.springframework.data.domain.Pageable;
 
 import com.terry.springjpa.vo.SearchVO;
 
-public interface CRUDService<T, L> {
+public interface CRUDService<T, L, V> {
 	
 	public Page<T> list(SearchVO searchVO, Pageable pageable) throws UnsupportedOperationException, DataAccessException;
 	public List<T> listAll(SearchVO searchVO) throws UnsupportedOperationException, DataAccessException;
 	public T view(L idx) throws UnsupportedOperationException, DataAccessException;
-	public void insert(T t) throws UnsupportedOperationException, DataAccessException;
-	public void update(T t) throws UnsupportedOperationException, DataAccessException;
+	public void insert(V v) throws UnsupportedOperationException, DataAccessException;
+	public void update(V v) throws UnsupportedOperationException, DataAccessException;
 	public void delete(L idx) throws UnsupportedOperationException, DataAccessException;
 
 }

@@ -174,5 +174,6 @@ public class Member implements UpdateEntity<Member>{
 		loginId = member.getLoginId();
 		password = member.getPassword();
 		name = member.getName();
+		email = member.getEmail();
 	}
 }

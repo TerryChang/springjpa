@@ -16,11 +16,12 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.LocalDateTime;
 
 import com.terry.springjpa.entity.embed.InsertUpdateDT;
+import com.terry.springjpa.vo.BoardTypeVO;
 
 @Entity
 @Table(name = "BOARDTYPE")
 @SequenceGenerator(name = "BoardTypeSequenceGenerator", sequenceName = "BOARDTYPE_SEQUENCE", initialValue = 1, allocationSize = 1)
-public class BoardType implements UpdateEntity<BoardType>{
+public class BoardType implements EntityConvert<BoardTypeVO>{
 
 	@Id
 	@Column(name = "IDX")
@@ -125,15 +126,15 @@ public class BoardType implements UpdateEntity<BoardType>{
 	}
 
 	@Override
-	public void entityUpdate(BoardType boardType) throws UnsupportedOperationException{
+	public BoardTypeVO convertToVO() {
 		// TODO Auto-generated method stub
-		this.boardTypeName = boardType.getBoardTypeName();
-		this.url = boardType.getUrl();
-	}
-
-	
-	
-
-	
+		BoardTypeVO boardTypeVO = new BoardTypeVO();
+		boardTypeVO.setIdx(this.idx);
+		boardTypeVO.setBoardTypeName(this.boardTypeName);
+		boardTypeVO.setUrl(this.url);
+		boardTypeVO.setInsertDateTime(this.insertUpdateDT.getInsertDateTime());
+		boardTypeVO.setUpdateDateTime(this.insertUpdateDT.getUpdateDateTime());
+		return null;
+	}	
 
 }

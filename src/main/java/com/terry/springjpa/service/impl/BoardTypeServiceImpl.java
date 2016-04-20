@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.terry.springjpa.entity.BoardType;
 import com.terry.springjpa.repository.BoardTypeRepository;
 import com.terry.springjpa.service.BoardTypeService;
+import com.terry.springjpa.vo.BoardTypeVO;
 import com.terry.springjpa.vo.SearchVO;
 
 /**
@@ -49,16 +50,16 @@ public class BoardTypeServiceImpl implements BoardTypeService {
 	}
 
 	@Override
-	public void insert(BoardType t) throws UnsupportedOperationException, DataAccessException {
+	public void insert(BoardTypeVO v) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
-		repository.saveAndFlush(t);
+		BoardType boardType = v.convertToEntity(repository);
+		repository.saveAndFlush(boardType);
 	}
 
 	@Override
-	public void update(BoardType t) throws UnsupportedOperationException, DataAccessException {
+	public void update(BoardTypeVO v) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
-		BoardType updateBoardType = view(t.getIdx()); // update 대상이 되는 엔티티 객체를 먼저 조회한다.
-		updateBoardType.entityUpdate(t);
+		BoardType updateBoardType = v.convertToEntity(repository);
 		repository.saveAndFlush(updateBoardType);
 	}
 

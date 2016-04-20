@@ -86,7 +86,8 @@
 				<tr>
 					<th class="col-md-1 text-center">번호</th>
 					<th class="col-md-3 text-center">아이디</th>
-					<th class="col-md-6 text-center">이름</th>
+					<th class="col-md-3 text-center">이름</th>
+					<th class="col-md-3 text-center">이메일</th>
 					<th class="col-md-2 text-center">등록일시</th>
 				</tr>
 			</thead>
@@ -94,7 +95,7 @@
 				<c:choose>	
 					<c:when test="${totcnt == 0}">			
 						<tr>
-							<td colspan="4" class="text-center">검색된 결과가 없습니다</td>
+							<td colspan="5" class="text-center">검색된 결과가 없습니다</td>
 						</tr>
 					</c:when>
 					<c:otherwise>
@@ -104,6 +105,7 @@
 								<td class="text-center">${startNo-status.index}</td>
 								<td><a href="/member/memberInsertUpdate.do?idx=<c:out value='${item.idx}' escapeXml='false'/>"><c:out value="${item.loginId}" escapeXml="false"/></a></td>
 								<td><c:out value="${item.name}" escapeXml="false"/></td>
+								<td><c:out value="${item.email}" escapeXml="false"/></td>
 								<td><spring:eval expression="item.insertUpdateDT.insertDateTime" /></td>
 							</tr>
 						</c:forEach>

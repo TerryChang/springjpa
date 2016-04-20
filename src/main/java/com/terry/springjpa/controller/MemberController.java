@@ -36,7 +36,8 @@ public class MemberController {
 	
 	@RequestMapping(value="/member/memberInsertUpdate", method=RequestMethod.GET)
 	public String memberInsertUpdate(@RequestParam(value="idx", required=false) Member member, Model model){
-		model.addAttribute("result", member);
+		if(member == null) member = new Member();
+		model.addAttribute("member", member);
 		return "/member/memberInsertUpdate";
 	}
 	
