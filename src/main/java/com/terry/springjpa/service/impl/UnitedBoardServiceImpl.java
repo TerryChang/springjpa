@@ -13,6 +13,7 @@ import com.terry.springjpa.entity.UnitedBoard;
 import com.terry.springjpa.repository.UnitedBoardRepository;
 import com.terry.springjpa.service.UnitedBoardService;
 import com.terry.springjpa.vo.SearchVO;
+import com.terry.springjpa.vo.UnitedBoardVO;
 
 @Service
 @Transactional
@@ -30,9 +31,9 @@ public class UnitedBoardServiceImpl implements UnitedBoardService {
 
 	@Override
 	@Transactional(readOnly=true)
-	public List<UnitedBoard> listAll(SearchVO searchVO) throws UnsupportedOperationException, DataAccessException {
+	public List<UnitedBoardVO> listAll(SearchVO searchVO) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("요청하신 메소드는 지원하지 않습니다");
 	}
 
 	@Override
@@ -43,13 +44,13 @@ public class UnitedBoardServiceImpl implements UnitedBoardService {
 	}
 
 	@Override
-	public void insert(UnitedBoard t) throws UnsupportedOperationException, DataAccessException {
+	public void insert(UnitedBoardVO unitedBoardVO) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void update(UnitedBoard t) throws UnsupportedOperationException, DataAccessException {
+	public void update(UnitedBoardVO unitedBoardVO) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
 		
 	}

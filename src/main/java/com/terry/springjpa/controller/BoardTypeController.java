@@ -18,16 +18,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.terry.springjpa.common.vo.CommonResultVO;
 import com.terry.springjpa.entity.BoardType;
 import com.terry.springjpa.service.CRUDService;
+import com.terry.springjpa.vo.BoardTypeVO;
 
 @Controller
 public class BoardTypeController {
 
 	@Autowired
-	CRUDService<BoardType, Long> service;
+	CRUDService<BoardType, Long, BoardTypeVO> service;
 	
 	@RequestMapping(value="/boardType/boardTypeList")
 	public String boardTypeList(Model model){
-		List<BoardType> list = service.listAll(null);
+		List<BoardTypeVO> list = service.listAll(null);
 		model.addAttribute("result", list);
 		return "/boardType/boardTypeList";
 	}
@@ -42,21 +43,23 @@ public class BoardTypeController {
 	 */
 	@RequestMapping(value="/boardType/boardTypeInsertUpdate", method=RequestMethod.GET)
 	public String boardTypeInsertUpdate(@RequestParam(value="idx", required=false) BoardType boardType, Model model){
-		model.addAttribute("result", boardType);
+		if(boardType == null) boardType = new BoardType();
+		BoardTypeVO boardTypeVO = boardType.convertToVO();
+		model.addAttribute("result", boardTypeVO);
 		return "/boardType/boardTypeInsertUpdate";
 	}
 	
 	@RequestMapping(value="/boardType/boardTypeInsertUpdate", method=RequestMethod.POST)
 	@ResponseBody
-	public CommonResultVO boardTypeInsertUpdate(@RequestBody @Valid BoardType boardType){
+	public CommonResultVO boardTypeInsertUpdate(@RequestBody @Valid BoardTypeVO boardTypeVO){
 		CommonResultVO result = new CommonResultVO();
 		
 		// idx값이 null 일 경우엔 신규 등록을 의미하는 것이고
 		// null이 아닌 경우엔 기존 값을 수정한다는 의미이다
-		if(boardType.getIdx() == null){
-			service.insert(boardType);
+		if(boardTypeVO.getIdx() == null){
+			service.insert(boardTypeVO);
 		}else{
-			service.update(boardType);
+			service.update(boardTypeVO);
 		}
 
 		return result;
@@ -78,12 +81,12 @@ public class BoardTypeController {
 	}
 	
 	@RequestMapping(value="/boardType/boardTypeInsertUpdate2", method=RequestMethod.POST)
-	public String boardTypeInsert2Proc(@ModelAttribute("boardType") @Valid BoardType boardType, BindingResult bindingResult){
+	public String boardTypeInsert2Proc(@ModelAttribute("boardType") @Valid BoardTypeVO boardTypeVO, BindingResult bindingResult){
 		String url = "";
 		if(bindingResult.hasErrors()){
 			url = "/boardType/boardTypeInsertUpdate2";
 		}else{
-			service.insert(boardType);
+			service.insert(boardTypeVO);
 			url = "redirect:/boardType/boardTypeList";
 		}
 		return url;

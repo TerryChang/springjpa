@@ -1,15 +1,29 @@
 package com.terry.springjpa.vo;
 
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.LocalDateTime;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.terry.springjpa.entity.BoardType;
 
 public class BoardTypeVO implements VOConvert<BoardType, Long>{
 	private Long idx;
+	
+	@NotBlank
+	@Size(min=3, max=10)
 	private String boardTypeName;
+	
+	@NotBlank
+	@Size(min=10, max=100)
 	private String url;
+	
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime insertDateTime;
+	
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime updateDateTime;
 	
 	public BoardTypeVO(){
@@ -64,9 +78,11 @@ public class BoardTypeVO implements VOConvert<BoardType, Long>{
 			boardType = new BoardType();
 		}else{
 			boardType = repository.findOne(this.getIdx());
-			boardType.setBoardTypeName(this.boardTypeName);
-			boardType.setUrl(this.url);
 		}
+		
+		boardType.setBoardTypeName(this.boardTypeName);
+		boardType.setUrl(this.url);
+		
 		return boardType;
 	}
 

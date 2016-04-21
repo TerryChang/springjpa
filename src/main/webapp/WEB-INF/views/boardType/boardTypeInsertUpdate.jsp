@@ -201,7 +201,7 @@
 	<div class="container">
 		<div class="page-header">
 			<c:choose>
-				<c:when test="${result eq null}">
+				<c:when test="${result.idx eq null}">
 					<h1>게시판 종류 등록</h1>
 				</c:when>
 				<c:otherwise>
@@ -225,7 +225,7 @@
 		<div class="form-group text-center">
 			<div class="col-xs-offset-4 col-xs-4 col-cs-offset-4 col-lg-offset-4 col-lg-4 col-lg-offset-4">
 				<c:choose>
-					<c:when test="${result eq null}">
+					<c:when test="${result.idx eq null}">
 						<button id="btnRegist" type="button" class="btn btn-default">등록</button>
 					</c:when>
 					<c:otherwise>

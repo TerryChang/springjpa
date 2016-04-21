@@ -18,11 +18,12 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.LocalDateTime;
 
 import com.terry.springjpa.entity.embed.InsertUpdateDT;
+import com.terry.springjpa.vo.MemberVO;
 
 @Entity
 @Table(name="MEMBER")
 @SequenceGenerator(name="MemberSequenceGenerator", sequenceName="MEMBER_SEQUENCE", initialValue=1, allocationSize=1)
-public class Member implements UpdateEntity<Member>{
+public class Member implements EntityConvert<MemberVO>{
 
 	@Id
 	@Column(name="IDX")
@@ -30,27 +31,15 @@ public class Member implements UpdateEntity<Member>{
 	private Long idx;
 	
 	@Column(name="LOGINID")
-	@NotBlank
-	@Size(min=8, max=16)
 	private String loginId;
 	
 	@Column(name="PASSWORD")
-	@NotBlank
-	@Size(min=8, max=20)
-	@Pattern(regexp="^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$")	// 길이체크 뺀거(길이는 @Size에서 해주고 있기 때문에 뺄수도 있다)
-	// @Pattern(regexp="^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$", groups={InsertValidated.class, UpdateValidated.class}, message="{CheckPattern.password}")		// 길이체크 뺀거(길이는 @Size에서 해주고 있기 때문에 뺄수도 있다)
-	// @Pattern(regexp="^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{10,15}$", message="{CheckPattern.password}")		// 길이체크 포함한거
 	private String password;
 	
 	@Column(name="NAME")
-	@NotBlank
-	@Size(min=2, max=10)
 	private String name;
 	
 	@Column(name="EMAIL")
-	@NotBlank
-	@Size(min=10, max=30)
-	@Email
 	private String email;
 	
 	@Embedded
@@ -169,11 +158,18 @@ public class Member implements UpdateEntity<Member>{
 	}
 
 	@Override
-	public void entityUpdate(Member member) throws UnsupportedOperationException {
+	public MemberVO convertToVO() throws UnsupportedOperationException {
 		// TODO Auto-generated method stub
-		loginId = member.getLoginId();
-		password = member.getPassword();
-		name = member.getName();
-		email = member.getEmail();
+		MemberVO memberVO = new MemberVO();
+		memberVO.setIdx(this.idx);
+		memberVO.setLoginId(this.loginId);
+		memberVO.setPassword(this.password);
+		memberVO.setName(this.name);
+		memberVO.setEmail(this.email);
+		memberVO.setInsertDateTime(this.insertUpdateDT.getInsertDateTime());
+		memberVO.setUpdateDateTime(this.insertUpdateDT.getUpdateDateTime());
+		return memberVO;
 	}
+
+	
 }

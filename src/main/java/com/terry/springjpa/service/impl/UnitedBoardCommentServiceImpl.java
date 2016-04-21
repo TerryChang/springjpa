@@ -13,6 +13,7 @@ import com.terry.springjpa.entity.UnitedBoardComment;
 import com.terry.springjpa.repository.UnitedBoardCommentRepository;
 import com.terry.springjpa.service.UnitedBoardCommentService;
 import com.terry.springjpa.vo.SearchVO;
+import com.terry.springjpa.vo.UnitedBoardCommentVO;
 
 @Service
 @Transactional
@@ -30,9 +31,9 @@ public class UnitedBoardCommentServiceImpl implements UnitedBoardCommentService 
 
 	@Override
 	@Transactional(readOnly=true)
-	public List<UnitedBoardComment> listAll(SearchVO searchVO) throws UnsupportedOperationException, DataAccessException {
+	public List<UnitedBoardCommentVO> listAll(SearchVO searchVO) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("요청하신 메소드는 지원하지 않습니다");
 	}
 
 	@Override
@@ -43,13 +44,13 @@ public class UnitedBoardCommentServiceImpl implements UnitedBoardCommentService 
 	}
 
 	@Override
-	public void insert(UnitedBoardComment t) throws UnsupportedOperationException, DataAccessException {
+	public void insert(UnitedBoardCommentVO unitedBoardCommentVO) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void update(UnitedBoardComment t) throws UnsupportedOperationException, DataAccessException {
+	public void update(UnitedBoardCommentVO unitedBoardCommentVO) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
 		
 	}

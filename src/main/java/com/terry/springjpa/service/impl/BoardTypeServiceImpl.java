@@ -2,6 +2,8 @@ package com.terry.springjpa.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -23,7 +25,9 @@ import com.terry.springjpa.vo.SearchVO;
  */
 @Service
 @Transactional
-public class BoardTypeServiceImpl implements BoardTypeService {
+public class BoardTypeServiceImpl extends AbstractService<BoardType, BoardTypeVO> implements BoardTypeService {
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	BoardTypeRepository repository;
@@ -37,9 +41,11 @@ public class BoardTypeServiceImpl implements BoardTypeService {
 
 	@Override
 	@Transactional(readOnly=true)
-	public List<BoardType> listAll(SearchVO searchVO) throws UnsupportedOperationException, DataAccessException {
+	public List<BoardTypeVO> listAll(SearchVO searchVO) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
-		return repository.findAll();
+		List<BoardType> entityResult = repository.findAll();
+		List<BoardTypeVO> result = convertEntityListToVOList(entityResult);
+ 		return result;
 	}
 
 	@Override
@@ -50,16 +56,16 @@ public class BoardTypeServiceImpl implements BoardTypeService {
 	}
 
 	@Override
-	public void insert(BoardTypeVO v) throws UnsupportedOperationException, DataAccessException {
+	public void insert(BoardTypeVO boardTypeVO) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
-		BoardType boardType = v.convertToEntity(repository);
+		BoardType boardType = boardTypeVO.convertToEntity(repository);
 		repository.saveAndFlush(boardType);
 	}
 
 	@Override
-	public void update(BoardTypeVO v) throws UnsupportedOperationException, DataAccessException {
+	public void update(BoardTypeVO boardTypeVO) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
-		BoardType updateBoardType = v.convertToEntity(repository);
+		BoardType updateBoardType = boardTypeVO.convertToEntity(repository);
 		repository.saveAndFlush(updateBoardType);
 	}
 

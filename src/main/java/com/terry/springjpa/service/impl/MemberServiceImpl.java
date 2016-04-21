@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import com.terry.springjpa.entity.Member;
 import com.terry.springjpa.repository.MemberRepository;
 import com.terry.springjpa.service.MemberService;
+import com.terry.springjpa.vo.MemberVO;
 import com.terry.springjpa.vo.SearchVO;
 
 @Service
@@ -48,7 +49,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional(readOnly=true)
-	public List<Member> listAll(SearchVO searchVO) throws UnsupportedOperationException, DataAccessException {
+	public List<MemberVO> listAll(SearchVO searchVO) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("요청하신 메소드는 지원하지 않습니다");
 	}
@@ -61,16 +62,16 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public void insert(Member t) throws UnsupportedOperationException, DataAccessException {
+	public void insert(MemberVO memberVO) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
-		repository.saveAndFlush(t);
+		Member member = memberVO.convertToEntity(repository);
+		repository.saveAndFlush(member);
 	}
 
 	@Override
-	public void update(Member t) throws UnsupportedOperationException, DataAccessException {
+	public void update(MemberVO memberVO) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
-		Member member = repository.findOne(t.getIdx());
-		member.entityUpdate(t);
+		Member member = memberVO.convertToEntity(repository);
 		repository.saveAndFlush(member);
 	}
 

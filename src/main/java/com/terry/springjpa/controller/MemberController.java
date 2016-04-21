@@ -19,13 +19,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.terry.springjpa.common.vo.CommonResultVO;
 import com.terry.springjpa.entity.Member;
 import com.terry.springjpa.service.CRUDService;
+import com.terry.springjpa.vo.MemberVO;
 import com.terry.springjpa.vo.SearchVO;
 
 @Controller
 public class MemberController {
 
 	@Autowired
-	CRUDService<Member, Long> service;
+	CRUDService<Member, Long, MemberVO> service;
 	
 	@RequestMapping(value="/member/memberList")
 	public String memberList(@ModelAttribute(value="searchVO") SearchVO searchVO, @PageableDefault(size=10, sort="loginId", direction=Sort.Direction.DESC) Pageable pageable, Model model){
@@ -37,21 +38,22 @@ public class MemberController {
 	@RequestMapping(value="/member/memberInsertUpdate", method=RequestMethod.GET)
 	public String memberInsertUpdate(@RequestParam(value="idx", required=false) Member member, Model model){
 		if(member == null) member = new Member();
-		model.addAttribute("member", member);
+		MemberVO memberVO = member.convertToVO();
+		model.addAttribute("member", memberVO);
 		return "/member/memberInsertUpdate";
 	}
 	
 	@RequestMapping(value="/member/memberInsertUpdate", method=RequestMethod.POST)
 	@ResponseBody
-	public CommonResultVO memberInsertUpdate(@RequestBody @Valid Member member){
+	public CommonResultVO memberInsertUpdate(@RequestBody @Valid MemberVO memberVO){
 		CommonResultVO result = new CommonResultVO();
 		
 		// idx값이 null 일 경우엔 신규 등록을 의미하는 것이고
 		// null이 아닌 경우엔 기존 값을 수정한다는 의미이다
-		if(member.getIdx() == null){
-			service.insert(member);
+		if(memberVO.getIdx() == null){
+			service.insert(memberVO);
 		}else{
-			service.update(member);
+			service.update(memberVO);
 		}
 
 		return result;

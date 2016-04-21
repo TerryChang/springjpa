@@ -12,12 +12,10 @@ public class InsertUpdateDT {
 
 	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")    // Joda time 에서 제공하는 DateTime 클래스를 사용할 경우
 	@Column(name="INSERTDT", insertable = true, updatable = false)
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime insertDateTime;
 	
 	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")    // Joda time 에서 제공하는 DateTime 클래스를 사용할 경우
 	@Column(name="UPDATEDT", insertable = false, updatable = true)
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime updateDateTime;
 	
 	public InsertUpdateDT(){

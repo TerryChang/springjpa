@@ -1,5 +1,9 @@
 package com.terry.springjpa.entity;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -10,9 +14,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.LocalDateTime;
 
 import com.terry.springjpa.entity.embed.InsertUpdateDT;
@@ -29,13 +31,9 @@ public class BoardType implements EntityConvert<BoardTypeVO>{
 	private Long idx;
 
 	@Column(name = "NAME", nullable = false)
-	@NotBlank
-	@Size(min=3, max=10)
 	private String boardTypeName;
 
 	@Column(name = "URL", nullable = false)
-	@NotBlank
-	@Size(min=10, max=100)
 	private String url;
 
 	@Embedded
@@ -132,9 +130,26 @@ public class BoardType implements EntityConvert<BoardTypeVO>{
 		boardTypeVO.setIdx(this.idx);
 		boardTypeVO.setBoardTypeName(this.boardTypeName);
 		boardTypeVO.setUrl(this.url);
-		boardTypeVO.setInsertDateTime(this.insertUpdateDT.getInsertDateTime());
-		boardTypeVO.setUpdateDateTime(this.insertUpdateDT.getUpdateDateTime());
-		return null;
-	}	
+		
+		if(this.insertUpdateDT != null){
+			boardTypeVO.setInsertDateTime(this.insertUpdateDT.getInsertDateTime());
+			boardTypeVO.setUpdateDateTime(this.insertUpdateDT.getUpdateDateTime());
+		}
+		
+		return boardTypeVO;
+	}
+	
+	public static List<BoardTypeVO> convertEntityListToVOList(List<BoardType> entityList){
+		List<BoardTypeVO> result = new ArrayList<BoardTypeVO>();
+		Iterator<BoardType> iterator = entityList.iterator();
+		while(iterator.hasNext()){
+			BoardType boardType = iterator.next();
+			BoardTypeVO boardTypeVO = boardType.convertToVO();
+			result.add(boardTypeVO);
+			iterator.remove();
+		}
+		entityList = null;
+		return result;
+	}
 
 }
