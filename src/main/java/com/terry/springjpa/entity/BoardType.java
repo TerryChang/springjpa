@@ -23,7 +23,7 @@ import com.terry.springjpa.vo.BoardTypeVO;
 @Entity
 @Table(name = "BOARDTYPE")
 @SequenceGenerator(name = "BoardTypeSequenceGenerator", sequenceName = "BOARDTYPE_SEQUENCE", initialValue = 1, allocationSize = 1)
-public class BoardType implements EntityConvert<BoardTypeVO>{
+public class BoardType {
 
 	@Id
 	@Column(name = "IDX")
@@ -122,34 +122,4 @@ public class BoardType implements EntityConvert<BoardTypeVO>{
 			return false;
 		return true;
 	}
-
-	@Override
-	public BoardTypeVO convertToVO() {
-		// TODO Auto-generated method stub
-		BoardTypeVO boardTypeVO = new BoardTypeVO();
-		boardTypeVO.setIdx(this.idx);
-		boardTypeVO.setBoardTypeName(this.boardTypeName);
-		boardTypeVO.setUrl(this.url);
-		
-		if(this.insertUpdateDT != null){
-			boardTypeVO.setInsertDateTime(this.insertUpdateDT.getInsertDateTime());
-			boardTypeVO.setUpdateDateTime(this.insertUpdateDT.getUpdateDateTime());
-		}
-		
-		return boardTypeVO;
-	}
-	
-	public static List<BoardTypeVO> convertEntityListToVOList(List<BoardType> entityList){
-		List<BoardTypeVO> result = new ArrayList<BoardTypeVO>();
-		Iterator<BoardType> iterator = entityList.iterator();
-		while(iterator.hasNext()){
-			BoardType boardType = iterator.next();
-			BoardTypeVO boardTypeVO = boardType.convertToVO();
-			result.add(boardTypeVO);
-			iterator.remove();
-		}
-		entityList = null;
-		return result;
-	}
-
 }

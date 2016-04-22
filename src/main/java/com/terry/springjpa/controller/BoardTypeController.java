@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,7 +25,10 @@ import com.terry.springjpa.vo.BoardTypeVO;
 public class BoardTypeController {
 
 	@Autowired
-	CRUDService<BoardType, Long, BoardTypeVO> service;
+	CRUDService<BoardTypeVO, Long> service;
+	
+	@Autowired
+	Converter<BoardType, BoardTypeVO> boardTypeToBoardTypeVOConverter;
 	
 	@RequestMapping(value="/boardType/boardTypeList")
 	public String boardTypeList(Model model){
@@ -44,7 +48,7 @@ public class BoardTypeController {
 	@RequestMapping(value="/boardType/boardTypeInsertUpdate", method=RequestMethod.GET)
 	public String boardTypeInsertUpdate(@RequestParam(value="idx", required=false) BoardType boardType, Model model){
 		if(boardType == null) boardType = new BoardType();
-		BoardTypeVO boardTypeVO = boardType.convertToVO();
+		BoardTypeVO boardTypeVO = boardTypeToBoardTypeVOConverter.convert(boardType);
 		model.addAttribute("result", boardTypeVO);
 		return "/boardType/boardTypeInsertUpdate";
 	}

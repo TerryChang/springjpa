@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.terry.springjpa.entity.UnitedBoard;
 import com.terry.springjpa.repository.UnitedBoardRepository;
 import com.terry.springjpa.service.UnitedBoardService;
 import com.terry.springjpa.vo.SearchVO;
@@ -24,7 +23,7 @@ public class UnitedBoardServiceImpl implements UnitedBoardService {
 	
 	@Override
 	@Transactional(readOnly=true)
-	public Page<UnitedBoard> list(SearchVO searchVO, Pageable pageable) throws UnsupportedOperationException, DataAccessException {
+	public Page<UnitedBoardVO> list(SearchVO searchVO, Pageable pageable) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -38,7 +37,7 @@ public class UnitedBoardServiceImpl implements UnitedBoardService {
 
 	@Override
 	@Transactional(readOnly=true)
-	public UnitedBoard view(Long idx) throws UnsupportedOperationException, DataAccessException {
+	public UnitedBoardVO view(Long idx) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
 		return null;
 	}

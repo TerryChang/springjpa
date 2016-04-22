@@ -23,7 +23,7 @@ import com.terry.springjpa.vo.MemberVO;
 @Entity
 @Table(name="MEMBER")
 @SequenceGenerator(name="MemberSequenceGenerator", sequenceName="MEMBER_SEQUENCE", initialValue=1, allocationSize=1)
-public class Member implements EntityConvert<MemberVO>{
+public class Member {
 
 	@Id
 	@Column(name="IDX")
@@ -156,20 +156,4 @@ public class Member implements EntityConvert<MemberVO>{
 			return false;
 		return true;
 	}
-
-	@Override
-	public MemberVO convertToVO() throws UnsupportedOperationException {
-		// TODO Auto-generated method stub
-		MemberVO memberVO = new MemberVO();
-		memberVO.setIdx(this.idx);
-		memberVO.setLoginId(this.loginId);
-		memberVO.setPassword(this.password);
-		memberVO.setName(this.name);
-		memberVO.setEmail(this.email);
-		memberVO.setInsertDateTime(this.insertUpdateDT.getInsertDateTime());
-		memberVO.setUpdateDateTime(this.insertUpdateDT.getUpdateDateTime());
-		return memberVO;
-	}
-
-	
 }

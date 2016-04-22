@@ -3,6 +3,7 @@ package com.terry.springjpa.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,11 +27,14 @@ import com.terry.springjpa.vo.SearchVO;
 public class MemberController {
 
 	@Autowired
-	CRUDService<Member, Long, MemberVO> service;
+	CRUDService<MemberVO, Long> service;
+	
+	@Autowired
+	Converter<Member, MemberVO> memberToMemberVOConverter;
 	
 	@RequestMapping(value="/member/memberList")
 	public String memberList(@ModelAttribute(value="searchVO") SearchVO searchVO, @PageableDefault(size=10, sort="loginId", direction=Sort.Direction.DESC) Pageable pageable, Model model){
-		Page<Member> list = service.list(searchVO, pageable);
+		Page<MemberVO> list = service.list(searchVO, pageable);
 		model.addAttribute("result", list);
 		return "/member/memberList";
 	}
@@ -38,7 +42,8 @@ public class MemberController {
 	@RequestMapping(value="/member/memberInsertUpdate", method=RequestMethod.GET)
 	public String memberInsertUpdate(@RequestParam(value="idx", required=false) Member member, Model model){
 		if(member == null) member = new Member();
-		MemberVO memberVO = member.convertToVO();
+		
+		MemberVO memberVO = memberToMemberVOConverter.convert(member);
 		model.addAttribute("member", memberVO);
 		return "/member/memberInsertUpdate";
 	}

@@ -24,7 +24,7 @@ public class UnitedBoardCommentServiceImpl implements UnitedBoardCommentService 
 	
 	@Override
 	@Transactional(readOnly=true)
-	public Page<UnitedBoardComment> list(SearchVO searchVO, Pageable pageable) throws UnsupportedOperationException, DataAccessException {
+	public Page<UnitedBoardCommentVO> list(SearchVO searchVO, Pageable pageable) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -38,7 +38,7 @@ public class UnitedBoardCommentServiceImpl implements UnitedBoardCommentService 
 
 	@Override
 	@Transactional(readOnly=true)
-	public UnitedBoardComment view(Long idx) throws UnsupportedOperationException, DataAccessException {
+	public UnitedBoardCommentVO view(Long idx) throws UnsupportedOperationException, DataAccessException {
 		// TODO Auto-generated method stub
 		return null;
 	}
