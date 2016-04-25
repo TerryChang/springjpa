@@ -49,10 +49,11 @@ public class Member {
 		
 	}
 	
-	public Member(String loginId, String password, String name){
+	public Member(String loginId, String password, String name, String email){
 		this.loginId = loginId;
 		this.password = password;
 		this.name = name;
+		this.email = email;
 	}
 	
 	public Long getIdx() {
@@ -122,6 +123,7 @@ public class Member {
 		result = prime * result + ((loginId == null) ? 0 : loginId.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		return result;
 	}
 
@@ -153,6 +155,11 @@ public class Member {
 			if (other.getPassword() != null)
 				return false;
 		} else if (!password.equals(other.getPassword()))
+			return false;
+		if (email == null) {
+			if (other.getEmail() != null)
+				return false;
+		} else if (!email.equals(other.getEmail()))
 			return false;
 		return true;
 	}

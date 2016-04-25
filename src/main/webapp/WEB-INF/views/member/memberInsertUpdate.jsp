@@ -76,7 +76,8 @@
 		});
 		
 		$("#btnList").click(function(){
-			location.href="/member/memberList.do";
+			// location.href="/member/memberList.do";
+			$("#listfrm")[0].submit();
 		});
 		
 		$("#regfrm").submit(function(event){
@@ -246,7 +247,7 @@
 				</c:otherwise>
 			</c:choose>
 		</div>
-		<form:form id="regfrm" commandName="member" method="post" cssClass="form-horizontal" role="form">
+		<form:form id="regfrm" commandName="member" method="post" cssClass="form-horizontal" role="form" action="/member/memberInsertUpdate.do">
 		<c:choose>
 			<c:when test="${member.idx eq null}">
 				<div class="form-group">
@@ -309,6 +310,14 @@
 			</div>
 		</div>
 		<form:hidden id="idx" path="idx" />
+		</form:form>
+		<form:form id="listfrm" commandName="searchVO" method="get" cssClass="form-horizontal" role="form" action="/member/memberList.do">
+			<form:hidden id="searchCnd1" path="searchCnd1" />
+			<form:hidden id="searchWrd1" path="searchWrd1" />
+			<form:hidden id="searchCnd" path="searchCnd" />
+			<form:hidden id="searchWrd" path="searchWrd" />
+			<form:hidden id="pageNo" path="pageNo" />
+			<form:hidden id="pageSize" path="pageSize" />
 		</form:form>
 	</div>
 </body>

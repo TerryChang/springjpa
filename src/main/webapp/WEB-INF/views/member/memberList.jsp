@@ -17,7 +17,8 @@
 	<script type="text/javascript">
 	$(document).ready(function(){
 		$("#btnRegist").click(function(){
-			location.href="/member/memberInsertUpdate.do";
+			var serializeForm = $("#listfrm").serialize();
+			location.href="/member/memberInsertUpdate.do?" + serializeForm;
 		});
 		
 		$("#searchBtn").click(function(){
@@ -40,6 +41,11 @@
 	function go_page(page_no){
 		$("#pageNo").val(page_no);
 		$("#listfrm")[0].submit();
+	}
+	
+	function go_detail(idx){
+		var serializeForm = $("#listfrm").serialize();
+		location.href="/member/memberInsertUpdate.do?idx="+idx+"&"+serializeForm;
 	}
 	</script>
 </head>
@@ -103,10 +109,10 @@
 						<c:forEach var="item" items="${page}" varStatus="status">
 							<tr>
 								<td class="text-center">${startNo-status.index}</td>
-								<td><a href="/member/memberInsertUpdate.do?idx=<c:out value='${item.idx}' escapeXml='false'/>"><c:out value="${item.loginId}" escapeXml="false"/></a></td>
+								<td><a href="#" onclick="go_detail(<c:out value='${item.idx}' escapeXml='false'/>)"><c:out value="${item.loginId}" escapeXml="false"/></a></td>
 								<td><c:out value="${item.name}" escapeXml="false"/></td>
 								<td><c:out value="${item.email}" escapeXml="false"/></td>
-								<td><spring:eval expression="item.insertUpdateDT.insertDateTime" /></td>
+								<td><spring:eval expression="item.insertDateTime" /></td>
 							</tr>
 						</c:forEach>
 					</c:otherwise>
@@ -119,10 +125,10 @@
 		<div class="pull-right">
 			<button id="btnRegist" type="button" class="btn btn-default">등록</button>
 		</div>
-		<form:hidden id="searchCnd" path="searchCnd" value="" />
-		<form:hidden id="searchWrd" path="searchWrd" value="" />
-		<form:hidden id="pageNo" path="pageNo" value="1" />
-		<form:hidden id="pageSize" path="pageSize" value="10" />
+		<form:hidden id="searchCnd" path="searchCnd" />
+		<form:hidden id="searchWrd" path="searchWrd" />
+		<form:hidden id="pageNo" path="pageNo" />
+		<form:hidden id="pageSize" path="pageSize" />
 		</form:form>
 	</div>
 </body>

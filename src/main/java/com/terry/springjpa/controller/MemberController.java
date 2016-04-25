@@ -40,7 +40,7 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value="/member/memberInsertUpdate", method=RequestMethod.GET)
-	public String memberInsertUpdate(@RequestParam(value="idx", required=false) Member member, Model model){
+	public String memberInsertUpdate(@RequestParam(value="idx", required=false) Member member, @ModelAttribute(value="searchVO") SearchVO searchVO, Model model){
 		if(member == null) member = new Member();
 		
 		MemberVO memberVO = memberToMemberVOConverter.convert(member);

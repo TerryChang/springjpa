@@ -54,9 +54,9 @@ public class MemberServiceImpl extends AbstractService<MemberVO, Member> impleme
 			}
 		}
 		
-		List<MemberVO> memberVOList = convertEntityListToVOList(memberResult.getContent(), memberToMemberVOConverter);
+		// List<MemberVO> memberVOList = convertEntityListToVOList(memberResult.getContent(), memberToMemberVOConverter);
+		result = memberResult.map(memberToMemberVOConverter);
 		
-		result = new PageImpl<MemberVO>(memberVOList, pageable, memberResult.getTotalElements());
 		return result;
 	}
 
