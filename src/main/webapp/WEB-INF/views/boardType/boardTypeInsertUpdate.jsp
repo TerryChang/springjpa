@@ -109,22 +109,22 @@
         	beforeSend : function(xhr){
         		var validationResult = true;
         		if($.trim($("#boardTypeName").val()) == ""){
-					alert("<spring:message code='NotBlank.boardType.boardTypeName' />");
+					alert("<spring:message code='NotBlank.boardTypeVO.boardTypeName' />");
 					$("#boardTypeName").focus();
 					validationResult = false;
         		}else if(($("#boardTypeName").val().length < 3) || ($("#boardTypeName").val().length > 10)){
-					var alertMsg = "<spring:message code='Size.boardType.boardTypeName' />";
+					var alertMsg = "<spring:message code='Size.boardTypeVO.boardTypeName' />";
 					alertMsg = alertMsg.replace("\{2\}", "3");
 					alertMsg = alertMsg.replace("\{1\}", "10");
 					alert(alertMsg);
 					$("#boardTypeName").focus();
 					validationResult = false;
 				}else if($.trim($("#url").val()) == ""){
-					alert("<spring:message code='NotBlank.boardType.url' />");
+					alert("<spring:message code='NotBlank.boardTypeVO.url' />");
 					$("#url").focus();
 					validationResult = false;
 				}else if(($("#url").val().length < 10) || ($("#url").val().length > 100)){
-					var alertMsg = "<spring:message code='Size.boardType.url' />";
+					var alertMsg = "<spring:message code='Size.boardTypeVO.url' />";
 					alertMsg = alertMsg.replace("\{2\}", "10");
 					alertMsg = alertMsg.replace("\{1\}", "100");
 					alert(alertMsg);

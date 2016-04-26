@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.terry.springjpa.common.vo.CommonResultVO;
 import com.terry.springjpa.entity.Member;
 import com.terry.springjpa.service.CRUDService;
+import com.terry.springjpa.service.CommonService;
 import com.terry.springjpa.vo.MemberVO;
 import com.terry.springjpa.vo.SearchVO;
 
@@ -31,6 +32,9 @@ public class MemberController {
 	
 	@Autowired
 	Converter<Member, MemberVO> memberToMemberVOConverter;
+	
+	@Autowired
+	CommonService commonService;
 	
 	@RequestMapping(value="/member/memberList")
 	public String memberList(@ModelAttribute(value="searchVO") SearchVO searchVO, @PageableDefault(size=10, sort="loginId", direction=Sort.Direction.DESC) Pageable pageable, Model model){
@@ -70,6 +74,18 @@ public class MemberController {
 		CommonResultVO result = new CommonResultVO();
 		
 		service.delete(idx);
+
+		return result;
+	}
+	
+	@RequestMapping(value="/member/checkLoginId", method=RequestMethod.POST)
+	@ResponseBody
+	public CommonResultVO checkLoginId(@RequestParam(value="loginId") String loginId){
+		CommonResultVO result = new CommonResultVO();
+		
+		boolean checkLoginIdResult = commonService.existCheck("MEMBER", "LOGINID", loginId);
+		if(checkLoginIdResult)
+			result.setResult(CommonResultVO.FAIL);
 
 		return result;
 	}

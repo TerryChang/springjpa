@@ -11,7 +11,6 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.SortHandlerMethodArgumentResolver;
-import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -22,6 +21,8 @@ import org.springframework.web.servlet.config.annotation.DefaultServletHandlerCo
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+import com.terry.springjpa.config.servlet.validate.ExistCheckValidator;
 
 @Configuration
 @Import({LocalConfig.class, ProductionConfig.class, DevConfig.class, SpringDataWebConfiguration.class})
@@ -95,6 +96,11 @@ public class ServletContextMain extends WebMvcConfigurerAdapter{
 		LocalValidatorFactoryBean lvfb = new LocalValidatorFactoryBean();
 		lvfb.setValidationMessageSource(messageSource());
 		return lvfb;
+	}
+	
+	@Bean
+	public ExistCheckValidator existCheckValidator(){
+		return new ExistCheckValidator();
 	}
 
 	/**

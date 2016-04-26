@@ -34,6 +34,10 @@
 		<!-- Hibernate / JPA -->
 		<!-- Spring 3.2.X 버전을 사용할 경우 Hibernate 4.3.X 계열 버전을 사용하면 에러가 발생한다. 4.2.X 계열로 할것(4.2.17로는 하지말것, 버그가 있어서 며칠 고생했음) -->
 		<hibernate.version>4.3.10.Final</hibernate.version>
+		
+		<!-- Mybatis -->
+		<mybatis.version>3.2.2</mybatis.version>
+        <mybatis-spring.version>1.1.1</mybatis-spring.version>
 
 		<!-- Logging -->
 		<logback.version>1.1.2</logback.version>
@@ -218,6 +222,19 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
+		
+		<!-- Mybatis -->
+		<dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>${mybatis-spring.version}</version>
+        </dependency>
 		
 		<!-- SQL Log -->
         <dependency>

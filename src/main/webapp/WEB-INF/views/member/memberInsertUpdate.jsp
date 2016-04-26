@@ -21,6 +21,8 @@
 	<script src="/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
+		var checkLoginId = false;
+		
 		// ajax 작업시 캐쉬를 사용하지 않도록 한다
 		$.ajaxSetup({ 
 			cache: false
@@ -75,6 +77,73 @@
 	        });
 		});
 		
+		<c:if test="${member.idx eq null}">
+		$("#loginId").change(function(){
+			checkLoginId = false;	
+		});
+		
+		$("#existchkbtn").click(function(){
+			var loginId = $("#loginId").val();
+			
+			$.ajax({
+	        	url : "/member/checkLoginId.do",
+	        	type : "POST",
+	        	data : {"loginId" : loginId},
+	        	// contentType: "application/json",	// contentType으로 지정하면 Request Body로 전달되기 때문에 Spring에서 받을때 다르게 접근해야 한다
+	        	dataType : "json",
+	        	beforeSend : function(xhr){
+	        		var validationResult = true;
+	        		if($.trim(loginId) == ""){
+						alert("<spring:message code='NotBlank.memberVO.loginId' />");
+						$("#loginId").focus();
+						validationResult = false;
+	        		}else if((loginId.length < 8) || (loginId.length > 16)){
+						var alertMsg = "<spring:message code='Size.memberVO.loginId' />";
+						alertMsg = alertMsg.replace("\{2\}", "8");
+						alertMsg = alertMsg.replace("\{1\}", "16");
+						alert(alertMsg);
+						$("#loginId").focus();
+						validationResult = false;
+	        		}
+	        		return validationResult;
+					
+	        	},
+	        	success:function(data, textStatus, jqXHR){
+	        		if(data.result == "OK"){
+	        			alert("입력된 아이디는 사용가능합니다");
+	        			checkLoginId = true;
+	        		}else{
+	        			alert("입력된 아이디는 사용할 수 없습니다");
+	        			checkLoginId = false;
+	        		}
+	        	},
+	        	error:function(jqXHR, textStatus, errorThrown){
+	        		if(jqXHR.status == 400){
+	        			var responseJSON = jqXHR.responseJSON;
+	        			if(responseJSON.hasOwnProperty("result")){		// result property가 있다는 것은 Spring에서 return한 결과 Object이므로 이에 대한 작업을 진행한다
+	        				var alertMsg = "";
+		        			if(responseJSON.hasOwnProperty("result")){
+		        				var errorMessageMap = responseJSON.errorMessageMap;
+		        				$.each(errorMessageMap, function(k, v){
+		        					alertMsg += v + "\n";
+			        			});
+		        			}
+		        			var pattern = /\n$/;
+		        			alertMsg = alertMsg.replace(pattern, "");		// 에러 문자열을 결합하면 마지막 행 끝에 개행문자(\n)가 붙기 때문에 이를 제거하기 위해 정규표현식을 이용해서 마지막에 붙은 개행문자를 제거한다
+		        			console.log(alertMsg);
+		        			alert(alertMsg);
+	        			}else{
+	        				alert("<spring:message code='errorFail' />");
+	        			}	
+	        		}else{
+	        			alert("<spring:message code='errorFail' />");
+	        		}
+	        	}
+	        	
+	        });
+		});
+		</c:if>
+		
 		$("#btnList").click(function(){
 			// location.href="/member/memberList.do";
 			$("#listfrm")[0].submit();
@@ -114,18 +183,21 @@
         		var validationResult = true;
         		var pwdpattern = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/;
         		if($.trim(loginId) == ""){
-					alert("<spring:message code='NotBlank.member.loginId' />");
+					alert("<spring:message code='NotBlank.memberVO.loginId' />");
 					$("#loginId").focus();
 					validationResult = false;
         		}else if((loginId.length < 8) || (loginId.length > 16)){
-					var alertMsg = "<spring:message code='Size.member.loginId' />";
+					var alertMsg = "<spring:message code='Size.memberVO.loginId' />";
 					alertMsg = alertMsg.replace("\{2\}", "8");
 					alertMsg = alertMsg.replace("\{1\}", "16");
 					alert(alertMsg);
 					$("#loginId").focus();
 					validationResult = false;
+        		}else if(!checkLoginId){
+        			alert("중복체크 버튼을 클릭해서 로그인 아이디 중복체크를 해주세요");
+        			validationResult = false;
         		}else if((password.length < 8) || (password.length > 20)){
-					var alertMsg = "<spring:message code='Size.member.password' />";
+					var alertMsg = "<spring:message code='Size.memberVO.password' />";
 					alertMsg = alertMsg.replace("\{2\}", "8");
 					alertMsg = alertMsg.replace("\{1\}", "20");
 					alert(alertMsg);
@@ -137,27 +209,27 @@
 					$("#password").focus();
 					validationResult = false;
         		}else if(!/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/.test(password)){
-        			var alertMsg = "<spring:message code='Pattern.member.password' />";
+        			var alertMsg = "<spring:message code='Pattern.memberVO.password' />";
         			alert(alertMsg);
         			$("#password").focus();
 					validationResult = false;
 				}else if($.trim(name) == ""){
-					alert("<spring:message code='NotBlank.member.name' />");
+					alert("<spring:message code='NotBlank.memberVO.name' />");
 					$("#name").focus();
 					validationResult = false;
 				}else if((name.length < 2) || (name.length > 10)){
-					var alertMsg = "<spring:message code='Size.member.name' />";
+					var alertMsg = "<spring:message code='Size.memberVO.name' />";
 					alertMsg = alertMsg.replace("\{2\}", "2");
 					alertMsg = alertMsg.replace("\{1\}", "10");
 					alert(alertMsg);
 					$("#name").focus();
 					validationResult = false;
 				}else if($.trim(email) == ""){
-					alert("<spring:message code='NotBlank.member.email' />");
+					alert("<spring:message code='NotBlank.memberVO.email' />");
 					$("#email").focus();
 					validationResult = false;
 				}else if((email.length < 10) || (email.length > 100)){
-					var alertMsg = "<spring:message code='Size.member.email' />";
+					var alertMsg = "<spring:message code='Size.memberVO.email' />";
 					alertMsg = alertMsg.replace("\{2\}", "10");
 					alertMsg = alertMsg.replace("\{1\}", "100");
 					alert(alertMsg);

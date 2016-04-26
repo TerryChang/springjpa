@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.LocalDateTime;
 import org.springframework.data.repository.CrudRepository;
 
+import com.terry.springjpa.common.annotation.ExistCheck;
 import com.terry.springjpa.entity.Member;
 
 public class MemberVO implements VOConvert<Member, Long> {
@@ -16,6 +17,7 @@ public class MemberVO implements VOConvert<Member, Long> {
 	
 	@NotBlank
 	@Size(min=8, max=16)
+	@ExistCheck(tableName="member", columnName="loginId")
 	private String loginId;
 	
 	@NotBlank
