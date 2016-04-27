@@ -6,6 +6,7 @@ import javax.persistence.PersistenceContext;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,15 +18,14 @@ public class AopMybatis {
 	@PersistenceContext
 	EntityManager em;
 	
-	// @Pointcut("@target(com.terry.springjpa.common.annotation.FirstEntityManagerFlush) || @within(com.terry.springjpa.common.annotation.FirstEntityManagerFlush)")
-	// private void firstEntityManagerFlush(){}
+	@Pointcut("execution(* org.mybatis.spring.SqlSessionTemplate.*(..))")
+	public void mybatisOperation(){}
 	
-	// @Before(value = "firstEntityManagerFlush")
-	@Before("@target(com.terry.springjpa.common.annotation.FirstEntityManagerFlush) || @within(com.terry.springjpa.common.annotation.FirstEntityManagerFlush)")
-	public void doBeforeMybatisDaoMethod(JoinPoint thisJoinPoint){
+	@Before("mybatisOperation()")
+	public void doBeforeMybatisOperation(JoinPoint thisJoinPoint){
 		em.flush();
 		String className = thisJoinPoint.getClass().getName();
 		String methodName = thisJoinPoint.getSignature().getName();
-		logger.debug("execution doBeforeMybatisDaoMethod : className=" + className + ", methodName=" + methodName);
+		logger.debug("execution doBeforeMybatisOperation : className=" + className + ", methodName=" + methodName);
 	}
 }

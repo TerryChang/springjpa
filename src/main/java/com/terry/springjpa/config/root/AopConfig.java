@@ -7,11 +7,11 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import com.terry.springjpa.config.root.aspect.AopMybatis;
 
 @Configuration
-@EnableAspectJAutoProxy
+@EnableAspectJAutoProxy(proxyTargetClass=true)
 public class AopConfig {
 
 	@Bean
 	public AopMybatis aopMybatis(){
-		return new AopMybatis();
+		return new AopMybatis(); 
 	}
 }
