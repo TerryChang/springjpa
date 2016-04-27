@@ -7,9 +7,12 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public class ValidateDao {
+import com.terry.springjpa.common.annotation.FirstEntityManagerFlush;
 
+@Repository
+@FirstEntityManagerFlush
+public class ValidateDao {
+	
 	@Autowired
 	SqlSessionTemplate sqlSession;
 	

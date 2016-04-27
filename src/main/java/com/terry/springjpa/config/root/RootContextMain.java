@@ -19,7 +19,7 @@ import com.terry.springjpa.entity.BoardType;
 import com.terry.springjpa.entity.Member;
 
 @Configuration
-@Import({LocalConfig.class, ProductionConfig.class, DevConfig.class, JpaConfig.class, MybatisConfig.class, TransactionConfig.class})
+@Import({LocalConfig.class, ProductionConfig.class, DevConfig.class, AopConfig.class, JpaConfig.class, MybatisConfig.class, TransactionConfig.class})
 @ComponentScan(
 		basePackages="com.terry.springjpa",  
 		useDefaultFilters = false,
@@ -28,7 +28,6 @@ import com.terry.springjpa.entity.Member;
 				@ComponentScan.Filter(type=FilterType.ANNOTATION, value=Repository.class)
 		}
 )
-@EnableAspectJAutoProxy(proxyTargetClass=true)
 public class RootContextMain {
 
 	/**
