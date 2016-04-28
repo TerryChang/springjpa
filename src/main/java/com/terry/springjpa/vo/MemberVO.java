@@ -6,12 +6,11 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.LocalDateTime;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.terry.springjpa.common.annotation.ExistCheck;
-import com.terry.springjpa.entity.Member;
 
-public class MemberVO implements VOConvert<Member, Long> {
+public class MemberVO {
 	
 	private Long idx;
 	
@@ -36,8 +35,12 @@ public class MemberVO implements VOConvert<Member, Long> {
 	@Email
 	private String email;
 
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime insertDateTime;
+	
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime updateDateTime;
+	
 	public Long getIdx() {
 		return idx;
 	}
@@ -80,23 +83,4 @@ public class MemberVO implements VOConvert<Member, Long> {
 	public void setUpdateDateTime(LocalDateTime updateDateTime) {
 		this.updateDateTime = updateDateTime;
 	}
-	@Override
-	public Member convertToEntity(CrudRepository<Member, Long> repository) throws UnsupportedOperationException {
-		// TODO Auto-generated method stub
-		Member member = null;
-		if(this.getIdx() == null){
-			member = new Member();
-		}else{
-			member = repository.findOne(this.getIdx());
-		}
-		
-		member.setLoginId(this.loginId);
-		member.setPassword(this.password);
-		member.setName(this.name);
-		member.setEmail(this.email);
-		
-		return member;
-	}
-	
-	
 }

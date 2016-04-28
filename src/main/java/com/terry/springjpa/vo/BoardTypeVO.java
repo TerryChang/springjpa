@@ -4,12 +4,9 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.LocalDateTime;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.terry.springjpa.entity.BoardType;
-
-public class BoardTypeVO implements VOConvert<BoardType, Long>{
+public class BoardTypeVO {
 	private Long idx;
 	
 	@NotBlank
@@ -69,25 +66,4 @@ public class BoardTypeVO implements VOConvert<BoardType, Long>{
 	public void setUpdateDateTime(LocalDateTime updateDateTime) {
 		this.updateDateTime = updateDateTime;
 	}
-
-	@Override
-	public BoardType convertToEntity(CrudRepository<BoardType, Long> repository) throws UnsupportedOperationException {
-		// TODO Auto-generated method stub
-		BoardType boardType = null;
-		if(this.getIdx() == null){
-			boardType = new BoardType();
-		}else{
-			boardType = repository.findOne(this.getIdx());
-		}
-		
-		boardType.setBoardTypeName(this.boardTypeName);
-		boardType.setUrl(this.url);
-		
-		return boardType;
-	}
-
-	
-	
-	
-
 }

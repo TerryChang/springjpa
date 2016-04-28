@@ -1,9 +1,5 @@
 package com.terry.springjpa.entity;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -18,7 +14,6 @@ import javax.persistence.Table;
 import org.joda.time.LocalDateTime;
 
 import com.terry.springjpa.entity.embed.InsertUpdateDT;
-import com.terry.springjpa.vo.BoardTypeVO;
 
 @Entity
 @Table(name = "BOARDTYPE")

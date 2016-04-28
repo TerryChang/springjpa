@@ -14,4 +14,5 @@ public class AopConfig {
 	public AopMybatis aopMybatis(){
 		return new AopMybatis(); 
 	}
+	
 }

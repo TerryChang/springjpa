@@ -5,7 +5,6 @@ import javax.persistence.Embeddable;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Embeddable
 public class InsertUpdateDT {
