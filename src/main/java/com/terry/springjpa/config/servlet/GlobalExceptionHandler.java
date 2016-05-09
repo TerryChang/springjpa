@@ -94,6 +94,7 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(value={Exception.class})
 	public ModelAndView processException(HttpServletRequest request, HttpServletResponse response, Exception ex){
+		ex.printStackTrace();
 		String uri = request.getRequestURI();
 		String contentType = request.getHeader("content-type");
 		

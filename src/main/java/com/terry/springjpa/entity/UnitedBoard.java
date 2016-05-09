@@ -29,11 +29,11 @@ public class UnitedBoard extends Board {
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="UnitedBoardSequenceGenerator")
 	private Long idx;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	@JoinColumn(name="BOARDTYPE_IDX", referencedColumnName="IDX", nullable=false)
 	private BoardType boardType;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	@JoinColumn(name="MEMBER_IDX", referencedColumnName="IDX", nullable=false)
 	// @JoinColumn(foreignKey = @ForeignKey(name="FK_MEMBER", foreignKeyDefinition="FOREIGN KEY(MEMBER_IDX) REFERENCES MEMBER"))
 	private Member member;

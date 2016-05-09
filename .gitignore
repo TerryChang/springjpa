@@ -2,3 +2,5 @@
 /test-output/
 /.classpath
 /.gitignore
+/.settings/
+/.project

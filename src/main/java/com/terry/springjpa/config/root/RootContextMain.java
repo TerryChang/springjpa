@@ -19,9 +19,9 @@ import com.terry.springjpa.entity.BoardType;
 import com.terry.springjpa.entity.Member;
 
 @Configuration
-@Import({LocalConfig.class, ProductionConfig.class, DevConfig.class, AopConfig.class, JpaConfig.class, MybatisConfig.class, TransactionConfig.class})
+@Import({LocalConfig.class, ProductionConfig.class, DevConfig.class, AopConfig.class, ConverterConfig.class, JpaConfig.class, MybatisConfig.class, TransactionConfig.class})
 @ComponentScan(
-		basePackages="com.terry.springjpa",  
+		basePackages={"com.terry.springjpa"},  
 		useDefaultFilters = false,
 		includeFilters={
 				@ComponentScan.Filter(type=FilterType.ANNOTATION, value=Service.class),
@@ -41,44 +41,5 @@ public class RootContextMain {
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
 		return new PropertySourcesPlaceholderConfigurer();
-	}
-	
-	/**
-	 * BoardType Entity 클래스 객체를 BoardTypeVO 클래스 객체로 변환하는 Converter 클래스 객체를 bean으로 등록한다
-	 * @return
-	 */
-	@Bean
-	public BoardTypeToBoardTypeVOConverter boardTypeToBoardTypeVOConverter(){
-		return new BoardTypeToBoardTypeVOConverter();
-		
-	}
-	
-	/**
-	 * BoardTypeVO 클래스 객체를 BoardType 엔티티 클래스 객체로 변환하는 Converter 클래스 객체를 bean으로 등록한다
-	 * @param repository BoardType 엔티티 관련 Spring Data JpaRepository 인터페이스를 구현한 bean 객체
-	 * @return
-	 */
-	@Bean
-	public BoardTypeVOToBoardTypeConverter boardTypeVOToBoardTypeConverter(JpaRepository<BoardType, Long> repository){
-		return new BoardTypeVOToBoardTypeConverter(repository);
-	}
-	
-	/**
-	 * Member Entity 클래스 객체를 MemberVO 클래스 객체로 변환하는 Converter 클래스 객체를 bean으로 등록한다
-	 * @return
-	 */
-	@Bean
-	public MemberToMemberVOConverter memberToMemberVOConverter(){
-		return new MemberToMemberVOConverter();
-	}
-	
-	/**
-	 * MemberVO 클래스 객체를 Member 엔티티 클래스 객체로 변환하는 Converter 클래스 객체를 bean으로 등록한다
-	 * @param repository Member 엔티티 관련 Spring Data JpaRepository 인터페이스를 구현한 bean 객체
-	 * @return
-	 */
-	@Bean
-	public MemberVOToMemberConverter memberVOToMemberConverter(JpaRepository<Member, Long> repository){
-		return new MemberVOToMemberConverter(repository);
 	}
 }

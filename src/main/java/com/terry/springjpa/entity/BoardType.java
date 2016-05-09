@@ -1,5 +1,7 @@
 package com.terry.springjpa.entity;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -18,11 +20,9 @@ import com.terry.springjpa.entity.embed.InsertUpdateDT;
 @Entity
 @Table(name = "BOARDTYPE")
 @SequenceGenerator(name = "BoardTypeSequenceGenerator", sequenceName = "BOARDTYPE_SEQUENCE", initialValue = 1, allocationSize = 1)
+@Access(AccessType.FIELD)
 public class BoardType {
 
-	@Id
-	@Column(name = "IDX")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BoardTypeSequenceGenerator")
 	private Long idx;
 
 	@Column(name = "NAME", nullable = false)
@@ -38,6 +38,10 @@ public class BoardType {
 
 	}
 
+	@Id
+	@Column(name = "IDX")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BoardTypeSequenceGenerator")
+	@Access(AccessType.PROPERTY)
 	public Long getIdx() {
 		return idx;
 	}

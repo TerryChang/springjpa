@@ -3,7 +3,16 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-	<title>회원 등록/수정</title>
+	<title>
+		<c:choose>
+			<c:when test="${unitedBoard.idx eq null}">
+				${boardType.boardTypeName} 게시판 등록
+			</c:when>
+			<c:otherwise>
+				${boardType.boardTypeName} 게시판 수정
+			</c:otherwise>
+		</c:choose>
+	</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -44,7 +53,7 @@
 		$("#btnDelete").click(function(){
 			var idx = $("#idx").val();
 			$.ajax({
-	        	url : "/member/memberDelete.do",
+	        	url : "/unitedBoard/unitedBoardDelete.do",
 	        	type : "POST",
 	        	// data : JSON.stringify({"idx" : idx}),
 	        	data : {"idx" : idx},
@@ -52,7 +61,7 @@
 	        	dataType : "json",
 	        	success:function(data, textStatus, jqXHR){
 	        		alert("<spring:message code='deleteOK' />");
-	        		location.href="/member/memberList.do";
+	        		location.href="/unitedBoard/unitedBoardList.do?boardTypeIdx=<c:out value='${boardType.idx}' escapeXml='false' />";
 	        	},
 	        	error:function(jqXHR, textStatus, errorThrown){
 	        		// alert("<spring:message code='errorFail' />");
@@ -77,73 +86,6 @@
 	        });
 		});
 		
-		<c:if test="${member.idx eq null}">
-		$("#loginId").change(function(){
-			checkLoginId = false;	
-		});
-		
-		$("#existchkbtn").click(function(){
-			var loginId = $("#loginId").val();
-			
-			$.ajax({
-	        	url : "/member/checkLoginId.do",
-	        	type : "POST",
-	        	data : {"loginId" : loginId},
-	        	// contentType: "application/json",	// contentType으로 지정하면 Request Body로 전달되기 때문에 Spring에서 받을때 다르게 접근해야 한다
-	        	dataType : "json",
-	        	beforeSend : function(xhr){
-	        		var validationResult = true;
-	        		if($.trim(loginId) == ""){
-						alert("<spring:message code='NotBlank.memberVO.loginId' />");
-						$("#loginId").focus();
-						validationResult = false;
-	        		}else if((loginId.length < 8) || (loginId.length > 16)){
-						var alertMsg = "<spring:message code='Size.memberVO.loginId' />";
-						alertMsg = alertMsg.replace("\{2\}", "8");
-						alertMsg = alertMsg.replace("\{1\}", "16");
-						alert(alertMsg);
-						$("#loginId").focus();
-						validationResult = false;
-	        		}
-	        		return validationResult;
-					
-	        	},
-	        	success:function(data, textStatus, jqXHR){
-	        		if(data.result == "OK"){
-	        			alert("입력된 아이디는 사용가능합니다");
-	        			checkLoginId = true;
-	        		}else{
-	        			alert("입력된 아이디는 사용할 수 없습니다");
-	        			checkLoginId = false;
-	        		}
-	        	},
-	        	error:function(jqXHR, textStatus, errorThrown){
-	        		if(jqXHR.status == 400){
-	        			var responseJSON = jqXHR.responseJSON;
-	        			if(responseJSON.hasOwnProperty("result")){		// result property가 있다는 것은 Spring에서 return한 결과 Object이므로 이에 대한 작업을 진행한다
-	        				var alertMsg = "";
-		        			if(responseJSON.hasOwnProperty("result")){
-		        				var errorMessageMap = responseJSON.errorMessageMap;
-		        				$.each(errorMessageMap, function(k, v){
-		        					alertMsg += v + "\n";
-			        			});
-		        			}
-		        			var pattern = /\n$/;
-		        			alertMsg = alertMsg.replace(pattern, "");		// 에러 문자열을 결합하면 마지막 행 끝에 개행문자(\n)가 붙기 때문에 이를 제거하기 위해 정규표현식을 이용해서 마지막에 붙은 개행문자를 제거한다
-		        			console.log(alertMsg);
-		        			alert(alertMsg);
-	        			}else{
-	        				alert("<spring:message code='errorFail' />");
-	        			}	
-	        		}else{
-	        			alert("<spring:message code='errorFail' />");
-	        		}
-	        	}
-	        	
-	        });
-		});
-		</c:if>
-		
 		$("#btnList").click(function(){
 			// location.href="/member/memberList.do";
 			$("#listfrm")[0].submit();
@@ -156,22 +98,21 @@
 	
 	function processjob(blInsert){
 		
-		var loginId = $("#loginId").val();
-		var password = $("#password").val();
-		var cfpassword = $("#cfpassword").val();
-		var name = $("#name").val();
-		var email = $("#email").val();
+		var boardTypeIdx = $("#boardTypeIdx").val();
+		var memberIdx = $("#memberIdx").val();
+		var title = $("#title").val();
+		var contents = $("#contents").val();
 		
 		var sendData = null;
 		if(blInsert){
-			sendData = JSON.stringify({"loginId" : loginId, "password" : password, "name" : name, "email" : email});
+			sendData = JSON.stringify({"boardTypeIdx" : boardTypeIdx, "memberIdx" : memberIdx, "title" : title, "contents" : contents});
 		}else{
 			var idx = $("#idx").val();
-			sendData = JSON.stringify({"idx" : idx, "loginId" : loginId, "password" : password, "name" : name, "email" : email});
+			sendData = JSON.stringify({"idx" : idx, "boardTypeIdx" : boardTypeIdx, "memberIdx" : memberIdx, "title" : title, "contents" : contents});
 		}
 		
 		$.ajax({
-        	url : "/member/memberInsertUpdate.do",
+        	url : "/unitedBoard/unitedBoardInsertUpdate.do",
         	type : "POST",
         	// data : JSON.stringify({"idx" : idx, "boardTypeName" : boardTypeName, "url" : url}),
         	data : sendData,
@@ -181,68 +122,37 @@
         	dataType : "json",
         	beforeSend : function(xhr){
         		var validationResult = true;
-        		var pwdpattern = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/;
-        		if($.trim(loginId) == ""){
-					alert("<spring:message code='NotBlank.memberVO.loginId' />");
-					$("#loginId").focus();
+        		
+        		if($.trim(title) == ""){
+					alert("<spring:message code='NotBlank.unitedBoardVO.title' />");
+					$("#title").focus();
 					validationResult = false;
-        		}else if((loginId.length < 8) || (loginId.length > 16)){
-					var alertMsg = "<spring:message code='Size.memberVO.loginId' />";
-					alertMsg = alertMsg.replace("\{2\}", "8");
-					alertMsg = alertMsg.replace("\{1\}", "16");
+        		}else if((title.length < 3) || (title.length > 255)){
+					var alertMsg = "<spring:message code='Size.unitedBoardVO.title' />";
+					alertMsg = alertMsg.replace("\{2\}", "3");
+					alertMsg = alertMsg.replace("\{1\}", "255");
 					alert(alertMsg);
-					$("#loginId").focus();
+					$("#title").focus();
 					validationResult = false;
-        		}else if(!checkLoginId){
-        			alert("중복체크 버튼을 클릭해서 로그인 아이디 중복체크를 해주세요");
-        			validationResult = false;
-        		}else if((password.length < 8) || (password.length > 20)){
-					var alertMsg = "<spring:message code='Size.memberVO.password' />";
-					alertMsg = alertMsg.replace("\{2\}", "8");
-					alertMsg = alertMsg.replace("\{1\}", "20");
-					alert(alertMsg);
-					$("#password").focus();
-					validationResult = false;
-        		}else if(password != cfpassword){
-					var alertMsg = "패스워드와 패스워드 확인 입력값이 다릅니다";
-					alert(alertMsg);
-					$("#password").focus();
-					validationResult = false;
-        		}else if(!/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/.test(password)){
-        			var alertMsg = "<spring:message code='Pattern.memberVO.password' />";
-        			alert(alertMsg);
-        			$("#password").focus();
-					validationResult = false;
-				}else if($.trim(name) == ""){
-					alert("<spring:message code='NotBlank.memberVO.name' />");
-					$("#name").focus();
-					validationResult = false;
-				}else if((name.length < 2) || (name.length > 10)){
-					var alertMsg = "<spring:message code='Size.memberVO.name' />";
-					alertMsg = alertMsg.replace("\{2\}", "2");
-					alertMsg = alertMsg.replace("\{1\}", "10");
-					alert(alertMsg);
-					$("#name").focus();
-					validationResult = false;
-				}else if($.trim(email) == ""){
-					alert("<spring:message code='NotBlank.memberVO.email' />");
-					$("#email").focus();
-					validationResult = false;
-				}else if((email.length < 10) || (email.length > 100)){
-					var alertMsg = "<spring:message code='Size.memberVO.email' />";
+        		}else if($.trim(contents) == ""){
+						alert("<spring:message code='NotBlank.unitedBoardVO.contents' />");
+						$("#contents").focus();
+						validationResult = false;
+        		}else if(contents.length < 10){
+					var alertMsg = "<spring:message code='Size.unitedBoardVO.contents' />";
 					alertMsg = alertMsg.replace("\{2\}", "10");
-					alertMsg = alertMsg.replace("\{1\}", "100");
 					alert(alertMsg);
-					$("#email").focus();
+					$("#contents").focus();
 					validationResult = false;
-				}
+        		}
+
         		return validationResult;
 				
         	},
         	success:function(data, textStatus, jqXHR){
         		if(blInsert){
         			alert("<spring:message code='registOK' />");
-        			location.href="/member/memberList.do";
+        			location.href="/unitedBoard/unitedBoardList.do?boardTypeIdx=<c:out value='${boardType.idx}' escapeXml='false' />";
         		}else{
         			alert("<spring:message code='updateOK' />");
         		}		
@@ -303,73 +213,40 @@
 	</script>
 </head>
 <body>
-	<!-- 
-	member.idx : ${member.idx}
-	member.loginId : ${member.loginId}
-	member.password : ${member.password}
-	 -->
 	<div class="container">
 		<div class="page-header">
 			<c:choose>
-				<c:when test="${member.idx eq null}">
-					<h1>회원 등록</h1>
+				<c:when test="${unitedBoard.idx eq null}">
+					<h1><c:out value="${boardType.boardTypeName}" escapeXml="false" /> 게시판 등록</h1>
 				</c:when>
 				<c:otherwise>
-					<h1>회원 수정</h1>
+					<h1><c:out value="${boardType.boardTypeName}" escapeXml="false" /> 게시판 수정</h1>
 				</c:otherwise>
 			</c:choose>
 		</div>
-		<form:form id="regfrm" commandName="member" method="post" cssClass="form-horizontal" role="form" action="/member/memberInsertUpdate.do">
-		<c:choose>
-			<c:when test="${member.idx eq null}">
-				<div class="form-group">
-					<label for="name" class="col-xs-2 col-lg-2 control-label">로그인 ID</label>
-					<div class="col-xs-8 col-lg-8">
-						<form:input id="loginId" path="loginId" cssClass="form-control" placeholder="로그인 ID" />
-					</div>
-					<div class="col-xs-2 col-lg-2">
-						<button id="existchkbtn" class="btn btn-default">중복확인</button>
-					</div>
-				</div>
-			</c:when>
-			<c:otherwise>
-				<div class="form-group">
-					<label for="name" class="col-xs-2 col-lg-2 control-label">로그인 ID</label>
-					<div class="col-xs-10 col-lg-10">
-						<form:label path="loginId" cssClass="control-label"><c:out value="${member.loginId}" escapeXml="false"/></form:label>
-						<form:hidden id="loginId" path="loginId" />
-					</div>
-				</div>
-			</c:otherwise>
-		</c:choose>
+		<form:form id="regfrm" commandName="unitedBoard" method="post" cssClass="form-horizontal" role="form" action="/member/memberInsertUpdate.do">
 		<div class="form-group">
-			<label for="password" class="col-xs-2 col-lg-2 control-label">패스워드</label>
+			<label for="name" class="col-xs-2 col-lg-2 control-label">작성자</label>
 			<div class="col-xs-10 col-lg-10">
-				<form:password id="password" path="password" cssClass="form-control" showPassword="true" />
+				<form:input id="memberIdx" path="memberIdx" cssClass="form-control" placeholder="로그인 아이디" />
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="cfpassword" class="col-xs-2 col-lg-2 control-label">패스워드 확인</label>
+			<label for="title" class="col-xs-2 col-lg-2 control-label">제목</label>
 			<div class="col-xs-10 col-lg-10">
-				<input type="password" id="cfpassword" name="cfpassword" class="form-control" />
+				<form:input id="title" path="title" cssClass="form-control" placeholder="제목" />
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="name" class="col-xs-2 col-lg-2 control-label">이름</label>
+			<label for="content" class="col-xs-2 col-lg-2 control-label">내용</label>
 			<div class="col-xs-10 col-lg-10">
-				<form:input id="name" path="name" cssClass="form-control" placeholder="이름" />
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="email" class="col-xs-2 col-lg-2 control-label">이메일</label>
-			<div class="col-xs-10 col-lg-10">
-				<form:input id="email" path="email" cssClass="form-control" placeholder="이메일" />
+				<form:textarea id="contents" path="contents" cssClass="form-control" rows="8" cols="80" placeholder="내용" />
 			</div>
 		</div>
 		<div class="form-group text-center">
 			<div class="col-xs-offset-4 col-xs-4 col-cs-offset-4 col-lg-offset-4 col-lg-4 col-lg-offset-4">
 				<c:choose>
-					<c:when test="${member.idx eq null}">
+					<c:when test="${unitedBoard.idx eq null}">
 						<button id="btnRegist" type="button" class="btn btn-default">등록</button>
 					</c:when>
 					<c:otherwise>
@@ -383,13 +260,16 @@
 		</div>
 		<form:hidden id="idx" path="idx" />
 		</form:form>
-		<form:form id="listfrm" commandName="searchVO" method="get" cssClass="form-horizontal" role="form" action="/member/memberList.do">
+		<form:form id="listfrm" commandName="searchVO" method="get" cssClass="form-horizontal" role="form" action="/unitedBoard/unitedBoardList.do">
+			<form:hidden id="searchCnd2" path="searchCnd2" />
+			<form:hidden id="searchCnd3" path="searchCnd3" />
 			<form:hidden id="searchCnd1" path="searchCnd1" />
 			<form:hidden id="searchWrd1" path="searchWrd1" />
 			<form:hidden id="searchCnd" path="searchCnd" />
 			<form:hidden id="searchWrd" path="searchWrd" />
 			<form:hidden id="pageNo" path="pageNo" />
 			<form:hidden id="pageSize" path="pageSize" />
+			<input type="hidden" id="boardTypeIdx" name="boardTypeIdx" value="<c:out value='${boardType.idx}' escapeXml='false'/>" />
 		</form:form>
 	</div>
 </body>

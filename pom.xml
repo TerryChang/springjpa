@@ -35,6 +35,10 @@
 		<!-- Spring 3.2.X 버전을 사용할 경우 Hibernate 4.3.X 계열 버전을 사용하면 에러가 발생한다. 4.2.X 계열로 할것(4.2.17로는 하지말것, 버그가 있어서 며칠 고생했음) -->
 		<hibernate.version>4.3.10.Final</hibernate.version>
 		
+		<!-- QueryDSL -->
+		<querydsl-jpa.version>3.7.2</querydsl-jpa.version>
+		<querydsl-apt.version>3.7.2</querydsl-apt.version>
+		
 		<!-- Mybatis -->
 		<mybatis.version>3.2.2</mybatis.version>
         <mybatis-spring.version>1.1.1</mybatis-spring.version>
@@ -58,10 +62,10 @@
 		<joda-time.version>2.8.2</joda-time.version>
 		<!-- joda time hibernate 버전 -->
 		<usertype.core.version>4.0.0.GA</usertype.core.version>
+
+
 		
-		
-		
-	</properties>
+    </properties>
 	
 	<repositories>
         <repository>
@@ -176,6 +180,20 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
             <version>${spring-data-jpa.version}</version>
+        </dependency>
+        
+        <!-- QueryDSL -->
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <version>${querydsl-jpa.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <version>${querydsl-apt.version}</version>
+            <scope>provided</scope>
         </dependency>
         
         <!-- AspectJ -->
@@ -362,6 +380,23 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
+            <plugin>
+				<groupId>com.mysema.maven</groupId>
+  				<artifactId>apt-maven-plugin</artifactId>
+  				<version>1.1.3</version>
+  				<executions>
+    				<execution>
+      					<phase>generate-sources</phase>
+      					<goals>
+        					<goal>process</goal>
+      					</goals>
+      					<configuration>
+        					<outputDirectory>target/generated-sources</outputDirectory>
+         					<processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
+      					</configuration>
+    				</execution>
+  				</executions>
+			</plugin>
         </plugins>
     </build>
 </project>

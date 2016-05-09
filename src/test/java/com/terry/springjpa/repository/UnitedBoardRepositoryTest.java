@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,11 +27,18 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.mysema.query.jpa.impl.JPAQuery;
+import com.mysema.query.types.Projections;
 import com.terry.springjpa.config.root.RootContextMain;
 import com.terry.springjpa.entity.BoardType;
 import com.terry.springjpa.entity.Member;
+import com.terry.springjpa.entity.QBoardType;
+import com.terry.springjpa.entity.QMember;
+import com.terry.springjpa.entity.QUnitedBoard;
 import com.terry.springjpa.entity.UnitedBoard;
 import com.terry.springjpa.entity.embed.InsertUpdateDT;
+import com.terry.springjpa.vo.SearchVO;
+import com.terry.springjpa.vo.UnitedBoardVO;
 
 @ContextConfiguration(classes={RootContextMain.class})
 @ActiveProfiles("local")
@@ -48,8 +56,8 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@BeforeClass
 	public void initTest(){
 		String sql1 = "insert into boardtype(idx, name, url, insertdt, updatedt) values (boardtype_sequence.nextval, ?, ?, current_timestamp(), null)";
-		String sql2 = "insert into member(idx, loginid, password, name, insertdt, updatedt) "
-				+ "values (member_sequence.nextval, ?, ?, ?, current_timestamp(), null)";
+		String sql2 = "insert into member(idx, loginid, password, name, email, insertdt, updatedt) "
+				+ "values (member_sequence.nextval, ?, ?, ?, ?, current_timestamp(), null)";
 		String sql3 = "insert into unitedboard(idx, boardtype_idx, member_idx, title, contents, viewcnt, insertdt, updatedt)"
 				+ "values (unitedboard_sequence.nextval, ?, ?, ?, ?, ?, current_timestamp(), null)";
 		// 게시판 타입1 등록
@@ -58,11 +66,11 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 		jdbcTemplate.update(sql1,"동영상 게시판", "http://localhost/sampleboard1.do");
 		
 		// 사용자1 등록
-		jdbcTemplate.update(sql2, "loginId1", "loginPassword1", "이름1");
+		jdbcTemplate.update(sql2, "loginId1", "loginPassword1", "이름1", "user1@aaa.com");
 		// 사용자2 등록
-		jdbcTemplate.update(sql2, "loginId2", "loginPassword2", "이름2");
+		jdbcTemplate.update(sql2, "loginId2", "loginPassword2", "이름2", "user2@aaa.com");
 		// 사용자3 등록
-		jdbcTemplate.update(sql2, "loginId3", "loginPassword3", "이름3");
+		jdbcTemplate.update(sql2, "loginId3", "loginPassword3", "이름3", "user3@aaa.com");
 		
 		// 게시판 타입1 글 12개(사용자1 3개, 사용자2 5개, 사용자3 4개) 등록
 		jdbcTemplate.update(sql3, 1, 2, "자유게시판 제목1", "자유게시판 내용1", 0);
@@ -180,7 +188,7 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 		unitedBoard.setInsertUpdateDT(new InsertUpdateDT());
 		
 		// When
-		UnitedBoard selectBoard = repository.findUnitedBoard(20L);
+		UnitedBoard selectBoard = repository.findOne(20L);
 		selectBoard.setTitle("동영상 게시판 제목8 수정");
 		selectBoard.setContents("동영상 게시판 내용8 수정");
 		
@@ -222,46 +230,124 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 	}
 	
 	@Test
+	public void 게시판_글목록조회() throws Exception {
+		// Given
+		
+		// When
+		SearchVO searchVO = new SearchVO();
+		Pageable pageable = new PageRequest(0, 10, new Sort(Direction.DESC, "idx"));
+		Page<UnitedBoardVO> result = repository.selectList(null, searchVO, pageable);
+		
+		// Then
+		assertEquals(27, result.getTotalElements(), "게시판_글목록조회 실패");
+	}
+	
+	@Test
 	public void 자유게시판_사용자1_글목록조회() throws Exception {
 		// Given
-		BoardType boardType = em.find(BoardType.class, 1L); 
-		Member member = em.find(Member.class, 1L);
 		
-		List<UnitedBoard> compareList = new ArrayList<UnitedBoard>();
-		UnitedBoard board1 = new UnitedBoard();
+		List<UnitedBoardVO> compareList = new ArrayList<UnitedBoardVO>();
+		UnitedBoardVO board1 = new UnitedBoardVO();
 		board1.setIdx(12L);
-		board1.setBoardType(boardType);
-		board1.setMember(member);
+		board1.setBoardTypeName("자유게시판");
+		board1.setMemberLoginId("loginId1");
 		board1.setTitle("자유게시판 제목12");
-		board1.setContents("자유게시판 내용12");
+		// board1.setContents("자유게시판 내용12");
 		board1.setViewCnt(0);
-		UnitedBoard board2 = new UnitedBoard();
+		UnitedBoardVO board2 = new UnitedBoardVO();
 		board2.setIdx(5L);
-		board2.setBoardType(boardType);
-		board2.setMember(member);
+		board2.setBoardTypeName("자유게시판");
+		board2.setMemberLoginId("loginId1");
 		board2.setTitle("자유게시판 제목5");
-		board2.setContents("자유게시판 내용5");
+		// board2.setContents("자유게시판 내용5");
 		board2.setViewCnt(0);
-		UnitedBoard board3 = new UnitedBoard();
+		UnitedBoardVO board3 = new UnitedBoardVO();
 		board3.setIdx(2L);
-		board3.setBoardType(boardType);
-		board3.setMember(member);
+		board3.setBoardTypeName("자유게시판");
+		board3.setMemberLoginId("loginId1");
 		board3.setTitle("자유게시판 제목2");
-		board3.setContents("자유게시판 내용2");
+		// board3.setContents("자유게시판 내용2");
 		board3.setViewCnt(0);
 		compareList.add(board1);
 		compareList.add(board2);
 		compareList.add(board3);
 		
 		// When
+		SearchVO searchVO = new SearchVO();
+		searchVO.setSearchCnd("loginId");
+		searchVO.setSearchWrd("loginId1");
 		Pageable pageable = new PageRequest(0, 10, new Sort(Direction.DESC, "idx"));
-		Page<UnitedBoard> result = repository.findUserAll(1L, "loginId1", pageable);
+		Page<UnitedBoardVO> result = repository.selectList(1L, searchVO, pageable);
 		
 		// Then
 		assertEquals(3, result.getTotalElements(), "자유게시판_사용자1_글목록조회 실패");
 		assertEquals(result.getContent(), compareList, "자유게시판_사용자1_글목록조회 실패");
 	}
 	
+	@Test
+	public void QueryDSL_Fetch_Join_테스트(){
+		
+		QUnitedBoard unitedBoard = QUnitedBoard.unitedBoard;
+		QBoardType boardType = QBoardType.boardType;
+		QMember member = QMember.member;
+		
+		JPAQuery query = new JPAQuery(em);
+		List<UnitedBoard> result = query.from(unitedBoard)
+				.join(unitedBoard.boardType, boardType).fetch()
+				.join(unitedBoard.member, member).fetch()
+				.where(unitedBoard.member.loginId.eq("loginId1"))
+				.list(unitedBoard);
+		
+		assertEquals(7, result.size(), "QueryDSL_Fetch_Join_테스트 실패");
+		/*
+		JPQLQuery query = from(unitedBoard);
+		
+		query = query.innerJoin(unitedBoard.boardType).fetch()
+				.innerJoin(unitedBoard.member).fetch();
+		
+		long testCount = query.count();
+		*/
+		
+	}
+	
+	@Test
+	public void QueryDSL_Fetch_Join_Projections_테스트(){
+		
+		QUnitedBoard unitedBoard = QUnitedBoard.unitedBoard;
+		QBoardType boardType = QBoardType.boardType;
+		QMember member = QMember.member;
+		
+		JPAQuery query = new JPAQuery(em);
+		List<UnitedBoardVO> result = query.from(unitedBoard)
+				.innerJoin(unitedBoard.boardType, boardType).fetch()
+				.where(unitedBoard.member.loginId.eq("loginId1"))
+				.list(Projections.fields(UnitedBoardVO.class, boardType.boardTypeName, unitedBoard.title, unitedBoard.member.loginId.as("memberLoginId"), unitedBoard.viewCnt, unitedBoard.insertUpdateDT.insertDateTime));
+		
+		assertEquals(7, result.size(), "QueryDSL_Fetch_Join_Projections_테스트 실패");
+		/*
+		JPQLQuery query = from(unitedBoard);
+		
+		query = query.innerJoin(unitedBoard.boardType).fetch()
+				.innerJoin(unitedBoard.member).fetch();
+		
+		long testCount = query.count();
+		*/
+		
+	}
+	
+	@Test
+	public void JPQL_Proxy_fettch_Join_테스트(){
+
+		String strQuery = "select u from UnitedBoard u join fetch u.boardType "
+				+ "join fetch u.member "
+				+ "where u.member.loginId=?1 ";
+		
+		TypedQuery<UnitedBoard> query = em.createQuery(strQuery, UnitedBoard.class).setParameter(1, "loginId1");
+		List<UnitedBoard> result = query.getResultList();
+		
+		assertEquals(7, result.size(), "JPQL_Proxy_fettch_Join_테스트 실패");
+	}
+	/*
 	@Test
 	public void 동영상게시판_사용자3_글목록조회() throws Exception {
 		// Given
@@ -319,29 +405,7 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 		assertEquals(result.getContent(), compareList, "동영상게시판_사용자3_글목록조회 실패");
 	}
 	
-	@Test
-	public void 자유게시판_사용자3_글조회() throws Exception {
-		// Given
-		BoardType boardType = em.find(BoardType.class, 1L);
-		Member member = em.find(Member.class, 3L);
-		
-		UnitedBoard unitedBoard = new UnitedBoard();
-		unitedBoard.setIdx(10L);
-		unitedBoard.setBoardType(boardType);
-		unitedBoard.setMember(member);
-		unitedBoard.setTitle("자유게시판 제목10");
-		unitedBoard.setContents("자유게시판 내용10");
-		unitedBoard.setViewCnt(1);
-		
-		// When
-		UnitedBoard selectBoard = repository.findUnitedBoard(10L);
-		// 조회 카운트를 증가시킨다
-		selectBoard.setViewCnt(selectBoard.getViewCnt()+1);
-		repository.saveAndFlush(selectBoard);
-		
-		// Then
-		assertEquals(selectBoard, unitedBoard, "자유게시판_사용자3_글조회 실패");
-	}
+	
 	
 	@Test
 	public void 동영상게시판_사용자2_글조회() throws Exception {
@@ -424,15 +488,15 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 	// -------------------------------
 	@Test
 	public void 동영상게시판_내용_글목록조회() throws Exception {
-		/*
-		jdbcTemplate.update(sql3, 2, 3, "동영상 게시판 제목1", "동영상 게시판 내용1", 0);
-		jdbcTemplate.update(sql3, 2, 2, "동영상 게시판 제목10", "동영상 게시판 내용10", 0);
-		jdbcTemplate.update(sql3, 2, 3, "동영상 게시판 제목11", "동영상 게시판 내용11", 0);
-		jdbcTemplate.update(sql3, 2, 2, "동영상 게시판 제목12", "동영상 게시판 내용12", 0);
-		jdbcTemplate.update(sql3, 2, 1, "동영상 게시판 제목13", "동영상 게시판 내용13", 0);
-		jdbcTemplate.update(sql3, 2, 3, "동영상 게시판 제목14", "동영상 게시판 내용14", 0);
-		jdbcTemplate.update(sql3, 2, 2, "동영상 게시판 제목15", "동영상 게시판 내용15", 0);
-		 */
+		
+		// jdbcTemplate.update(sql3, 2, 3, "동영상 게시판 제목1", "동영상 게시판 내용1", 0);
+		// jdbcTemplate.update(sql3, 2, 2, "동영상 게시판 제목10", "동영상 게시판 내용10", 0);
+		// jdbcTemplate.update(sql3, 2, 3, "동영상 게시판 제목11", "동영상 게시판 내용11", 0);
+		// jdbcTemplate.update(sql3, 2, 2, "동영상 게시판 제목12", "동영상 게시판 내용12", 0);
+		// jdbcTemplate.update(sql3, 2, 1, "동영상 게시판 제목13", "동영상 게시판 내용13", 0);
+		// jdbcTemplate.update(sql3, 2, 3, "동영상 게시판 제목14", "동영상 게시판 내용14", 0);
+		// jdbcTemplate.update(sql3, 2, 2, "동영상 게시판 제목15", "동영상 게시판 내용15", 0);
+		
 		// Given
 		BoardType boardType = em.getReference(BoardType.class, 2L);
 		Member member1 = em.getReference(Member.class, 1L);
@@ -514,7 +578,7 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 		assertEquals(7, result.getTotalElements(), "동영상게시판_내용_글목록조회 실패");
 		assertEquals(result.getContent(), compareList, "동영상게시판_내용_글목록조회 실패");
 	}
-	
+	*/
 	
 	@AfterClass
 	public void finalizeTest(){

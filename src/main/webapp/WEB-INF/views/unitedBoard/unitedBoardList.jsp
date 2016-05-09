@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-	<title>게시판</title>
+	<title><c:out value="${boardType.boardTypeName}" escapeXml="false"/> 게시판</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,13 +18,13 @@
 	$(document).ready(function(){
 		$("#btnRegist").click(function(){
 			var serializeForm = $("#listfrm").serialize();
-			location.href="/member/memberInsertUpdate.do?" + serializeForm;
+			location.href="/unitedBoard/unitedBoardInsertUpdate.do?" + serializeForm;
 		});
 		
 		$("#searchBtn").click(function(){
 			var frm = $("#listfrm")[0];
 			if($("#searchWrd1").val() == ""){
-				location.href="/member/memberList.do";
+				location.href="/unitedBoard/unitedBoardList.do?boardTypeIdx=<c:out value='${boardType.idx}' escapeXml='false'/>";
 			}else{
 				$("#searchCnd").val($("#searchCnd1").val());
 				$("#searchWrd").val($("#searchWrd1").val());
@@ -45,7 +45,16 @@
 	
 	function go_detail(idx){
 		var serializeForm = $("#listfrm").serialize();
-		location.href="/member/memberInsertUpdate.do?idx="+idx+"&"+serializeForm;
+		location.href="/unitedBoard/unitedBoardInsertUpdate.do?idx="+idx+"&"+serializeForm;
+	}
+	
+	function changeBoard(objSel){
+		var frm = $("#listfrm")[0];
+		$("#searchCnd2").val($("#searchCnd3").val());
+		$("#searchCnd").val($("#searchCnd1").val());
+		$("#searchWrd").val($("#searchWrd1").val());
+		$("#pageNo").val(1);
+		frm.submit();
 	}
 	</script>
 </head>
@@ -56,18 +65,16 @@
 	<div class="container">
 		<!-- Page Header Start -->
 		<div class="page-header">
-	 		<h1>게시판</h1>
+	 		<h1><c:out value="${boardType.boardTypeName}" escapeXml="false"/> 게시판</h1>
 		</div>
 		
 		<form:form id="listfrm" method="get" cssClass="form-inline" commandName="searchVO" role="form">
-		
 		<div class="form-group pull-right">
        		<form:select id="searchCnd1" class="form-control" path="searchCnd1">
-       			<form:option value="0">전체</form:option>
-       			<form:option value="1">아이디</form:option>
-       			<form:option value="2">제목</form:option>
-       			<form:option value="3">내용</form:option>
-       			<form:option value="4">제목 + 내용</form:option>
+       			<form:option value="">전체</form:option>
+       			<form:option value="loginId">아이디</form:option>
+       			<form:option value="title">제목</form:option>
+       			<form:option value="contents">내용</form:option>
        		</form:select>
       		<form:input type="text" class="form-control" id="searchWrd1" path="searchWrd1" />
       		<button id="searchBtn" class="form-control">검색</button>
@@ -111,9 +118,9 @@
 						<c:forEach var="item" items="${page}" varStatus="status">
 							<tr>
 								<td class="text-center">${startNo-status.index}</td>
-								<td><a href="#" onclick="go_detail(<c:out value='${item.idx}' escapeXml='false'/>)"><c:out value="${item.loginId}" escapeXml="false"/></a></td>
-								<td><c:out value="${item.name}" escapeXml="false"/></td>
-								<td><c:out value="${item.email}" escapeXml="false"/></td>
+								<td><a href="#" onclick="go_detail(<c:out value='${item.idx}' escapeXml='false'/>)"><c:out value="${item.title}" escapeXml="false"/></a></td>
+								<td><c:out value="${item.memberLoginId}" escapeXml="false"/></td>
+								<td><c:out value="${item.viewCnt}" escapeXml="false"/></td>
 								<td><spring:eval expression="item.insertDateTime" /></td>
 							</tr>
 						</c:forEach>
@@ -128,9 +135,11 @@
 			<button id="btnRegist" type="button" class="btn btn-default">등록</button>
 		</div>
 		<form:hidden id="searchCnd" path="searchCnd" />
+		<form:hidden id="searchCnd2" path="searchCnd2" />
 		<form:hidden id="searchWrd" path="searchWrd" />
 		<form:hidden id="pageNo" path="pageNo" />
 		<form:hidden id="pageSize" path="pageSize" />
+		<input type="hidden" id="boardTypeIdx" name="boardTypeIdx" value="<c:out value='${boardType.idx}' escapeXml='false'/>" />
 		</form:form>
 	</div>
 </body>
