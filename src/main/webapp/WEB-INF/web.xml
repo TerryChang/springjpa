@@ -7,21 +7,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 
     <display-name>springjpa</display-name>
     
-   <!--
-		- Location of the XML file that defines the root application context.
-		- Applied by ContextLoaderListener.
-	-->
-	<!-- 
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:spring/application-config.xml</param-value>
-    </context-param>
-
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
-     -->
-    
     <listener>
     	<listener-class> 
       		org.springframework.security.web.session.HttpSessionEventPublisher
@@ -44,26 +29,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
         <param-value>com.terry.springjpa.config.root.RootContextMain</param-value>
     </context-param>
     
-    <!--
-		- Servlet that dispatches request to registered handlers (Controller implementations).
-	-->
-	<!-- 
-    <servlet>
-        <servlet-name>dispatcherServlet</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <init-param>
-            <param-name>contextConfigLocation</param-name>
-            <param-value>/WEB-INF/mvc-config.xml</param-value>
-        </init-param>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>dispatcherServlet</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
-	-->
-	
 	<servlet>
         <servlet-name>dispatcherServlet</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -86,6 +51,11 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </servlet-mapping>
     
     <filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+
+    <filter>
     	<filter-name>jpaFilter</filter-name>
       	<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
       	<init-param>
@@ -104,6 +74,11 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
             <param-value>utf-8</param-value>
         </init-param>
     </filter>
+
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<filter-mapping>
         <filter-name>jpaFilter</filter-name>

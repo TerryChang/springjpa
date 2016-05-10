@@ -1,5 +1,8 @@
 package com.terry.springjpa.vo;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -7,10 +10,15 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.SpringSecurityCoreVersion;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.terry.springjpa.common.annotation.ExistCheck;
 
-public class MemberVO {
+public class MemberVO implements UserDetails{
+	
+	private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 	
 	private Long idx;
 	
@@ -40,6 +48,78 @@ public class MemberVO {
 	
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime updateDateTime;
+	
+	// Spring Security 관련 멤버 변수들 정의 시작
+	Collection<? extends GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();		// 계정이 갖고 있는 권한 목록
+	boolean accountNonExpired = true;						// 계정 만료 여부(true일 경우 만료되지 않았음을 의미)
+	boolean accountNonLocked = true;						// 계정 잠김 여부(true일 경우 계정이 잠기지 않았음을 의미)
+	boolean credentialsNonExpired = true;					// 계정의 패스워드 만료 여부(true일 경우 계정의 패스워드가 아직 만료되지 않았음을 의미)
+	boolean enabled = true;									// 계정 사용 가능 여부(true일 경우 계정이 사용 가능)
+	// Spring Security 관련 멤버 변수들 정의 끝
+	
+	public MemberVO(){
+		
+	}
+
+	/**
+	 * 회원정보의 실제 유효한 멤버변수들만 설정하는 생성자
+	 * @param idx
+	 * @param loginId
+	 * @param password
+	 * @param name
+	 * @param email
+	 * @param insertDateTime
+	 * @param updateDateTime
+	 */
+	public MemberVO(Long idx, String loginId, String password, String name, String email, LocalDateTime insertDateTime, LocalDateTime updateDateTime){
+		this.idx = idx;
+		this.loginId = loginId;
+		this.password = password;
+		this.name = name;
+		this.email = email;
+		this.insertDateTime = insertDateTime;
+		this.updateDateTime = updateDateTime;
+	}
+	
+	/**
+	 * Spring Security 관련으로 사용되는 멤버변수들만 설정하는 생성자
+	 * @param accountNonExpired
+	 * @param accountNonLocked
+	 * @param credentialsNonExpired
+	 * @param enabled
+	 * @param authorities
+	 */
+	public MemberVO(boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, boolean enabled, Collection<? extends GrantedAuthority> authorities){
+		this.accountNonExpired = accountNonExpired;
+		this.accountNonLocked = accountNonLocked;
+		this.credentialsNonExpired = credentialsNonExpired;
+		this.enabled = enabled;
+		this.authorities = authorities;
+	}
+	
+	/**
+	 * 회원정보의 실제 유효한 멤버변수들과 Spring Security 관련으로 사용되는 멤버변수들 모두 설정하는 생성자
+	 * @param idx
+	 * @param loginId
+	 * @param password
+	 * @param name
+	 * @param email
+	 * @param insertDateTime
+	 * @param updateDateTime
+	 * @param accountNonExpired
+	 * @param accountNonLocked
+	 * @param credentialsNonExpired
+	 * @param enabled
+	 * @param authorities
+	 */
+	public MemberVO(Long idx, String loginId, String password, String name, String email, LocalDateTime insertDateTime, LocalDateTime updateDateTime, boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, boolean enabled, Collection<? extends GrantedAuthority> authorities){
+		this(idx, loginId, password, name, email, insertDateTime, updateDateTime);
+		this.accountNonExpired = accountNonExpired;
+		this.accountNonLocked = accountNonLocked;
+		this.credentialsNonExpired = credentialsNonExpired;
+		this.enabled = enabled;
+		this.authorities = authorities;
+	}
 	
 	public Long getIdx() {
 		return idx;
@@ -82,5 +162,56 @@ public class MemberVO {
 	}
 	public void setUpdateDateTime(LocalDateTime updateDateTime) {
 		this.updateDateTime = updateDateTime;
+	}
+	
+	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+		this.authorities = authorities;
+	}
+	
+	public void setAccountNonExpired(boolean accountNonExpired) {
+		this.accountNonExpired = accountNonExpired;
+	}
+	
+	public void setAccountNonLocked(boolean accountNonLocked) {
+		this.accountNonLocked = accountNonLocked;
+	}
+	
+	public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+		this.credentialsNonExpired = credentialsNonExpired;
+	}
+	
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return authorities;
+	}
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return loginId;
+	}
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return accountNonExpired;
+	}
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return accountNonLocked;
+	}
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return credentialsNonExpired;
+	}
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return enabled;
 	}
 }

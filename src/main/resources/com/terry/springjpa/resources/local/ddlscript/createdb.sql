@@ -31,14 +31,70 @@ create memory table unitedboard_comment(
 	, comment clob not null
 	, insertdt timestamp not null
 );
+
+create memory table authority (
+  idx 				bigint 			primary key,
+  authority_name    varchar(50)		not null, 
+  authority_desc    varchar(50)         null
+);
+
+create memory table member_authority (
+  member_idx		bigint		    not null, 
+  authority_idx     bigint		    not null,
+  primary key(member_idx, authority_idx)
+);
+
+create memory table groups (
+  idx           bigint				primary key, 
+  group_name    varchar(50)         not null
+);
+
+create memory table member_groups (
+  member_idx	bigint         		not null,
+  groups_idx	bigint         		not null, 
+  primary key(member_idx, groups_idx)
+);
+
+create memory table groups_authority (
+  groups_idx   		bigint         	not null, 
+  authority_idx  	bigint         	not null,
+  primary key(groups_idx, authority_idx)
+);
+
+create memory table secured_resources (
+  idx        		bigint      	primary key, 
+  resource_name     varchar(50)     null, 
+  resource_pattern  varchar(100)    not null, 
+  resource_type     varchar(10)     null, 
+  sort_order        int				null
+);
+
+create memory table secured_resources_authority (
+  resources_idx		bigint			not null, 
+  authority_idx     bigint			not null,
+  primary key(resources_idx, authority_idx)
+);
+
 alter table unitedboard add foreign key(boardtype_idx) references boardtype(idx);
 alter table unitedboard add foreign key(member_idx) references member(idx);
 alter table unitedboard_comment add foreign key(unitedboard_idx) references unitedboard(idx);
 alter table unitedboard_comment add foreign key(member_idx) references member(idx);
+alter table member_authority add foreign key(member_idx) references member(idx);
+alter table member_authority add foreign key(authority_idx) references authority(idx);
+alter table member_groups add foreign key(member_idx) references member(idx);
+alter table member_groups add foreign key(groups_idx) references groups(idx);
+alter table groups_authority add foreign key(groups_idx) references groups(idx);
+alter table groups_authority add foreign key(authority_idx) references authority(idx);
+alter table secured_resources_authority add foreign key(resources_idx) references secured_resources(idx);
+alter table secured_resources_authority add foreign key(authority_idx) references authority(idx);
+
 create sequence boardtype_sequence start with 1 increment by 1;
 create sequence member_sequence start with 1 increment by 1;
 create sequence unitedboard_sequence start with 1 increment by 1;
 create sequence unitedboard_comment_sequence start with 1 increment by 1;
+create sequence authority_sequence start with 1 increment by 1;
+create sequence groups_sequence start with 1 increment by 1;
+create sequence secured_resources_sequence start with 1 increment by 1;
 
 -- test data insert query boardtype_sequence.nextval, ?, ?, current_timestamp(), null
 insert into boardtype(idx, name, url, insertdt) values(boardtype_sequence.nextval, '테스트 게시판1', '/unitedBoard/unitedBoardList.do?boardType=1', current_timestamp());

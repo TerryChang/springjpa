@@ -1,5 +1,7 @@
 package com.terry.springjpa.entity;
 
+import java.util.List;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
@@ -8,19 +10,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.LocalDateTime;
 
 import com.terry.springjpa.entity.embed.InsertUpdateDT;
-import com.terry.springjpa.vo.MemberVO;
 
 @Entity
 @Table(name="MEMBER")
@@ -44,6 +42,12 @@ public class Member {
 	
 	@Embedded
 	private InsertUpdateDT insertUpdateDT;
+	
+	@OneToMany(mappedBy="member")
+	private List<MemberAuthority> memberAuthorities;
+	
+	@OneToMany(mappedBy="member")
+	private List<MemberGroups> memberGroups;
 
 	public Member(){
 		
@@ -108,6 +112,22 @@ public class Member {
 		this.insertUpdateDT = insertUpdateDT;
 	}
 	
+	public List<MemberAuthority> getMemberAuthorities() {
+		return memberAuthorities;
+	}
+
+	public void setMemberAuthorities(List<MemberAuthority> memberAuthorities) {
+		this.memberAuthorities = memberAuthorities;
+	}
+
+	public List<MemberGroups> getMemberGroups() {
+		return memberGroups;
+	}
+
+	public void setMemberGroups(List<MemberGroups> memberGroups) {
+		this.memberGroups = memberGroups;
+	}
+
 	@PrePersist
 	public void onCreate(){
 		insertUpdateDT = new InsertUpdateDT();
