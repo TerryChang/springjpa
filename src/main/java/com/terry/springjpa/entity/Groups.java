@@ -80,7 +80,9 @@ public class Groups {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((groupName == null) ? 0 : groupName.hashCode());
+		result = prime * result + ((groupsAuthority == null) ? 0 : groupsAuthority.hashCode());
 		result = prime * result + ((idx == null) ? 0 : idx.hashCode());
+		result = prime * result + ((memberGroups == null) ? 0 : memberGroups.hashCode());
 		return result;
 	}
 
@@ -90,22 +92,29 @@ public class Groups {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof Groups))
 			return false;
 		Groups other = (Groups) obj;
 		if (groupName == null) {
-			if (other.getGroupName() != null)
+			if (other.groupName != null)
 				return false;
-		} else if (!groupName.equals(other.getGroupName()))
+		} else if (!groupName.equals(other.groupName))
+			return false;
+		if (groupsAuthority == null) {
+			if (other.groupsAuthority != null)
+				return false;
+		} else if (!groupsAuthority.equals(other.groupsAuthority))
 			return false;
 		if (idx == null) {
-			if (other.getIdx() != null)
+			if (other.idx != null)
 				return false;
-		} else if (!idx.equals(other.getIdx()))
+		} else if (!idx.equals(other.idx))
+			return false;
+		if (memberGroups == null) {
+			if (other.memberGroups != null)
+				return false;
+		} else if (!memberGroups.equals(other.memberGroups))
 			return false;
 		return true;
 	}
-	
-	
-	
 }

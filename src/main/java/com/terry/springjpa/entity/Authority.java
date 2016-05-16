@@ -92,6 +92,8 @@ public class Authority {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((authorityDesc == null) ? 0 : authorityDesc.hashCode());
+		result = prime * result + ((authorityGroups == null) ? 0 : authorityGroups.hashCode());
+		result = prime * result + ((authorityMembers == null) ? 0 : authorityMembers.hashCode());
 		result = prime * result + ((authorityName == null) ? 0 : authorityName.hashCode());
 		result = prime * result + ((idx == null) ? 0 : idx.hashCode());
 		return result;
@@ -103,13 +105,23 @@ public class Authority {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof Authority))
 			return false;
 		Authority other = (Authority) obj;
 		if (authorityDesc == null) {
 			if (other.getAuthorityDesc() != null)
 				return false;
 		} else if (!authorityDesc.equals(other.getAuthorityDesc()))
+			return false;
+		if (authorityGroups == null) {
+			if (other.getAuthorityGroups() != null)
+				return false;
+		} else if (!authorityGroups.equals(other.getAuthorityGroups()))
+			return false;
+		if (authorityMembers == null) {
+			if (other.getAuthorityMembers() != null)
+				return false;
+		} else if (!authorityMembers.equals(other.getAuthorityMembers()))
 			return false;
 		if (authorityName == null) {
 			if (other.getAuthorityName() != null)
@@ -123,5 +135,7 @@ public class Authority {
 			return false;
 		return true;
 	}
+
+	
 	
 }

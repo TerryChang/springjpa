@@ -3,6 +3,7 @@ package com.terry.springjpa.repository.impl;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.support.QueryDslRepositorySupport;
+import org.springframework.stereotype.Repository;
 
 import com.mysema.query.jpa.JPQLQuery;
 import com.terry.springjpa.entity.Authority;
@@ -15,6 +16,7 @@ import com.terry.springjpa.entity.QMemberAuthority;
 import com.terry.springjpa.entity.QMemberGroups;
 import com.terry.springjpa.repository.LoginAuthorities;
 
+@Repository
 public class LoginAuthoritiesImpl extends QueryDslRepositorySupport implements LoginAuthorities {
 
 	public LoginAuthoritiesImpl() {

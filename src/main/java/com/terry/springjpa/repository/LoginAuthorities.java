@@ -2,8 +2,6 @@ package com.terry.springjpa.repository;
 
 import java.util.List;
 
-import org.springframework.security.core.GrantedAuthority;
-
 import com.terry.springjpa.entity.Authority;
 import com.terry.springjpa.entity.Member;
 
