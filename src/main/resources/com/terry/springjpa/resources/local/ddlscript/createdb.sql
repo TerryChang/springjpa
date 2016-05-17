@@ -121,3 +121,28 @@ insert into unitedboard(idx, boardtype_idx, member_idx, title, contents, viewcnt
 -- insert into member(idx, loginid, password, name, email, insertdt) values(member_sequence.nextval, '1loginid', 'password1', '가나하', 'a@b.com', current_timestamp());
 -- insert into member(idx, loginid, password, name, email, insertdt) values(member_sequence.nextval, '2loginid', 'password2', '1가나다', 'a@b.com', current_timestamp());
 -- insert into member(idx, loginid, password, name, email, insertdt) values(member_sequence.nextval, '3loginid', 'password3', '2가나다', 'a@b.com', current_timestamp());
+
+-- 권한 테스트 테이터
+
+insert into authority(idx, authority_name, authority_desc) values(authority_sequence.nextval, 'ADMIN', '관리자');
+insert into authority(idx, authority_name, authority_desc) values(authority_sequence.nextval, 'MEMBER', '회원');
+insert into authority(idx, authority_name, authority_desc) values(authority_sequence.nextval, 'ANONYMOUS', '비회원');
+
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '사용자 목록', '/user/userList.do', 'url', 1);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '사용자 등록', '/user/userInsert.do', 'url', 1);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '사용자 삭제', '/user/userDelete.do', 'url', 1);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '사용자 전체', '/user/*.do', 'url', 2);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '관리자 목록', '/admin/adminList.do', 'url', 1);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '관리자 등록', '/admin/adminInsert.do', 'url', 1);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '관리자 삭제', '/admin/adminDelete.do', 'url', 1);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '관리자 전체', '/admin/*.do', 'url', 2);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '공지 목록', '/notice/noticeList.do', 'url', 1);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '공지 조회', '/notice/noticeView.do', 'url', 1);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '공지 전체', '/notice/notice*.do', 'url', 2);
+
+insert into secured_resources_authority(resources_idx, authority_idx) values(5, 1);
+insert into secured_resources_authority(resources_idx, authority_idx) values(6, 1);
+insert into secured_resources_authority(resources_idx, authority_idx) values(7, 1);
+insert into secured_resources_authority(resources_idx, authority_idx) values(4, 2);
+insert into secured_resources_authority(resources_idx, authority_idx) values(9, 3);
+insert into secured_resources_authority(resources_idx, authority_idx) values(10, 3);
