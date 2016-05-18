@@ -124,6 +124,7 @@ insert into unitedboard(idx, boardtype_idx, member_idx, title, contents, viewcnt
 
 -- 권한 테스트 테이터
 
+/*
 insert into authority(idx, authority_name, authority_desc) values(authority_sequence.nextval, 'ADMIN', '관리자');
 insert into authority(idx, authority_name, authority_desc) values(authority_sequence.nextval, 'MEMBER', '회원');
 insert into authority(idx, authority_name, authority_desc) values(authority_sequence.nextval, 'ANONYMOUS', '비회원');
@@ -146,3 +147,4 @@ insert into secured_resources_authority(resources_idx, authority_idx) values(7, 
 insert into secured_resources_authority(resources_idx, authority_idx) values(4, 2);
 insert into secured_resources_authority(resources_idx, authority_idx) values(9, 3);
 insert into secured_resources_authority(resources_idx, authority_idx) values(10, 3);
+*/

@@ -14,6 +14,8 @@ import com.mysema.query.Tuple;
 import com.mysema.query.jpa.JPQLQuery;
 import com.mysema.query.types.Expression;
 import com.mysema.query.types.QTuple;
+import com.terry.springjpa.entity.QAuthority;
+import com.terry.springjpa.entity.QSecuredResources;
 import com.terry.springjpa.entity.QSecuredResourcesAuthority;
 import com.terry.springjpa.entity.SecuredResources;
 
@@ -42,15 +44,30 @@ public class SecuredObjectRepositoryImpl extends QueryDslRepositorySupport {
 	}
 	
 	public List<Map<String, Object>> getSqlRolesAndUrl(){
+		
+		QSecuredResources securedResources = QSecuredResources.securedResources;
 		QSecuredResourcesAuthority securedResourcesAuthority = QSecuredResourcesAuthority.securedResourcesAuthority;
-		JPQLQuery query = from(securedResourcesAuthority);
-		List<Tuple> tupleResult = query.where(securedResourcesAuthority.securedResources.resourceType.eq("URL"))
-													.orderBy(securedResourcesAuthority.securedResources.sortOrder.asc(), securedResourcesAuthority.securedResources.resourcePattern.asc())
-													.list(new QTuple(securedResourcesAuthority.securedResources.resourcePattern, securedResourcesAuthority.authority.authorityName));
+		QSecuredResources refSecuredResources = QSecuredResourcesAuthority.securedResourcesAuthority.securedResources;
+		QAuthority refAuthority = QSecuredResourcesAuthority.securedResourcesAuthority.authority;
+		QAuthority authority = QAuthority.authority;
+		
+		JPQLQuery query = from(securedResources, authority);
+
+		query = query.innerJoin(securedResources.securedResourcesAuthorityList, securedResourcesAuthority).fetch()
+					.innerJoin(authority.securedResourcesAuthorityList, securedResourcesAuthority).fetch();
+		
+		List<SecuredResources> tempResult = query.where(securedResources.resourceType.eq("URL"))
+												.orderBy(securedResources.sortOrder.asc(), securedResources.resourcePattern.asc())
+												.list(securedResources);
+/*
+		List<Tuple> tupleResult = query.where(securedResources.resourceType.eq("URL"))
+													.orderBy(securedResources.sortOrder.asc(), securedResources.resourcePattern.asc())
+													.list(new QTuple(securedResources.resourcePattern, securedResourcesAuthority.authority.authorityName));
 		List<Map<String, Object>> result = convertTupleToMap(tupleResult
-														, new Expression[]{securedResourcesAuthority.securedResources.resourcePattern, securedResourcesAuthority.authority.authorityName}
+														, new Expression[]{securedResources.resourcePattern, securedResourcesAuthority.authority.authorityName}
 														, new String[]{"url", "authority"});
-		return result;
+*/
+		return null;
 	}
 	
 	public List<Map<String, Object>> getSqlRolesAndMethod(){

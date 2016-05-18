@@ -1,5 +1,7 @@
 package com.terry.springjpa.entity;
 
+import java.util.List;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
@@ -7,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -29,6 +32,9 @@ public class SecuredResources {
 	
 	@Column(name="SORT_ORDER")
 	private int sortOrder;
+	
+	@OneToMany(mappedBy="securedResources")
+	private List<SecuredResourcesAuthority> securedResourcesAuthorityList;
 	
 	public SecuredResources(){
 		
@@ -84,6 +90,14 @@ public class SecuredResources {
 
 	public void setSortOrder(int sortOrder) {
 		this.sortOrder = sortOrder;
+	}
+
+	public List<SecuredResourcesAuthority> getSecuredResourcesAuthorityList() {
+		return securedResourcesAuthorityList;
+	}
+
+	public void setSecuredResourcesAuthorityList(List<SecuredResourcesAuthority> securedResourcesAuthorityList) {
+		this.securedResourcesAuthorityList = securedResourcesAuthorityList;
 	}
 
 	@Override

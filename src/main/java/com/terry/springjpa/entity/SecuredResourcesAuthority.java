@@ -1,6 +1,7 @@
 package com.terry.springjpa.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
@@ -15,13 +16,13 @@ import com.terry.springjpa.entity.idclass.SecuredResourcesAuthorityId;
 public class SecuredResourcesAuthority {
 	
 	@Id
-	@ManyToOne
-	@JoinColumn(name="RESOURCES_IDX")
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
+	@JoinColumn(name="RESOURCES_IDX", nullable=false)
 	private SecuredResources securedResources;
 	
 	@Id
-	@ManyToOne
-	@JoinColumn(name="AUTHORITY_IDX")
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
+	@JoinColumn(name="AUTHORITY_IDX", nullable=false)
 	private Authority authority;
 
 	public SecuredResourcesAuthority(){
