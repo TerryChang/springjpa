@@ -53,7 +53,7 @@ public class SecuredObjectServiceImpl implements SecuredObjectService {
 		return result;
 	}
 	
-	private LinkedHashMap<Object, List<ConfigAttribute>> getRolesAndResources(String resourceType, List<Map<String, Object>> sqlResult) throws Exception {
+	private LinkedHashMap<Object, List<ConfigAttribute>> getRolesAndResources(String resourceType, List<Map<String, Object>> sqlResult) {
 		LinkedHashMap<Object, List<ConfigAttribute>> resourcesMap = new LinkedHashMap<Object, List<ConfigAttribute>>();
 		
 		boolean isResourcesUrl = true;

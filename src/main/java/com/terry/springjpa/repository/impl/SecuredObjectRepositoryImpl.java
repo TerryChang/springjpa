@@ -47,13 +47,11 @@ public class SecuredObjectRepositoryImpl extends QueryDslRepositorySupport {
 	public List<Map<String, Object>> getSqlRolesAndUrl(){
 		
 		QSecuredResources securedResources = QSecuredResources.securedResources;
-		QSecuredResourcesAuthority securedResourcesAuthority = QSecuredResourcesAuthority.securedResourcesAuthority;
-		QAuthority authority = QAuthority.authority;
-		
-		JPQLQuery query = from(securedResources);
 
+		/*
 		query = query.innerJoin(securedResources.securedResourcesAuthorityList, securedResourcesAuthority).fetch()
 					.innerJoin(securedResourcesAuthority.authority, authority).fetch();
+		*/
 		
 		/*
 		List<SecuredResources> tempResult = query.where(securedResources.resourceType.eq("URL"))
@@ -61,7 +59,7 @@ public class SecuredObjectRepositoryImpl extends QueryDslRepositorySupport {
 												.list(securedResources);
 		*/
 		
-		List<Tuple> tupleResult = query.where(securedResources.resourceType.eq("URL"))
+		List<Tuple> tupleResult = from(securedResources).where(securedResources.resourceType.eq("URL"))
 										.orderBy(securedResources.sortOrder.asc(), securedResources.resourcePattern.asc())
 										.list(securedResources.resourcePattern, securedResources.securedResourcesAuthorityList.any().authority.authorityName);
 		
@@ -74,14 +72,18 @@ public class SecuredObjectRepositoryImpl extends QueryDslRepositorySupport {
 	}
 	
 	public List<Map<String, Object>> getSqlRolesAndMethod(){
-		QSecuredResourcesAuthority securedResourcesAuthority = QSecuredResourcesAuthority.securedResourcesAuthority;
-		JPQLQuery query = from(securedResourcesAuthority);
-		List<Tuple> tupleResult = query.where(securedResourcesAuthority.securedResources.resourceType.eq("METHOD"))
-													.orderBy(securedResourcesAuthority.securedResources.sortOrder.asc(), securedResourcesAuthority.securedResources.resourcePattern.asc())
-													.list(new QTuple(securedResourcesAuthority.securedResources.resourcePattern, securedResourcesAuthority.authority.authorityName));
+		
+		QSecuredResources securedResources = QSecuredResources.securedResources;
+		
+		List<Tuple> tupleResult = from(securedResources).where(securedResources.resourceType.eq("METHOD"))
+										.orderBy(securedResources.sortOrder.asc(), securedResources.resourcePattern.asc())
+										.list(securedResources.resourcePattern, securedResources.securedResourcesAuthorityList.any().authority.authorityName);
+		
 		List<Map<String, Object>> result = convertTupleToMap(tupleResult
-														, new Expression[]{securedResourcesAuthority.securedResources.resourcePattern, securedResourcesAuthority.authority.authorityName}
+														, new Expression[]{securedResources.resourcePattern, securedResources.securedResourcesAuthorityList.any().authority.authorityName}
 														, new String[]{"method", "authority"});
+		
+		
 		return result;
 	}
 }
