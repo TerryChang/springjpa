@@ -11,13 +11,9 @@ import org.springframework.data.jpa.repository.support.QueryDslRepositorySupport
 import org.springframework.stereotype.Repository;
 
 import com.mysema.query.Tuple;
-import com.mysema.query.jpa.JPQLQuery;
 import com.mysema.query.types.Expression;
-import com.mysema.query.types.Projections;
-import com.mysema.query.types.QTuple;
-import com.terry.springjpa.entity.QAuthority;
+import com.terry.springjpa.entity.QAuthorityHierarchy;
 import com.terry.springjpa.entity.QSecuredResources;
-import com.terry.springjpa.entity.QSecuredResourcesAuthority;
 import com.terry.springjpa.entity.SecuredResources;
 
 @Repository
@@ -84,6 +80,18 @@ public class SecuredObjectRepositoryImpl extends QueryDslRepositorySupport {
 														, new String[]{"method", "authority"});
 		
 		
+		return result;
+	}
+	
+	public List<Map<String, Object>> getSqlRoleHierarchy(){
+		
+		QAuthorityHierarchy authorityHierachy = QAuthorityHierarchy.authorityHierarchy;
+		
+		List<Tuple> tupleResult = from(authorityHierachy)
+										.list(authorityHierachy.parentAuthority.authorityName, authorityHierachy.childAuthority.authorityName);
+		List<Map<String, Object>> result = convertTupleToMap(tupleResult
+														, new Expression[]{authorityHierachy.parentAuthority.authorityName, authorityHierachy.childAuthority.authorityName}
+														, new String[]{"parentAuthority", "childAuthority"});
 		return result;
 	}
 }

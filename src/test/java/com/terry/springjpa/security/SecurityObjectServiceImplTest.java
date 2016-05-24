@@ -30,6 +30,7 @@ public class SecurityObjectServiceImplTest extends AbstractTransactionalTestNGSp
 		String sql1 = "insert into authority(idx, authority_name, authority_desc) values(authority_sequence.nextval, ?, ?)";
 		String sql2 = "insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, ?, ?, ?, ?);";
 		String sql3 = "insert into secured_resources_authority(resources_idx, authority_idx) values(?, ?)";
+		String sql4 = "insert into authority_hierarchy(parent_authority_idx, child_authority_idx) values(?, ?)";
 		
 		jdbcTemplate.update(sql1, "ADMIN", "관리자");
 		jdbcTemplate.update(sql1, "MEMBER", "회원");
@@ -54,11 +55,20 @@ public class SecurityObjectServiceImplTest extends AbstractTransactionalTestNGSp
 		jdbcTemplate.update(sql3, 4, 2);
 		jdbcTemplate.update(sql3, 9, 3);
 		jdbcTemplate.update(sql3, 10, 3);
+		
+		jdbcTemplate.update(sql4, 1, 2);
+		jdbcTemplate.update(sql4, 2, 3);
 	}
 	
 	@Test
 	public void URL별_권한조회_use_matcher() throws Exception{
 		LinkedHashMap<RequestMatcher, List<ConfigAttribute>> result = service.getRolesAndUrl();
 		assertEquals(result.size(), 6); // /user/*.do 자원을 ADMIN과 MEMBER가 같이 사용하기 때문에 6개가 나와야 한다
+	}
+	
+	@Test
+	public void 부모자식_권한조회() throws Exception{
+		String result = service.getRolesHierarchy();
+		assertEquals(result, "ADMIN > MEMBER and MEMBER > ANONYMOUS");
 	}
 }

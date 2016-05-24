@@ -23,8 +23,7 @@ import com.terry.springjpa.entity.Authority;
 import com.terry.springjpa.entity.Member;
 import com.terry.springjpa.repository.LoginAuthorities;
 
-@Service
-public class CustomJpaImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -32,13 +31,21 @@ public class CustomJpaImpl implements UserDetailsService {
 	private boolean enableGroups = false;							// 권한 관리시 그룹핑 이용하는지의 여부
 	private String rolePrefix = "";
 
-	@Autowired
 	private LoginAuthorities loginAuthorities;
 	
-	@Autowired
 	private MemberToMemberVOConverter memberToMemberVOConverter;
 	
 	protected final MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
+	
+	public UserDetailsServiceImpl(){
+		
+	}
+	
+	public UserDetailsServiceImpl(boolean enableAuthorities, boolean enableGroups, String rolePrefix){
+		this.enableAuthorities = enableAuthorities;
+		this.enableGroups = enableGroups;
+		this.rolePrefix = rolePrefix;
+	}
 	
 	/**
 	 * 로그인 id를 이용해 사용자 정보를 조회한다
@@ -88,7 +95,7 @@ public class CustomJpaImpl implements UserDetailsService {
         return createUserDetails(username, user, dbAuths);
     }
 
-    public UserDetails createUserDetails(String username, UserDetails userFromUserQuery,
+    private UserDetails createUserDetails(String username, UserDetails userFromUserQuery,
             List<GrantedAuthority> combinedAuthorities) {
         String returnUsername = userFromUserQuery.getUsername();
 
@@ -112,6 +119,14 @@ public class CustomJpaImpl implements UserDetailsService {
 		this.enableGroups = enableGroups;
 	}
 
+	public String getRolePrefix() {
+		return rolePrefix;
+	}
+
+	public void setRolePrefix(String rolePrefix) {
+		this.rolePrefix = rolePrefix;
+	}
+
 	public LoginAuthorities getLoginAuthorities() {
 		return loginAuthorities;
 	}
@@ -119,7 +134,12 @@ public class CustomJpaImpl implements UserDetailsService {
 	public void setLoginAuthorities(LoginAuthorities loginAuthorities) {
 		this.loginAuthorities = loginAuthorities;
 	}
-    
-    
 
+	public MemberToMemberVOConverter getMemberToMemberVOConverter() {
+		return memberToMemberVOConverter;
+	}
+
+	public void setMemberToMemberVOConverter(MemberToMemberVOConverter memberToMemberVOConverter) {
+		this.memberToMemberVOConverter = memberToMemberVOConverter;
+	}
 }

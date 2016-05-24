@@ -53,6 +53,27 @@ public class SecuredObjectServiceImpl implements SecuredObjectService {
 		return result;
 	}
 	
+	@Override
+	public String getRolesHierarchy() throws Exception {
+		// TODO Auto-generated method stub
+		List<Map<String, Object>> roleResult = repository.getSqlRoleHierarchy();
+		StringBuilder builder = new StringBuilder();
+		String result = null;
+		for(Map<String, Object> map : roleResult){
+			String parentAuthority = (String)map.get("parentAuthority");
+			String childAuthority = (String)map.get("childAuthority");
+			if(builder.length() != 0){
+				builder.append(" and ");
+			}
+			builder.append(parentAuthority);
+			builder.append(" > ");
+			builder.append(childAuthority);
+		}
+		
+		result = builder.toString();
+		return result;
+	}
+
 	private LinkedHashMap<Object, List<ConfigAttribute>> getRolesAndResources(String resourceType, List<Map<String, Object>> sqlResult) {
 		LinkedHashMap<Object, List<ConfigAttribute>> resourcesMap = new LinkedHashMap<Object, List<ConfigAttribute>>();
 		

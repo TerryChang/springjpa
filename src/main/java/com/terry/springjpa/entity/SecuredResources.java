@@ -21,16 +21,16 @@ public class SecuredResources {
 
 	private Long idx;
 	
-	@Column(name="RESOURCE_NAME")
+	@Column(name="RESOURCE_NAME", nullable=false)
 	private String resourceName;
 	
-	@Column(name="RESOURCE_PATTERN")
+	@Column(name="RESOURCE_PATTERN", nullable = false)
 	private String resourcePattern;
 	
-	@Column(name="RESOURCE_TYPE")
+	@Column(name="RESOURCE_TYPE", nullable=false)
 	private String resourceType;
 	
-	@Column(name="SORT_ORDER")
+	@Column(name="SORT_ORDER", nullable=false)
 	private int sortOrder;
 	
 	@OneToMany(mappedBy="securedResources")

@@ -20,4 +20,11 @@ public interface SecuredObjectService {
      * @throws Exception
      */
     public LinkedHashMap<String, List<ConfigAttribute>> getRolesAndMethod() throws Exception;
+    
+    /**
+     * 롤에 대한 계층 구조를 문자열로 return 한다
+     * @return
+     * @throws Exception
+     */
+    public String getRolesHierarchy() throws Exception;
 }

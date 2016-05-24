@@ -63,16 +63,22 @@ create memory table groups_authority (
 
 create memory table secured_resources (
   idx        		bigint      	primary key, 
-  resource_name     varchar(50)     null, 
+  resource_name     varchar(50)     not null, 
   resource_pattern  varchar(100)    not null, 
-  resource_type     varchar(10)     null, 
-  sort_order        int				null
+  resource_type     varchar(10)     not null, 
+  sort_order        int				not null
 );
 
 create memory table secured_resources_authority (
   resources_idx		bigint			not null, 
   authority_idx     bigint			not null,
   primary key(resources_idx, authority_idx)
+);
+
+create memory table authority_hierarchy (
+	parent_authority_idx	bigint		not null,
+	child_authority_idx		bigint		not null,
+	primary key(parent_authority_idx, child_authority_idx)
 );
 
 alter table unitedboard add foreign key(boardtype_idx) references boardtype(idx);
@@ -87,6 +93,8 @@ alter table groups_authority add foreign key(groups_idx) references groups(idx);
 alter table groups_authority add foreign key(authority_idx) references authority(idx);
 alter table secured_resources_authority add foreign key(resources_idx) references secured_resources(idx);
 alter table secured_resources_authority add foreign key(authority_idx) references authority(idx);
+alter table authority_hierarchy add foreign key(parent_authority_idx) references authority(idx);
+alter table authority_hierarchy add foreign key(child_authority_idx) references authority(idx);
 
 create sequence boardtype_sequence start with 1 increment by 1;
 create sequence member_sequence start with 1 increment by 1;

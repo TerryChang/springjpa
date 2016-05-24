@@ -55,6 +55,7 @@ insert into secured_resources_authority(resources_idx, authority_idx) values(10,
 		String sql1 = "insert into authority(idx, authority_name, authority_desc) values(authority_sequence.nextval, ?, ?)";
 		String sql2 = "insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, ?, ?, ?, ?);";
 		String sql3 = "insert into secured_resources_authority(resources_idx, authority_idx) values(?, ?)";
+		String sql4 = "insert into authority_hierarchy(parent_authority_idx, child_authority_idx) values(?, ?)";
 		
 		jdbcTemplate.update(sql1, "ADMIN", "관리자");
 		jdbcTemplate.update(sql1, "MEMBER", "회원");
@@ -78,15 +79,26 @@ insert into secured_resources_authority(resources_idx, authority_idx) values(10,
 		jdbcTemplate.update(sql3, 4, 2);
 		jdbcTemplate.update(sql3, 9, 3);
 		jdbcTemplate.update(sql3, 10, 3);
+		
+		jdbcTemplate.update(sql4, 1, 2);
+		jdbcTemplate.update(sql4, 2, 3);
 	}
 	
 	@Test
 	public void URL별_권한조회(){
+		/*
 		List<Map<String, Object>> authorityList = jdbcTemplate.queryForList("select * from authority");
 		List<Map<String, Object>> securedResourcesList = jdbcTemplate.queryForList("select * from secured_resources");
 		List<Map<String, Object>> securedResourcesAuthorityList = jdbcTemplate.queryForList("select * from secured_resources_authority");
 		List<Map<String, Object>> tempList = jdbcTemplate.queryForList("select securedres0_.IDX as IDX1_7_, securedres0_.RESOURCE_NAME as RESOURCE2_7_, securedres0_.RESOURCE_PATTERN as RESOURCE3_7_, securedres0_.RESOURCE_TYPE as RESOURCE4_7_, securedres0_.SORT_ORDER as SORT_ORD5_7_ from SECURED_RESOURCES securedres0_ inner join SECURED_RESOURCES_AUTHORITY securedres1_ on securedres0_.IDX=securedres1_.RESOURCES_IDX inner join AUTHORITY authority2_ on securedres1_.AUTHORITY_IDX=authority2_.IDX where securedres0_.RESOURCE_TYPE='URL' order by securedres0_.SORT_ORDER asc, securedres0_.RESOURCE_PATTERN asc");
+		*/
 		List<Map<String, Object>> result = repository.getSqlRolesAndUrl();
 		assertEquals(result.size(), 6);
+	}
+	
+	@Test
+	public void 부모자식_권한조회(){
+		List<Map<String, Object>> result = repository.getSqlRoleHierarchy();
+		assertEquals(result.size(), 2);
 	}
 }
