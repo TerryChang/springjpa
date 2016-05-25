@@ -7,28 +7,32 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.stereotype.Service;
 
 import com.terry.springjpa.repository.impl.SecuredObjectRepositoryImpl;
 import com.terry.springjpa.security.SecuredObjectService;
 
-@Service
 public class SecuredObjectServiceImpl implements SecuredObjectService {
 	
-	@Autowired
-	SecuredObjectRepositoryImpl repository;
+	SecuredObjectRepositoryImpl securedObjectRepositoryImpl;
+
+	public SecuredObjectRepositoryImpl getSecuredObjectRepositoryImpl() {
+		return securedObjectRepositoryImpl;
+	}
+
+	public void setSecuredObjectRepositoryImpl(SecuredObjectRepositoryImpl securedObjectRepositoryImpl) {
+		this.securedObjectRepositoryImpl = securedObjectRepositoryImpl;
+	}
 
 	@Override
 	public LinkedHashMap<RequestMatcher, List<ConfigAttribute>> getRolesAndUrl() throws Exception {
 		// TODO Auto-generated method stub
 		LinkedHashMap<RequestMatcher, List<ConfigAttribute>> result = new LinkedHashMap<RequestMatcher, List<ConfigAttribute>>();
 		
-		List<Map<String, Object>> roleResult = repository.getSqlRolesAndUrl();
+		List<Map<String, Object>> roleResult = securedObjectRepositoryImpl.getSqlRolesAndUrl();
 		LinkedHashMap<Object, List<ConfigAttribute>> rolesAndResources = getRolesAndResources("url", roleResult);
 		
 		Set<Object> keys = rolesAndResources.keySet();
@@ -43,7 +47,7 @@ public class SecuredObjectServiceImpl implements SecuredObjectService {
 		// TODO Auto-generated method stub
 		LinkedHashMap<String, List<ConfigAttribute>> result = new LinkedHashMap<String, List<ConfigAttribute>>();
 		
-		List<Map<String, Object>> roleResult = repository.getSqlRolesAndMethod();
+		List<Map<String, Object>> roleResult = securedObjectRepositoryImpl.getSqlRolesAndMethod();
 		LinkedHashMap<Object, List<ConfigAttribute>> rolesAndResources = getRolesAndResources("method", roleResult);
 		
 		Set<Object> keys = rolesAndResources.keySet();
@@ -56,7 +60,7 @@ public class SecuredObjectServiceImpl implements SecuredObjectService {
 	@Override
 	public String getRolesHierarchy() throws Exception {
 		// TODO Auto-generated method stub
-		List<Map<String, Object>> roleResult = repository.getSqlRoleHierarchy();
+		List<Map<String, Object>> roleResult = securedObjectRepositoryImpl.getSqlRoleHierarchy();
 		StringBuilder builder = new StringBuilder();
 		String result = null;
 		for(Map<String, Object> map : roleResult){

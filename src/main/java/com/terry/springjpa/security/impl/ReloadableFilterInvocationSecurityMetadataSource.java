@@ -30,7 +30,6 @@ public class ReloadableFilterInvocationSecurityMetadataSource implements FilterI
 	
 	public ReloadableFilterInvocationSecurityMetadataSource(LinkedHashMap<RequestMatcher, Collection<ConfigAttribute>> requestMap){
 		this.requestMap = requestMap; 
-		
 	}
 	
 	public void setSecuredObjectService(SecuredObjectService securedObjectService) {
