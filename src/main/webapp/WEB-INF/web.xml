@@ -26,7 +26,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>com.terry.springjpa.config.root.RootContextMain</param-value>
+        <param-value>
+        	com.terry.springjpa.config.root.RootContextMain
+        	com.terry.springjpa.config.root.SecurityConfig
+        </param-value>
+        <!--
+        <param-value>
+        	com.terry.springjpa.config.root.RootContextMain
+        </param-value>
+        -->
     </context-param>
     
 	<servlet>
@@ -74,7 +82,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
             <param-value>utf-8</param-value>
         </init-param>
     </filter>
-
+ 
 	<filter-mapping>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>

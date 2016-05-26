@@ -22,11 +22,9 @@ See here for more details: http://gordondickens.com/wordpress/2013/03/27/sawing-
     <logger name="org.hibernate" level="info" additivity="false">
     	<appender-ref ref="console" /> 
     </logger>
-    <!-- 
-    <logger name="org.springframework.security" level="trace" additivity="false">
+    <logger name="org.springframework.security" level="debug" additivity="false">
     	<appender-ref ref="console" /> 
     </logger>
-     -->
     <logger name="org.springframework" level="info" additivity="false">
     	<appender-ref ref="console" /> 
     </logger>

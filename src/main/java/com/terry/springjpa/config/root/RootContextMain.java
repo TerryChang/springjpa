@@ -3,21 +3,11 @@ package com.terry.springjpa.config.root;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-
-import com.terry.springjpa.common.converter.BoardTypeToBoardTypeVOConverter;
-import com.terry.springjpa.common.converter.BoardTypeVOToBoardTypeConverter;
-import com.terry.springjpa.common.converter.MemberToMemberVOConverter;
-import com.terry.springjpa.common.converter.MemberVOToMemberConverter;
-import com.terry.springjpa.entity.BoardType;
-import com.terry.springjpa.entity.Member;
 
 @Configuration
 @Import({LocalConfig.class, ProductionConfig.class, DevConfig.class, AopConfig.class, ConverterConfig.class, JpaConfig.class, MybatisConfig.class, TransactionConfig.class})
