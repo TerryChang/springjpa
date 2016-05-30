@@ -97,7 +97,7 @@ public class SecuredObjectServiceImpl implements SecuredObjectService {
         	
         	presentResourceStr = (String) tempMap.get(resourceType);
             // url 인 경우 RequestKey 형식의 key를 Map에 담아야 함
-            presentResource = isResourcesUrl ? new AntPathRequestMatcher(presentResourceStr) : presentResourceStr;
+            presentResource = isResourcesUrl ? new AntPathRequestMatcher(presentResourceStr, null, true) : presentResourceStr;
             List<ConfigAttribute> configList = new LinkedList<ConfigAttribute>();
             
             // 이미 requestMap 에 해당 Resource 에 대한 Role 이 하나 이상 맵핑되어 있었던 경우, 

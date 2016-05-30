@@ -105,17 +105,53 @@ create sequence groups_sequence start with 1 increment by 1;
 create sequence secured_resources_sequence start with 1 increment by 1;
 
 -- test data insert query boardtype_sequence.nextval, ?, ?, current_timestamp(), null
-insert into boardtype(idx, name, url, insertdt) values(boardtype_sequence.nextval, '공지사항', '/unitedBoard/unitedBoardList.do?boardType=1', current_timestamp());
-insert into boardtype(idx, name, url, insertdt) values(boardtype_sequence.nextval, '회원 게시판', '/unitedBoard/unitedBoardList.do?boardType=2', current_timestamp());
-insert into boardtype(idx, name, url, insertdt) values(boardtype_sequence.nextval, '까페 게시판', '/unitedBoard/unitedBoardList.do?boardType=3', current_timestamp());
-insert into boardtype(idx, name, url, insertdt) values(boardtype_sequence.nextval, '질문 게시판', '/unitedBoard/unitedBoardList.do?boardType=4', current_timestamp());
+insert into boardtype(idx, name, url, insertdt) values(boardtype_sequence.nextval, '공지사항', '/unitedBoard/unitedBoardList.do?boardTypeIdx=1', current_timestamp());
+insert into boardtype(idx, name, url, insertdt) values(boardtype_sequence.nextval, '회원 게시판', '/unitedBoard/unitedBoardList.do?boardTypeIdx=2', current_timestamp());
+insert into boardtype(idx, name, url, insertdt) values(boardtype_sequence.nextval, '까페 게시판', '/unitedBoard/unitedBoardList.do?boardTypeIdx=3', current_timestamp());
+insert into boardtype(idx, name, url, insertdt) values(boardtype_sequence.nextval, '질문 게시판', '/unitedBoard/unitedBoardList.do?boardTypeIdx=4', current_timestamp());
 
 insert into member(idx, loginid, password, name, email, insertdt) values(member_sequence.nextval, 'loginId1', 'password1', '관리자', 'a1@b.com', current_timestamp());
 insert into member(idx, loginid, password, name, email, insertdt) values(member_sequence.nextval, 'loginId2', 'password2', '까페회원', 'a2@b.com', current_timestamp());
-insert into member(idx, loginid, password, name, email, insertdt) values(member_sequence.nextval, 'loginId3', 'password3', '일반회원', 'a2@b.com', current_timestamp());
+insert into member(idx, loginid, password, name, email, insertdt) values(member_sequence.nextval, 'loginId3', 'password3', '일반회원', 'a3@b.com', current_timestamp());
 
 insert into authority(idx, authority_name, authority_desc) values(authority_sequence.nextval, 'ADMIN', '관리자');
 insert into authority(idx, authority_name, authority_desc) values(authority_sequence.nextval, 'CAFEMEMBER', '까페회원');
 insert into authority(idx, authority_name, authority_desc) values(authority_sequence.nextval, 'MEMBER', '회원');
 insert into authority(idx, authority_name, authority_desc) values(authority_sequence.nextval, 'ANONYMOUS', '비회원');
+
+insert into authority_hierarchy(parent_authority_idx, child_authority_idx) values(1, 2);
+insert into authority_hierarchy(parent_authority_idx, child_authority_idx) values(1, 3);
+insert into authority_hierarchy(parent_authority_idx, child_authority_idx) values(2, 4);
+insert into authority_hierarchy(parent_authority_idx, child_authority_idx) values(3, 4);
+
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '공지사항 목록', '/unitedBoard/unitedBoardList.do?boardTypeIdx=1', 'URL', 1);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '공지사항 등록/상세조회/수정', '/unitedBoard/unitedBoardInsertUpdate.do?boardTypeIdx=1', 'URL', 1);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '공지사항 삭제', '/unitedBoard/unitedBoardDelete.do?boardTypeIdx=1', 'URL', 1);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '회원 게시판 목록', '/unitedBoard/unitedBoardList.do?boardTypeIdx=2', 'URL', 1);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '회원 게시판 등록/상세조회/수정', '/unitedBoard/unitedBoardInsertUpdate.do?boardTypeIdx=2', 'URL', 1);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '회원 게시판 삭제', '/unitedBoard/unitedBoardDelete.do?boardTypeIdx=2', 'URL', 1);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '까페 게시판 목록', '/unitedBoard/unitedBoardList.do?boardTypeIdx=3', 'URL', 1);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '까페 게시판 등록/상세조회/수정', '/unitedBoard/unitedBoardInsertUpdate.do?boardTypeIdx=3', 'URL', 1);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '까페 게시판 삭제', '/unitedBoard/unitedBoardDelete.do?boardTypeIdx=3', 'URL', 1);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '질문 게시판 목록', '/unitedBoard/unitedBoardList.do?boardTypeIdx=4', 'URL', 1);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '질문 게시판 등록/상세조회/수정', '/unitedBoard/unitedBoardInsertUpdate.do?boardTypeIdx=4', 'URL', 1);
+insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '질문 게시판 삭제', '/unitedBoard/unitedBoardDelete.do?boardTypeIdx=4', 'URL', 1);
+
+insert into member_authority(member_idx, authority_idx) values(1, 1);
+insert into member_authority(member_idx, authority_idx) values(2, 2);
+insert into member_authority(member_idx, authority_idx) values(3, 3);
+
+insert into secured_resources_authority(resources_idx, authority_idx) values(1, 4);
+insert into secured_resources_authority(resources_idx, authority_idx) values(2, 4);
+insert into secured_resources_authority(resources_idx, authority_idx) values(3, 4);
+insert into secured_resources_authority(resources_idx, authority_idx) values(4, 3);
+insert into secured_resources_authority(resources_idx, authority_idx) values(5, 3);
+insert into secured_resources_authority(resources_idx, authority_idx) values(6, 3);
+insert into secured_resources_authority(resources_idx, authority_idx) values(7, 2);
+insert into secured_resources_authority(resources_idx, authority_idx) values(8, 2);
+insert into secured_resources_authority(resources_idx, authority_idx) values(9, 2);
+insert into secured_resources_authority(resources_idx, authority_idx) values(10, 3);
+insert into secured_resources_authority(resources_idx, authority_idx) values(11, 3);
+insert into secured_resources_authority(resources_idx, authority_idx) values(12, 3);
+
 

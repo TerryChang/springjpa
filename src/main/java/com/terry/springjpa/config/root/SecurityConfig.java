@@ -4,17 +4,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
+import com.terry.springjpa.common.converter.MemberToMemberVOConverter;
+import com.terry.springjpa.repository.LoginAuthorities;
 import com.terry.springjpa.security.impl.CustomAccessDeniedHandler;
 import com.terry.springjpa.security.impl.CustomAuthenticationFailureHandler;
 import com.terry.springjpa.security.impl.CustomAuthenticationSuccessHandler;
+import com.terry.springjpa.security.impl.ReloadableFilterInvocationSecurityMetadataSource;
 import com.terry.springjpa.security.impl.UserDetailsServiceImpl;
 
 @Configuration
@@ -50,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// TODO Auto-generated method stub
 		http
 			.addFilterBefore(filterSecurityInterceptor, FilterSecurityInterceptor.class)
-			.authorizeRequests().anyRequest().authenticated()
+			.authorizeRequests()
 			.and()
 			.formLogin()
 				.usernameParameter("loginId")
@@ -80,7 +85,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		// TODO Auto-generated method stub
-		return super.authenticationManagerBean();
+		AuthenticationManager authenticationManager = super.authenticationManagerBean();
+		return authenticationManager;
 	}
+	
+	@Bean
+	public FilterSecurityInterceptor customFilterSecurityInterceptor(AuthenticationManager authenticationManager, AccessDecisionManager accessDecisionManager, ReloadableFilterInvocationSecurityMetadataSource rfisms){
+		FilterSecurityInterceptor customFilterSecurityInterceptor = new FilterSecurityInterceptor();
+		customFilterSecurityInterceptor.setAuthenticationManager(authenticationManager);
+		customFilterSecurityInterceptor.setAccessDecisionManager(accessDecisionManager);						// AccessDecisionManager 설정
+		customFilterSecurityInterceptor.setSecurityMetadataSource(rfisms);										// SecurityMetadataSource 설정
+		return customFilterSecurityInterceptor;
+	}
+
 	
 }

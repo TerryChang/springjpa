@@ -49,20 +49,13 @@ public class SecurityBeanConfig {
 	
 	@Bean
 	public UserDetailsServiceImpl userDetailsServiceImpl(){
-		UserDetailsServiceImpl userDetailsServiceImpl = new UserDetailsServiceImpl(true, true, "");
+		UserDetailsServiceImpl userDetailsServiceImpl = new UserDetailsServiceImpl(true, false, "");
 		userDetailsServiceImpl.setLoginAuthorities(loginAuthorities);
 		userDetailsServiceImpl.setMemberToMemberVOConverter(memberToMemberVOConverter);
 		return userDetailsServiceImpl;
 	}
 	
-	@Bean
-	public FilterSecurityInterceptor customFilterSecurityInterceptor(AuthenticationManager authenticationManager, AccessDecisionManager accessDecisionManager, ReloadableFilterInvocationSecurityMetadataSource rfisms){
-		FilterSecurityInterceptor customFilterSecurityInterceptor = new FilterSecurityInterceptor();
-		customFilterSecurityInterceptor.setAuthenticationManager(authenticationManager);
-		customFilterSecurityInterceptor.setAccessDecisionManager(accessDecisionManager);						// AccessDecisionManager 설정
-		customFilterSecurityInterceptor.setSecurityMetadataSource(rfisms);										// SecurityMetadataSource 설정
-		return customFilterSecurityInterceptor;
-	}
+	
 	
 	@Bean
 	public AccessDecisionManager accessDecisionManager(UserDetailsServiceImpl userDetailsServiceImpl, SecuredObjectService securedObjectService) throws Exception{
@@ -73,6 +66,7 @@ public class SecurityBeanConfig {
 		RoleHierarchyImpl roleHierarchyImpl = new RoleHierarchyImpl();
 		roleHierarchyImpl.setHierarchy(securedObjectService.getRolesHierarchy());
 		RoleHierarchyVoter roleHierarchyVoter = new RoleHierarchyVoter(roleHierarchyImpl);
+		roleHierarchyVoter.setRolePrefix(userDetailsServiceImpl.getRolePrefix());
 		decisionVoterList.add(roleVoter);
 		decisionVoterList.add(roleHierarchyVoter);
 		affirmativeBased = new AffirmativeBased(decisionVoterList);
