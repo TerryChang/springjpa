@@ -7,15 +7,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import com.terry.springjpa.repository.impl.SecuredObjectRepositoryImpl;
 import com.terry.springjpa.security.SecuredObjectService;
 
 public class SecuredObjectServiceImpl implements SecuredObjectService {
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	SecuredObjectRepositoryImpl securedObjectRepositoryImpl;
 
@@ -36,8 +41,16 @@ public class SecuredObjectServiceImpl implements SecuredObjectService {
 		LinkedHashMap<Object, List<ConfigAttribute>> rolesAndResources = getRolesAndResources("url", roleResult);
 		
 		Set<Object> keys = rolesAndResources.keySet();
+		// URL의 경우 AntPathRequestMatcher 또는 RegexRequestMatcher 객체를 사용하기 때문에 
+		// LinkedHashMap의 key에 설정시 해당 클래스 객체로 변환해서 설정한다
 		for(Object key : keys){
-			result.put((AntPathRequestMatcher)key, rolesAndResources.get(key));
+			if(key instanceof AntPathRequestMatcher){
+				result.put((AntPathRequestMatcher)key, rolesAndResources.get(key));
+			}else if(key instanceof RegexRequestMatcher){
+				result.put((RegexRequestMatcher)key, rolesAndResources.get(key));
+			}else{
+			}
+			
 		}
 		return result;
 	}
@@ -97,7 +110,17 @@ public class SecuredObjectServiceImpl implements SecuredObjectService {
         	
         	presentResourceStr = (String) tempMap.get(resourceType);
             // url 인 경우 RequestKey 형식의 key를 Map에 담아야 함
-            presentResource = isResourcesUrl ? new AntPathRequestMatcher(presentResourceStr, null, true) : presentResourceStr;
+        	if(isResourcesUrl){
+        		String matchType = (String) tempMap.get("matchtype");
+        		if("ANT".equals(matchType)){
+        			presentResource = new AntPathRequestMatcher(presentResourceStr, null, true);
+        		}else{
+        			presentResource = new RegexRequestMatcher(presentResourceStr, null, true);
+        		}
+        	}else{
+        		presentResource = presentResourceStr;
+        	}
+            // presentResource = isResourcesUrl ? new AntPathRequestMatcher(presentResourceStr, null, true) : presentResourceStr;
             List<ConfigAttribute> configList = new LinkedList<ConfigAttribute>();
             
             // 이미 requestMap 에 해당 Resource 에 대한 Role 이 하나 이상 맵핑되어 있었던 경우, 

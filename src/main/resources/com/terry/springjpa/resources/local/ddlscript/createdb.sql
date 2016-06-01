@@ -62,11 +62,12 @@ create memory table groups_authority (
 );
 
 create memory table secured_resources (
-  idx        		bigint      	primary key, 
-  resource_name     varchar(50)     not null, 
-  resource_pattern  varchar(100)    not null, 
-  resource_type     varchar(10)     not null, 
-  sort_order        int				not null
+  idx        			bigint      	primary key, 
+  resource_name     	varchar(50)     not null, 
+  resource_type     	varchar(10)     not null,		-- URL, METHOD
+  resource_pattern  	varchar(100)    not null,		-- ANT 패턴, REGEX 패턴, 메소드 이름
+  resource_match_type	varchar(100)    null,			-- ANT, REGEX(정규식)
+  sort_order        	int				not null		-- 정규표현식이 ANT 식보다 더 우선순위에 오게끔 한다(일치되는 타입은 그냥 정규표현식으로 할것)
 );
 
 create memory table secured_resources_authority (
@@ -124,34 +125,34 @@ insert into authority_hierarchy(parent_authority_idx, child_authority_idx) value
 insert into authority_hierarchy(parent_authority_idx, child_authority_idx) values(2, 4);
 insert into authority_hierarchy(parent_authority_idx, child_authority_idx) values(3, 4);
 
-insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '공지사항 목록', '/unitedBoard/unitedBoardList.do?boardTypeIdx=1', 'URL', 1);
-insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '공지사항 등록/상세조회/수정', '/unitedBoard/unitedBoardInsertUpdate.do?boardTypeIdx=1', 'URL', 1);
-insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '공지사항 삭제', '/unitedBoard/unitedBoardDelete.do?boardTypeIdx=1', 'URL', 1);
-insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '회원 게시판 목록', '/unitedBoard/unitedBoardList.do?boardTypeIdx=2', 'URL', 1);
-insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '회원 게시판 등록/상세조회/수정', '/unitedBoard/unitedBoardInsertUpdate.do?boardTypeIdx=2', 'URL', 1);
-insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '회원 게시판 삭제', '/unitedBoard/unitedBoardDelete.do?boardTypeIdx=2', 'URL', 1);
-insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '까페 게시판 목록', '/unitedBoard/unitedBoardList.do?boardTypeIdx=3', 'URL', 1);
-insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '까페 게시판 등록/상세조회/수정', '/unitedBoard/unitedBoardInsertUpdate.do?boardTypeIdx=3', 'URL', 1);
-insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '까페 게시판 삭제', '/unitedBoard/unitedBoardDelete.do?boardTypeIdx=3', 'URL', 1);
-insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '질문 게시판 목록', '/unitedBoard/unitedBoardList.do?boardTypeIdx=4', 'URL', 1);
-insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '질문 게시판 등록/상세조회/수정', '/unitedBoard/unitedBoardInsertUpdate.do?boardTypeIdx=4', 'URL', 1);
-insert into secured_resources(idx, resource_name, resource_pattern, resource_type, sort_order) values(secured_resources_sequence.nextval, '질문 게시판 삭제', '/unitedBoard/unitedBoardDelete.do?boardTypeIdx=4', 'URL', 1);
+insert into secured_resources(idx, resource_name, resource_type, resource_pattern, resource_match_type, sort_order) values(secured_resources_sequence.nextval, '공지사항 목록', 'URL', '/unitedBoard/unitedBoardList.do(([\\?&].+)*([\\?&]boardTypeIdx=1)(&.+)*)', 'REGEX', 2);
+insert into secured_resources(idx, resource_name, resource_type, resource_pattern, resource_match_type, sort_order) values(secured_resources_sequence.nextval, '공지사항 등록/상세조회/수정', 'URL', '/unitedBoard/unitedBoardInsertUpdate.do(([\\?&].+)*([\\?&]boardTypeIdx=1)(&.+)*)', 'REGEX', 2);
+insert into secured_resources(idx, resource_name, resource_type, resource_pattern, resource_match_type, sort_order) values(secured_resources_sequence.nextval, '공지사항 삭제', 'URL', '/unitedBoard/unitedBoardDelete.do(([\\?&].+)*([\\?&]boardTypeIdx=1)(&.+)*)', 'REGEX', 2);
+insert into secured_resources(idx, resource_name, resource_type, resource_pattern, resource_match_type, sort_order) values(secured_resources_sequence.nextval, '회원 게시판 목록', 'URL', '/unitedBoard/unitedBoardList.do(([\\?&].+)*([\\?&]boardTypeIdx=2)(&.+)*)', 'REGEX', 2);
+insert into secured_resources(idx, resource_name, resource_type, resource_pattern, resource_match_type, sort_order) values(secured_resources_sequence.nextval, '회원 게시판 등록/상세조회/수정', 'URL', '/unitedBoard/unitedBoardInsertUpdate.do(([\\?&].+)*([\\?&]boardTypeIdx=2)(&.+)*)', 'REGEX', 2);
+insert into secured_resources(idx, resource_name, resource_type, resource_pattern, resource_match_type, sort_order) values(secured_resources_sequence.nextval, '회원 게시판 삭제', 'URL', '/unitedBoard/unitedBoardDelete.do(([\\?&].+)*([\\?&]boardTypeIdx=2)(&.+)*)', 'REGEX', 2);
+insert into secured_resources(idx, resource_name, resource_type, resource_pattern, resource_match_type, sort_order) values(secured_resources_sequence.nextval, '까페 게시판 목록', 'URL', '/unitedBoard/unitedBoardList.do(([\\?&].+)*([\\?&]boardTypeIdx=3)(&.+)*)', 'REGEX', 2);
+insert into secured_resources(idx, resource_name, resource_type, resource_pattern, resource_match_type, sort_order) values(secured_resources_sequence.nextval, '까페 게시판 등록/상세조회/수정', 'URL', '/unitedBoard/unitedBoardInsertUpdate.do(([\\?&].+)*([\\?&]boardTypeIdx=3)(&.+)*)', 'REGEX', 2);
+insert into secured_resources(idx, resource_name, resource_type, resource_pattern, resource_match_type, sort_order) values(secured_resources_sequence.nextval, '까페 게시판 삭제', 'URL', '/unitedBoard/unitedBoardDelete.do(([\\?&].+)*([\\?&]boardTypeIdx=3)(&.+)*)', 'REGEX', 2);
+insert into secured_resources(idx, resource_name, resource_type, resource_pattern, resource_match_type, sort_order) values(secured_resources_sequence.nextval, '질문 게시판 목록', 'URL', '/unitedBoard/unitedBoardList.do(([\\?&].+)*([\\?&]boardTypeIdx=4)(&.+)*)', 'REGEX', 2);
+insert into secured_resources(idx, resource_name, resource_type, resource_pattern, resource_match_type, sort_order) values(secured_resources_sequence.nextval, '질문 게시판 등록/상세조회/수정', 'URL', '/unitedBoard/unitedBoardInsertUpdate.do(([\\?&].+)*([\\?&]boardTypeIdx=4)(&.+)*)', 'REGEX', 2);
+insert into secured_resources(idx, resource_name, resource_type, resource_pattern, resource_match_type, sort_order) values(secured_resources_sequence.nextval, '질문 게시판 삭제', 'URL', '/unitedBoard/unitedBoardDelete.do(([\\?&].+)*([\\?&]boardTypeIdx=4)(&.+)*)', 'REGEX', 2);
 
 insert into member_authority(member_idx, authority_idx) values(1, 1);
 insert into member_authority(member_idx, authority_idx) values(2, 2);
 insert into member_authority(member_idx, authority_idx) values(3, 3);
 
-insert into secured_resources_authority(resources_idx, authority_idx) values(1, 4);
-insert into secured_resources_authority(resources_idx, authority_idx) values(2, 4);
-insert into secured_resources_authority(resources_idx, authority_idx) values(3, 4);
-insert into secured_resources_authority(resources_idx, authority_idx) values(4, 3);
-insert into secured_resources_authority(resources_idx, authority_idx) values(5, 3);
-insert into secured_resources_authority(resources_idx, authority_idx) values(6, 3);
-insert into secured_resources_authority(resources_idx, authority_idx) values(7, 2);
-insert into secured_resources_authority(resources_idx, authority_idx) values(8, 2);
-insert into secured_resources_authority(resources_idx, authority_idx) values(9, 2);
-insert into secured_resources_authority(resources_idx, authority_idx) values(10, 3);
-insert into secured_resources_authority(resources_idx, authority_idx) values(11, 3);
-insert into secured_resources_authority(resources_idx, authority_idx) values(12, 3);
+insert into secured_resources_authority(resources_idx, authority_idx) values(1, 4);		-- 공지사항 목록, 비회원
+insert into secured_resources_authority(resources_idx, authority_idx) values(2, 4);		-- 공지사항 등록/상세조회/수정, 비회원
+insert into secured_resources_authority(resources_idx, authority_idx) values(3, 4);		-- 공지사항 등록/상세조회/수정, 삭제
+insert into secured_resources_authority(resources_idx, authority_idx) values(4, 3);		-- 회원 게시판 목록, 회원
+insert into secured_resources_authority(resources_idx, authority_idx) values(5, 3);		-- 회원 게시판 등록/상세조회/수정, 회원
+insert into secured_resources_authority(resources_idx, authority_idx) values(6, 3);		-- 회원 게시판 삭제, 회원
+insert into secured_resources_authority(resources_idx, authority_idx) values(7, 2);		-- 까페 게시판 목록, 까페회원
+insert into secured_resources_authority(resources_idx, authority_idx) values(8, 2);		-- 까페 게시판 등록/상세조회/수정, 까페회원
+insert into secured_resources_authority(resources_idx, authority_idx) values(9, 2);		-- 까페 게시판 삭제, 까페회원
+insert into secured_resources_authority(resources_idx, authority_idx) values(10, 3);	-- 질문 게시판 목록, 회원
+insert into secured_resources_authority(resources_idx, authority_idx) values(11, 3);	-- 질문 게시판 등록/상세조회/수정, 회원
+insert into secured_resources_authority(resources_idx, authority_idx) values(12, 3);	-- 질문 게시판 삭제, 회원
 
 

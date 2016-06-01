@@ -24,11 +24,14 @@ public class SecuredResources {
 	@Column(name="RESOURCE_NAME", nullable=false)
 	private String resourceName;
 	
+	@Column(name="RESOURCE_TYPE", nullable=false)
+	private String resourceType;
+	
 	@Column(name="RESOURCE_PATTERN", nullable = false)
 	private String resourcePattern;
 	
-	@Column(name="RESOURCE_TYPE", nullable=false)
-	private String resourceType;
+	@Column(name="RESOURCE_MATCH_TYPE", nullable=false)
+	private String resourceMatchType;
 	
 	@Column(name="SORT_ORDER", nullable=false)
 	private int sortOrder;
@@ -40,11 +43,12 @@ public class SecuredResources {
 		
 	}
 	
-	public SecuredResources(Long idx, String resourceName, String resourcePattern, String resourceType, int sortOrder){
+	public SecuredResources(Long idx, String resourceName, String resourceType, String resourcePattern, String resourceMatchType, int sortOrder){
 		this.idx = idx;
 		this.resourceName = resourceName;
-		this.resourcePattern = resourcePattern;
 		this.resourceType = resourceType;
+		this.resourcePattern = resourcePattern;
+		this.resourceMatchType = resourceMatchType;
 		this.sortOrder = sortOrder;
 	}
 
@@ -67,6 +71,14 @@ public class SecuredResources {
 	public void setResourceName(String resourceName) {
 		this.resourceName = resourceName;
 	}
+	
+	public String getResourceType() {
+		return resourceType;
+	}
+
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
+	}
 
 	public String getResourcePattern() {
 		return resourcePattern;
@@ -76,12 +88,12 @@ public class SecuredResources {
 		this.resourcePattern = resourcePattern;
 	}
 
-	public String getResourceType() {
-		return resourceType;
+	public String getResourceMatchType() {
+		return resourceMatchType;
 	}
 
-	public void setResourceType(String resourceType) {
-		this.resourceType = resourceType;
+	public void setResourceMatchType(String resourceMatchType) {
+		this.resourceMatchType = resourceMatchType;
 	}
 
 	public int getSortOrder() {
@@ -105,9 +117,12 @@ public class SecuredResources {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((idx == null) ? 0 : idx.hashCode());
+		result = prime * result + ((resourceMatchType == null) ? 0 : resourceMatchType.hashCode());
 		result = prime * result + ((resourceName == null) ? 0 : resourceName.hashCode());
 		result = prime * result + ((resourcePattern == null) ? 0 : resourcePattern.hashCode());
 		result = prime * result + ((resourceType == null) ? 0 : resourceType.hashCode());
+		result = prime * result
+				+ ((securedResourcesAuthorityList == null) ? 0 : securedResourcesAuthorityList.hashCode());
 		result = prime * result + sortOrder;
 		return result;
 	}
@@ -118,13 +133,18 @@ public class SecuredResources {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof SecuredResources))
 			return false;
 		SecuredResources other = (SecuredResources) obj;
 		if (idx == null) {
 			if (other.getIdx() != null)
 				return false;
 		} else if (!idx.equals(other.getIdx()))
+			return false;
+		if (resourceMatchType == null) {
+			if (other.getResourceMatchType() != null)
+				return false;
+		} else if (!resourceMatchType.equals(other.getResourceMatchType()))
 			return false;
 		if (resourceName == null) {
 			if (other.getResourceName() != null)
@@ -141,10 +161,16 @@ public class SecuredResources {
 				return false;
 		} else if (!resourceType.equals(other.getResourceType()))
 			return false;
+		if (securedResourcesAuthorityList == null) {
+			if (other.getSecuredResourcesAuthorityList() != null)
+				return false;
+		} else if (!securedResourcesAuthorityList.equals(other.getSecuredResourcesAuthorityList()))
+			return false;
 		if (sortOrder != other.getSortOrder())
 			return false;
 		return true;
 	}
+
 	
 	
 }
