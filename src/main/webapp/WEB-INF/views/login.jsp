@@ -20,12 +20,52 @@
 	<script src="/js/jquery-1.11.2.min.js"></script>
 	<script src="/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
+	
+	// ajax 작업시 캐쉬를 사용하지 않도록 한다
+	$.ajaxSetup({ 
+		cache: false
+	});
+	
 	$(document).ready(function(){
 		$("#btnLogin").click(function(){
 			var validateResult = validate();
 			if(validateResult){
 				$("#loginfrm")[0].submit();
 			}
+		});
+		
+		$("#btnAjaxLogin").click(function(){
+			var loginId = $("#loginId").val();
+			var loginPwd = $("#loginPwd").val();
+			
+			$.ajax({
+	        	url : "/j_spring_security_check",
+	        	headers : {"X-Ajax-Call" : "true"},
+	        	type : "POST",
+	        	// data : JSON.stringify({"idx" : idx}),
+	        	data : {"loginId" : loginId, "loginPwd" : loginPwd},
+	        	// contentType: "application/json",	// contentType으로 지정하면 Request Body로 전달되기 때문에 Spring에서 받을때 다르게 접근해야 한다
+	        	dataType : "json",
+	        	beforeSend : function(xhr){
+	        		var validateResult = validate();
+	        		return validateResult;
+	        	},
+	        	success:function(data, textStatus, jqXHR){
+	        		var result = data.result;
+	        		if(result){
+	        			var redirectUrl = data.redirectUrl;
+	        			location.href = redirectUrl;
+	        		}else{
+	        			var securityexceptionmsg = data.securityexceptionmsg;
+	        			alert("로그인이 실패했습니다. 다시 시도해주세요\n" + securityexceptionmsg);
+	        		}
+	        	},
+	        	error:function(jqXHR, textStatus, errorThrown){
+	        		var responseJSON = jqXHR.responseJSON;
+	        		var message = responseJSON.message;
+	        		alert(message);
+	        	}
+	        });
 		});
 	});
 	
@@ -51,11 +91,11 @@
 		<div class="page-header">
 			<h1>로그인 화면</h1>
 		</div>
-		<form id="loginfrm" method="post" action="<c:url value='/login.do'/>">
+		<form id="loginfrm" method="post" action="<c:url value='/j_spring_security_check'/>">
 		<div class="form-group">
 			<label for="name" class="col-xs-2 col-lg-2 control-label">로그인 ID</label>
 			<div class="col-xs-10 col-lg-10">
-				<input type="text" id="loginId" name="loginId" class="form-control" placeholder="로그인 ID" />
+				<input type="text" id="loginId" name="loginId" class="form-control" placeholder="로그인 ID" value="${loginId}" />
 			</div>
 		</div>
 			
@@ -66,9 +106,20 @@
 			</div>
 		</div>
 		
+		<c:if test="${not empty securityexceptionmsg}">
+		<div class="form-group">
+			<div class="col-xs-12 col-lg-12">
+				<font color="red">
+				로그인이 실패했습니다. 다시 시도해주세요<br/>
+				${securityexceptionmsg}
+				</font>
+			</div>
+		</div>
+    	</c:if>
 		<div class="form-group text-center">
 			<div class="col-xs-offset-4 col-xs-4 col-cs-offset-4 col-lg-offset-4 col-lg-4 col-lg-offset-4">
 				<button id="btnLogin" type="button" class="btn btn-default">로그인</button>
+				<button id="btnAjaxLogin" type="button" class="btn btn-default">Ajax 로그인</button>
 			</div>
 		</div>
 		</form>

@@ -39,10 +39,13 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		useReferer = false;
 	}
 	
-	public CustomAuthenticationSuccessHandler(String targetUrlParameter, String defaultUrl, boolean useReferer){
+	public CustomAuthenticationSuccessHandler(String targetUrlParameter, String defaultUrl, boolean useReferer, RedirectStrategy redirectStrategy){
 		this.targetUrlParameter = targetUrlParameter;
 		this.defaultUrl = defaultUrl;
 		this.useReferer = useReferer;
+		if(redirectStrategy != null){
+			this.redirectStrategy = redirectStrategy;
+		}
 	}
 	
 	public String getTargetUrlParameter() {
@@ -69,6 +72,14 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		this.useReferer = useReferer;
 	}
 	
+	public RedirectStrategy getRedirectStrategy() {
+		return redirectStrategy;
+	}
+
+	public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
+		this.redirectStrategy = redirectStrategy;
+	}
+
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {

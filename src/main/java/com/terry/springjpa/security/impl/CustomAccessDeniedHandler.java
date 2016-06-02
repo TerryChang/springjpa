@@ -15,7 +15,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
 	private String errorPage;
-	private String ajaxHeaderKey;			// ajax 사용시 Http Header로 넣을 key 값(이 key에 value를 true 로 넣어줘야 동작한다) X-Ajax-call
+	private String ajaxHeaderKey;			// ajax 사용시 Http Header로 넣을 key 값(이 key에 value를 true 로 넣어줘야 동작한다)
 	
 	public CustomAccessDeniedHandler(String errorPage, String ajaxHeaderKey){
 		if ((errorPage != null) && !errorPage.startsWith("/")) {

@@ -75,7 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.usernameParameter("loginId")
 				.passwordParameter("loginPwd")
 				.loginPage("/login.do").permitAll()								// loginPage 메소드를 이용해서 로그인 페이지를 지정할 경우 로그인 처리를 하는 URL도 이 
-				// .loginProcessingUrl("/j_spring_security_check").permitAll()
+				.loginProcessingUrl("/j_spring_security_check").permitAll()
 				.defaultSuccessUrl("/main.do").permitAll()
 				.successHandler(customAuthenticationSuccessHandler)			// Login Success Handler 설정
 				.failureHandler(customAuthenticationFailureHandler)			// Login Failure Handler 설정

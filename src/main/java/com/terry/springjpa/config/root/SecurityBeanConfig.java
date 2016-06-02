@@ -15,8 +15,6 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.access.vote.AffirmativeBased;
 import org.springframework.security.access.vote.RoleHierarchyVoter;
 import org.springframework.security.access.vote.RoleVoter;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import com.terry.springjpa.common.converter.MemberToMemberVOConverter;
@@ -26,6 +24,7 @@ import com.terry.springjpa.security.SecuredObjectService;
 import com.terry.springjpa.security.impl.CustomAccessDeniedHandler;
 import com.terry.springjpa.security.impl.CustomAuthenticationFailureHandler;
 import com.terry.springjpa.security.impl.CustomAuthenticationSuccessHandler;
+import com.terry.springjpa.security.impl.CustomDefaultRedirectStrategy;
 import com.terry.springjpa.security.impl.ReloadableFilterInvocationSecurityMetadataSource;
 import com.terry.springjpa.security.impl.SecuredObjectServiceImpl;
 import com.terry.springjpa.security.impl.UrlResourcesMapFactoryBean;
@@ -90,20 +89,25 @@ public class SecurityBeanConfig {
 	}
 	
 	@Bean
+	public CustomDefaultRedirectStrategy customDefaultRedirectStrategy(){
+		return new CustomDefaultRedirectStrategy(false, "X-Ajax-Call");
+	}
+	
+	@Bean
 	public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler(){
-		CustomAuthenticationSuccessHandler cash = new CustomAuthenticationSuccessHandler("loginRedirect", "/main.do", false);
+		CustomAuthenticationSuccessHandler cash = new CustomAuthenticationSuccessHandler("loginRedirect", "/main.do", false, customDefaultRedirectStrategy());
 		return cash;
 	}
 	
 	@Bean
 	public CustomAuthenticationFailureHandler customAuthenticationFailureHandler(){
-		CustomAuthenticationFailureHandler cafh = new CustomAuthenticationFailureHandler("loginid", "loginpwd", "loginRedirect", "securityexceptionmsg", "/login.do?fail=true");
+		CustomAuthenticationFailureHandler cafh = new CustomAuthenticationFailureHandler("loginId", "loginPwd", "securityexceptionmsg", "/login.do", "X-Ajax-Call");
 		return cafh;
 	}
 	
 	@Bean
 	public CustomAccessDeniedHandler customAccessDeniedHandler(){
-		CustomAccessDeniedHandler cadh = new CustomAccessDeniedHandler("/common/access_denied2.do", "X-Ajax-call");
+		CustomAccessDeniedHandler cadh = new CustomAccessDeniedHandler("/common/access_denied2.do", "X-Ajax-Call");
 		return cadh;
 	}
 }
