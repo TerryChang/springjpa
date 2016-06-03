@@ -52,18 +52,36 @@
 	        	},
 	        	success:function(data, textStatus, jqXHR){
 	        		var result = data.result;
-	        		if(result){
-	        			var redirectUrl = data.redirectUrl;
+	        		if(result == "OK"){
+	        			var redirectUrl = data.resultMap.redirectUrl;
 	        			location.href = redirectUrl;
 	        		}else{
-	        			var securityexceptionmsg = data.securityexceptionmsg;
+	        			var securityexceptionmsg = data.resultMap.securityexceptionmsg;
 	        			alert("로그인이 실패했습니다. 다시 시도해주세요\n" + securityexceptionmsg);
 	        		}
 	        	},
 	        	error:function(jqXHR, textStatus, errorThrown){
-	        		var responseJSON = jqXHR.responseJSON;
-	        		var message = responseJSON.message;
-	        		alert(message);
+	        		var alertMsg = "";
+	        		if(jqXHR.status == 400){
+	        			var responseJSON = jqXHR.responseJSON;
+	        			var resultMap = responseJSON.resultMap;
+	        			if(responseJSON.job == "Validate"){
+	        				$.each(resultMap, function(k, v){
+	        					alertMsg += v + "\n";
+		        			});
+	        				var pattern = /\n$/;
+	        				alertMsg = alertMsg.replace(pattern, "");		// 에러 문자열을 결합하면 마지막 행 끝에 개행문자(\n)가 붙기 때문에 이를 제거하기 위해 정규표현식을 이용해서 마지막에 붙은 개행문자를 제거한다
+	        				console.log(alertMsg);
+		        			alert(alertMsg);
+	        			}else if(responseJSON.job == "Ajax"){
+	        				var alertMsg = resultMap.message;
+	        				alert(alertMsg);
+	        			}else{
+	        				alert("<spring:message code='errorFail' />");
+	        			}
+	        		}else{
+	        			alert("<spring:message code='errorFail' />");
+	        		}
 	        	}
 	        });
 		});

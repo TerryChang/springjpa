@@ -53,24 +53,28 @@
 	        		location.href="/boardType/boardTypeList.do";
 	        	},
 	        	error:function(jqXHR, textStatus, errorThrown){
-	        		// alert("<spring:message code='errorFail' />");
-        			var responseJSON = jqXHR.responseJSON;
-        			if(responseJSON.hasOwnProperty("result")){		// result property가 있다는 것은 Spring에서 return한 결과 Object이므로 이에 대한 작업을 진행한다
-        				var alertMsg = "";
-	        			if(responseJSON.hasOwnProperty("result")){
-	        				var errorMessageMap = responseJSON.errorMessageMap;
-	        				$.each(errorMessageMap, function(k, v){
+	        		
+	        		var alertMsg = "";
+	        		if(jqXHR.status == 400){
+	        			var responseJSON = jqXHR.responseJSON;
+	        			var resultMap = responseJSON.resultMap;
+	        			if(responseJSON.job == "Validate"){
+	        				$.each(resultMap, function(k, v){
 	        					alertMsg += v + "\n";
 		        			});
+	        				var pattern = /\n$/;
+	        				alertMsg = alertMsg.replace(pattern, "");		// 에러 문자열을 결합하면 마지막 행 끝에 개행문자(\n)가 붙기 때문에 이를 제거하기 위해 정규표현식을 이용해서 마지막에 붙은 개행문자를 제거한다
+	        				console.log(alertMsg);
+		        			alert(alertMsg);
+	        			}else if(responseJSON.job == "Ajax"){
+	        				var alertMsg = resultMap.message;
+	        				alert(alertMsg);
+	        			}else{
+	        				alert("<spring:message code='errorFail' />");
 	        			}
-	        			var pattern = /\n$/;
-	        			alertMsg = alertMsg.replace(pattern, "");		// 에러 문자열을 결합하면 마지막 행 끝에 개행문자(\n)가 붙기 때문에 이를 제거하기 위해 정규표현식을 이용해서 마지막에 붙은 개행문자를 제거한다
-	        			console.log(alertMsg);
-	        			alert(alertMsg);
-        			}else{
-        				alert("<spring:message code='errorFail' />");
-        			}	
-	        		
+	        		}else{
+	        			alert("<spring:message code='errorFail' />");
+	        		}
 	        	}
 	        });
 		});
@@ -143,51 +147,24 @@
         		}		
         	},
         	error:function(jqXHR, textStatus, errorThrown){
-        		// console.log("error");
-        		
-        		// console.log(jqXHR);
-        		// console.log(textStatus);
-        		// console.log(errorThrown);
-        		
-        		// 에러메시지를 표현하는 span 태그를 모두 초기화를 시켜준다
-        		// 에러메시지를 표현하는 span 태그는 id가 ErrorMsg로 끝나는 것들이기 때문에 이것들만 찾아서 빈 문자열로 초기화 시켜주면된다
-        		/*
-        		$("span[id$='ErrorMsg']").html("");
-        		
+        		var alertMsg = "";
         		if(jqXHR.status == 400){
         			var responseJSON = jqXHR.responseJSON;
-	        		
-	        		if(responseJSON.hasOwnProperty("result")){		// result property가 있다는 것은 Spring에서 return한 결과 Object이므로 이에 대한 작업을 진행한다
-	        			var errorMessageMap = responseJSON.errorMessageMap;
-	        			$.each(errorMessageMap, function(k, v){
-	        				var spanId = k + "ErrorMsg";
-	        				var msg = v.replace(/\n/g, "<br/>");
-	        				$("#" + spanId).html(msg);
+        			var resultMap = responseJSON.resultMap;
+        			if(responseJSON.job == "Validate"){
+        				$.each(resultMap, function(k, v){
+        					alertMsg += v + "\n";
 	        			});
-	        		}else{											// result property가 없다는 것은 Spring과는 무관하게 발생한 것을 의미한다
-	        			alert("<spring:message code='errorFail' />");
-	        		}
-        		}else{
-        			alert("<spring:message code='errorFail' />");
-        		}
-        		*/
-        		if(jqXHR.status == 400){
-        			var responseJSON = jqXHR.responseJSON;
-        			if(responseJSON.hasOwnProperty("result")){		// result property가 있다는 것은 Spring에서 return한 결과 Object이므로 이에 대한 작업을 진행한다
-        				var alertMsg = "";
-	        			if(responseJSON.hasOwnProperty("result")){
-	        				var errorMessageMap = responseJSON.errorMessageMap;
-	        				$.each(errorMessageMap, function(k, v){
-	        					alertMsg += v + "\n";
-		        			});
-	        			}
-	        			var pattern = /\n$/;
-	        			alertMsg = alertMsg.replace(pattern, "");		// 에러 문자열을 결합하면 마지막 행 끝에 개행문자(\n)가 붙기 때문에 이를 제거하기 위해 정규표현식을 이용해서 마지막에 붙은 개행문자를 제거한다
-	        			console.log(alertMsg);
+        				var pattern = /\n$/;
+        				alertMsg = alertMsg.replace(pattern, "");		// 에러 문자열을 결합하면 마지막 행 끝에 개행문자(\n)가 붙기 때문에 이를 제거하기 위해 정규표현식을 이용해서 마지막에 붙은 개행문자를 제거한다
+        				console.log(alertMsg);
 	        			alert(alertMsg);
+        			}else if(responseJSON.job == "Ajax"){
+        				var alertMsg = resultMap.message;
+        				alert(alertMsg);
         			}else{
         				alert("<spring:message code='errorFail' />");
-        			}	
+        			}
         		}else{
         			alert("<spring:message code='errorFail' />");
         		}

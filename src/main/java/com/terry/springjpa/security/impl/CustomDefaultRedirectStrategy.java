@@ -14,6 +14,7 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.util.UrlUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.terry.springjpa.common.vo.CommonResultVO;
 
 /**
  * 기존 Spring Security에서 제공하고 있는 URL Redirect 정책을 정하는 인터페이스인 RedirectStrategy를 구현한 DefaultRedirectStrategy 클래스를
@@ -68,21 +69,26 @@ public class CustomDefaultRedirectStrategy implements RedirectStrategy {
     
             response.sendRedirect(redirectUrl);
         }else{
+        	CommonResultVO commonResultVO = new CommonResultVO();
+        	commonResultVO.setJob(CommonResultVO.Ajax);
+        	Map<String, String> resultMap = new HashMap<String, String>();
         	ObjectMapper objectMapper = new ObjectMapper();
-        	Map<String, Object> resultMap = new HashMap<String, Object>();
+        	
         	String result = "";
-        	if("true".equals(ajaxHeader)){								// true로 값을 받았다는 것은 ajax로 접근했음을 의미한다
-        		resultMap.put("result", true);
+        	if("true".equals(ajaxHeader)){								// true로 값을 받았다는 것은 ajax로 접근했음을 의미한다(redirect URL로 redirect 하면 된다)
+        		commonResultVO.setResult(CommonResultVO.OK);
         		resultMap.put("redirectUrl", redirectUrl);
+        		logger.debug("Ajax Redirecting to '" + redirectUrl + "'");
 				// result = "{\"result\" : \"fail\", \"message\" : \"" + accessDeniedException.getMessage() + "\"}";
 			}else{														// 헤더 변수는 있으나 값이 틀린 경우이므로 헤더값이 틀렸다는 의미로 돌려준다
 				response.setStatus(HttpStatus.BAD_REQUEST.value());		// Http Status Code를 Bad Request(400)으로 설정함으로써 Http 상태 코드로 에러 제어를 하도록 한다
+				commonResultVO.setResult(CommonResultVO.FAIL);
 				resultMap.put("message", "Header(" + ajaxHeaderKey + ") Value Mismatch");
 			}
         	
-        	logger.debug("Ajax Redirecting to '" + redirectUrl + "'");
+        	commonResultVO.setResultMap(resultMap);
         	
-        	result = objectMapper.writeValueAsString(resultMap);
+        	result = objectMapper.writeValueAsString(commonResultVO);
 			response.getWriter().print(result);
 			response.getWriter().flush();
         }

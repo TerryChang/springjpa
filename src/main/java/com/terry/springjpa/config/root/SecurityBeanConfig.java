@@ -15,6 +15,7 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.access.vote.AffirmativeBased;
 import org.springframework.security.access.vote.RoleHierarchyVoter;
 import org.springframework.security.access.vote.RoleVoter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import com.terry.springjpa.common.converter.MemberToMemberVOConverter;
@@ -53,8 +54,6 @@ public class SecurityBeanConfig {
 		userDetailsServiceImpl.setMemberToMemberVOConverter(memberToMemberVOConverter);
 		return userDetailsServiceImpl;
 	}
-	
-	
 	
 	@Bean
 	public AccessDecisionManager accessDecisionManager(UserDetailsServiceImpl userDetailsServiceImpl, SecuredObjectService securedObjectService) throws Exception{
@@ -109,5 +108,10 @@ public class SecurityBeanConfig {
 	public CustomAccessDeniedHandler customAccessDeniedHandler(){
 		CustomAccessDeniedHandler cadh = new CustomAccessDeniedHandler("/common/access_denied2.do", "X-Ajax-Call");
 		return cadh;
+	}
+	
+	@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder(){
+		return new BCryptPasswordEncoder();
 	}
 }

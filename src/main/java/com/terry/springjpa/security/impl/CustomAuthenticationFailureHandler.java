@@ -15,6 +15,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.terry.springjpa.common.vo.CommonResultVO;
 
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
@@ -97,18 +98,24 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 			
 		}else{									// Ajax로 로그인 한 것이면 로그인 실패했다는 의미를 response message로 전달하도록 한다
 			
+			CommonResultVO commonResultVO = new CommonResultVO();
+        	commonResultVO.setJob(CommonResultVO.Ajax);
+        	commonResultVO.setResult(CommonResultVO.FAIL);
+        	Map<String, String> resultMap = new HashMap<String, String>();
+			
 			ObjectMapper objectMapper = new ObjectMapper();
-	    	Map<String, Object> resultMap = new HashMap<String, Object>();
+	    	
 	    	String result = "";
 	    	if("true".equals(ajaxHeader)){		// true로 값을 받았다는 것은 ajax로 접근했음을 의미한다
-	    		resultMap.put("result", false);
 	    		resultMap.put(exceptionmsgname, exception.getMessage());
 			}else{								// 헤더 변수는 있으나 값이 틀린 경우이므로 헤더값이 틀렸다는 의미로 돌려준다
 				response.setStatus(HttpStatus.BAD_REQUEST.value());			// Http Status Code를 Bad Request(400)으로 설정함으로써 Http 상태 코드로 에러 제어를 하도록 한다
 				resultMap.put("message", "Header(" + ajaxHeaderKey + ") Value Mismatch");
 			}
 	    	
-	    	result = objectMapper.writeValueAsString(resultMap);
+	    	commonResultVO.setResultMap(resultMap);
+	    	
+	    	result = objectMapper.writeValueAsString(commonResultVO);
 			response.getWriter().print(result);
 			response.getWriter().flush();
 		}

@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -64,6 +63,7 @@ public class GlobalExceptionHandler {
 		
 		MethodArgumentNotValidException mane = (MethodArgumentNotValidException)ex;
 	
+		result.setJob(CommonResultVO.Validate);
 		result.setResult(CommonResultVO.FAIL);
 	
 		BindingResult bindingResult = mane.getBindingResult();
@@ -80,7 +80,7 @@ public class GlobalExceptionHandler {
 			}
 		}
 		
-		result.setErrorMessageMap(errorMessageMap);
+		result.setResultMap(errorMessageMap);
 		
 		return result;
 	}
@@ -107,7 +107,7 @@ public class GlobalExceptionHandler {
 			errorMessageMap.put("exceptionMessage", ex.getMessage());
 			CommonResultVO resultVO = new CommonResultVO();
 			resultVO.setResult(CommonResultVO.FAIL);
-			resultVO.setErrorMessageMap(errorMessageMap);
+			resultVO.setResultMap(errorMessageMap);
 			
 			result = new ModelAndView();
 			MappingJackson2JsonView mj2jv = new MappingJackson2JsonView();

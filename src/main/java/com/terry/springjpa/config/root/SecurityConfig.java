@@ -11,11 +11,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
-import com.terry.springjpa.common.converter.MemberToMemberVOConverter;
-import com.terry.springjpa.repository.LoginAuthorities;
 import com.terry.springjpa.security.impl.CustomAccessDeniedHandler;
 import com.terry.springjpa.security.impl.CustomAuthenticationFailureHandler;
 import com.terry.springjpa.security.impl.CustomAuthenticationSuccessHandler;
@@ -28,19 +26,22 @@ import com.terry.springjpa.security.impl.UserDetailsServiceImpl;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
-	UserDetailsServiceImpl userDetailsServiceImpl;
+	private UserDetailsServiceImpl userDetailsServiceImpl;
 	
 	@Autowired
-	CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+	private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 	
 	@Autowired
-	CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+	private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 	
 	@Autowired
-	CustomAccessDeniedHandler customAccessDeniedHandler;
+	private CustomAccessDeniedHandler customAccessDeniedHandler;
 	
 	@Autowired
-	FilterSecurityInterceptor filterSecurityInterceptor;
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	@Autowired
+	private FilterSecurityInterceptor filterSecurityInterceptor;
 	
 
 	@Override
@@ -69,7 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 			.addFilterBefore(filterSecurityInterceptor, FilterSecurityInterceptor.class)
 			.csrf().disable()
-			.authorizeRequests()
+			.authorizeRequests().anyRequest().authenticated()
 			.and()
 			.formLogin()
 				.usernameParameter("loginId")
@@ -93,7 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		// TODO Auto-generated method stub
-		auth.userDetailsService(userDetailsServiceImpl);	// Password Encoder 작업 추가할것
+		auth.userDetailsService(userDetailsServiceImpl).passwordEncoder(bCryptPasswordEncoder);	// Password Encoder 작업 추가할것
 	}
 
 	@Bean
