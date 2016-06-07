@@ -9,8 +9,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
@@ -22,7 +22,7 @@ import com.terry.springjpa.security.impl.UserDetailsServiceImpl;
 
 @Configuration
 @Import({SecurityBeanConfig.class})
-@EnableWebSecurity
+@EnableWebMvcSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
@@ -87,6 +87,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)		// Access Denied Handler 설정
 			.and()
 			.logout()
+				.logoutUrl("/logout.do")
 				.logoutSuccessUrl("/main.do").permitAll()
 				.deleteCookies("JSESSIONID");
 	}
@@ -105,12 +106,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return authenticationManager;
 	}
 	
+	/**
+	 * Cutom FilterSecurityInterceptor 객체를 bean으로 등록한다
+	 * 눈여겨 봐야 할 코드가 customFilterSecurityInterceptor.setRejectPublicInvocations(false) 이 부분이다
+	 * 이 메소드에 인자를 true로 주면 우리가 관리대상으로 삼은 자원(URL, Method)들이 아닌 다른 자원들에 대한 접근이 이루어졌을때 
+	 * 접근을 하지 못하도록 예외(IllegalArgumentExcption)을 던지게 된다
+	 * 그러나 false로 지정하면 다른 자원에 대한 접근이 이루어졌을 경우 이를 public 자원이라 판단하고 자원 접근을 허용하게 된다
+	 * 이것이 왜 필요하냐면 우리가 관리대상이 되는 자원(URL, 메소드)를 만든뒤에 Spring Security에 관리대상으로 등록하지 않으면
+	 * 예외가 발생되게끔 해야 하기 때문에 그렇다.(만약 만들기만 하고 Spring Security에 관리 대상으로 등록시키지 않게 되면 권한 여부와는 상관없이 모두 접근되기 때문에 이를 막기 위한 속성으로 있는 것이다)
+	 * 개발할때는 개발의 편리성 때문에 이것을 false로 하지만 나중에 완성된 뒤에 테스트 하는 시점에서는 이 부분을 true로 해주어야 보안에 더 철저해진 테스트를 진행할 수 있으리라 생각한다
+	 * 이 메소드가 설정하게 되는 rejectPublicInvocations 속성은 기본값이 false 이기 때문에 이 코드를 명시하지 않아도 되지만
+	 * 이 부분에 대한 설명을 하기 위해 추가해두었다
+	 * @param authenticationManager
+	 * @param accessDecisionManager
+	 * @param rfisms
+	 * @return
+	 */
 	@Bean
 	public FilterSecurityInterceptor customFilterSecurityInterceptor(AuthenticationManager authenticationManager, AccessDecisionManager accessDecisionManager, ReloadableFilterInvocationSecurityMetadataSource rfisms){
 		FilterSecurityInterceptor customFilterSecurityInterceptor = new FilterSecurityInterceptor();
 		customFilterSecurityInterceptor.setAuthenticationManager(authenticationManager);
 		customFilterSecurityInterceptor.setAccessDecisionManager(accessDecisionManager);						// AccessDecisionManager 설정
 		customFilterSecurityInterceptor.setSecurityMetadataSource(rfisms);										// SecurityMetadataSource 설정
+		customFilterSecurityInterceptor.setRejectPublicInvocations(false);										
 		return customFilterSecurityInterceptor;
 	}
 

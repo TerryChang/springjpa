@@ -1,10 +1,12 @@
 package com.terry.springjpa.config.servlet;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -91,20 +93,24 @@ public class GlobalExceptionHandler {
 	 * @param response
 	 * @param ex
 	 * @return
+	 * @throws IOException 
+	 * @throws ServletException 
 	 */
 	@ExceptionHandler(value={Exception.class})
-	public ModelAndView processException(HttpServletRequest request, HttpServletResponse response, Exception ex){
+	public ModelAndView processException(HttpServletRequest request, HttpServletResponse response, Exception ex) throws ServletException, IOException{
 		ex.printStackTrace();
-		String uri = request.getRequestURI();
+		String url = request.getRequestURI() + "?" + request.getQueryString();
 		String contentType = request.getHeader("content-type");
+		String exceptionClass = ex.getClass().getName();
+		String exceptionMessage = ex.getMessage();
 		
 		ModelAndView result = null;
 		if("application/json".equals(contentType)){									// content-type이 application/json일 경우 json으로 예외 메시지를 보내도록 한다
 			response.setStatus(HttpStatus.BAD_REQUEST.value());
 			Map<String, String> errorMessageMap = new HashMap<String, String>();
-			errorMessageMap.put("uri", uri);
-			errorMessageMap.put("exceptionClass", ex.getClass().getName());
-			errorMessageMap.put("exceptionMessage", ex.getMessage());
+			errorMessageMap.put("url", url);
+			errorMessageMap.put("exceptionClass", exceptionClass);
+			errorMessageMap.put("exceptionMessage", exceptionMessage);
 			CommonResultVO resultVO = new CommonResultVO();
 			resultVO.setResult(CommonResultVO.FAIL);
 			resultVO.setResultMap(errorMessageMap);
@@ -114,11 +120,18 @@ public class GlobalExceptionHandler {
 			mj2jv.setExtractValueFromSingleKeyModel(true);							// Model에 객체가 1개만 들어가기 때문에 변수명으로 json key를 잡는 것을 방지하기 위해 이 메소드에 true를 준다
 			result.addObject(resultVO);
 			result.setView(mj2jv);
-		}else{																		// 일반적인 상황은 web page로 보여주도록 한다 
+		}else{																		// 일반적인 상황은 web page로 보여주도록 한다(error.do에서 처리하도록 하게 할려고 forward 방식으로 해서 구현했다)
+			request.setAttribute("url", url);
+			request.setAttribute("exceptionClass", exceptionClass);
+			request.setAttribute("exceptionMessage", exceptionMessage);
+			request.getRequestDispatcher("/error.do").forward(request, response);
+			
+			/*
 			result = new ModelAndView("/error/handleException");
 			result.addObject("uri", uri);
 			result.addObject("exceptionClass", ex.getClass().getName());
 			result.addObject("exceptionMessage", ex.getMessage());
+			*/
 		}
 		
 		return result;

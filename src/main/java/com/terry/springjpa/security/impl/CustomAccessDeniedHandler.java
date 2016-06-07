@@ -59,7 +59,11 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 		String ajaxHeader = request.getHeader(ajaxHeaderKey);
 		String result = "";
 		
-		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+		String url = request.getRequestURI() + "?" + request.getQueryString();
+		String exceptionClass = accessDeniedException.getClass().getName();
+		String exceptionMessage = accessDeniedException.getMessage();
+		
+		// response.setStatus(HttpServletResponse.SC_FORBIDDEN); // 일반적인 에러 페이지에 통합적으로 구현할 것이어서 Status Code를 403으로 설정하지는 않았다
 		response.setCharacterEncoding("UTF-8");
 		
 		if(ajaxHeader == null){					// null로 받은 경우는 X-Ajax-call 헤더 변수가 없다는 의미이기 때문에 ajax가 아닌 일반적인 방법으로 접근했음을 의미한다
@@ -69,7 +73,11 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 				String username = ((UserDetails) principal).getUsername();
 				request.setAttribute("username", username);
 			}
-			request.setAttribute("errormsg", accessDeniedException);
+			
+			request.setAttribute("url", url);
+			request.setAttribute("exceptionClass", exceptionClass);
+			request.setAttribute("exceptionMessage", exceptionMessage);
+			
 			request.getRequestDispatcher(errorPage).forward(request, response);
 		}else{
 			
@@ -80,7 +88,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         	
 			ObjectMapper objectMapper = new ObjectMapper();
 	    	if("true".equals(ajaxHeader)){		// true로 값을 받았다는 것은 ajax로 접근했음을 의미한다
-	    		resultMap.put("message", accessDeniedException.getMessage());
+	    		resultMap.put("message", exceptionMessage);
 			}else{								// 헤더 변수는 있으나 값이 틀린 경우이므로 헤더값이 틀렸다는 의미로 돌려준다
 				resultMap.put("message", "Header(" + ajaxHeaderKey + ") Value Mismatch");
 			}

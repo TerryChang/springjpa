@@ -40,6 +40,8 @@ public class SecurityBeanConfig {
 	@Autowired
 	MemberToMemberVOConverter memberToMemberVOConverter;
 	
+	private String ajaxHeaderKey = "X-Ajax-Call";
+	
 	@Bean
 	public SecuredObjectServiceImpl SecuredObjectServiceImpl(SecuredObjectRepositoryImpl securedObjectRepositoryImpl){
 		SecuredObjectServiceImpl securedObjectServiceImpl = new SecuredObjectServiceImpl();
@@ -89,7 +91,7 @@ public class SecurityBeanConfig {
 	
 	@Bean
 	public CustomDefaultRedirectStrategy customDefaultRedirectStrategy(){
-		return new CustomDefaultRedirectStrategy(false, "X-Ajax-Call");
+		return new CustomDefaultRedirectStrategy(false, ajaxHeaderKey);
 	}
 	
 	@Bean
@@ -100,13 +102,13 @@ public class SecurityBeanConfig {
 	
 	@Bean
 	public CustomAuthenticationFailureHandler customAuthenticationFailureHandler(){
-		CustomAuthenticationFailureHandler cafh = new CustomAuthenticationFailureHandler("loginId", "loginPwd", "securityexceptionmsg", "/login.do", "X-Ajax-Call");
+		CustomAuthenticationFailureHandler cafh = new CustomAuthenticationFailureHandler("loginId", "loginPwd", "securityexceptionmsg", "/login.do", ajaxHeaderKey);
 		return cafh;
 	}
 	
 	@Bean
 	public CustomAccessDeniedHandler customAccessDeniedHandler(){
-		CustomAccessDeniedHandler cadh = new CustomAccessDeniedHandler("/common/access_denied2.do", "X-Ajax-Call");
+		CustomAccessDeniedHandler cadh = new CustomAccessDeniedHandler("/error.do", ajaxHeaderKey);
 		return cadh;
 	}
 	

@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-	<title>메인화면</title>
+	<title>에러화면</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,34 +24,17 @@
 	<div class="container">
 		<!-- Page Header Start -->
 		<div class="page-header">
-	 		<h1>메인 화면</h1>
+	 		<h1>에러 화면</h1>
 		</div>
 		<div>
-			<sec:authorize access="isAnonymous()">
-			<a href="/login.do">로그인</a>
-			</sec:authorize>
-			<sec:authorize access="isAuthenticated()">
-			로그인 id : ${member.username}<br/>
-			권한 : ${member.authorities}
-			<a href="/logout.do">로그아웃</a>
-			</sec:authorize>
-		</div>
-		<div>
-			<div>메뉴</div>
-			<div>
-				<sec:authorize url="/unitedBoard/unitedBoardList.do?boardTypeIdx=1">
-				공지사항
-				</sec:authorize>
-				<sec:authorize url="/unitedBoard/unitedBoardList.do?boardTypeIdx=2">
-				회원게시판
-				</sec:authorize>
-				<sec:authorize url="/unitedBoard/unitedBoardList.do?boardTypeIdx=3">
-				까페게시판
-				</sec:authorize>
-				<sec:authorize url="/unitedBoard/unitedBoardList.do?boardTypeIdx=4">
-				질문게시판
-				</sec:authorize>
-			</div>
+			문제가 발생했습니다. 관리자에게 문의하시기 바랍니다<br/>
+			에러내용은 다음과 같습니다<br/>
+			<c:if test="${not empty username}">
+			로그인 ID : ${username}<br/>
+			</c:if>
+			url : ${url}<br/>
+			exceptionClass : ${exceptionClass}<br/>
+			exceptionMessage : ${exceptionMessage}<br/>
 		</div>
 	</div>
 </body>

@@ -111,9 +111,15 @@ insert into boardtype(idx, name, url, insertdt) values(boardtype_sequence.nextva
 insert into boardtype(idx, name, url, insertdt) values(boardtype_sequence.nextval, '까페 게시판', '/unitedBoard/unitedBoardList.do?boardTypeIdx=3', current_timestamp());
 insert into boardtype(idx, name, url, insertdt) values(boardtype_sequence.nextval, '질문 게시판', '/unitedBoard/unitedBoardList.do?boardTypeIdx=4', current_timestamp());
 
+insert into member(idx, loginid, password, name, email, insertdt) values(member_sequence.nextval, 'loginId1', '$2a$10$uKMo1/K3k5e1r.pkBjiJs.ZYJSR5Flxhgojjs7r578NvaGOenQqhm', '관리자', 'a1@b.com', current_timestamp());
+insert into member(idx, loginid, password, name, email, insertdt) values(member_sequence.nextval, 'loginId2', '$2a$10$TOggES.7yhqi95L/z8j4j.tSIxjPYuYaQaZQD8Lm6VzgVAdGwEPQi', '까페회원', 'a2@b.com', current_timestamp());
+insert into member(idx, loginid, password, name, email, insertdt) values(member_sequence.nextval, 'loginId3', '$2a$10$E92nTJndyp8jLU5/IDnzn.c7fySRkiGHewL0fP9Vjc6gMWcNGr/bm', '일반회원', 'a3@b.com', current_timestamp());
+
+/*
 insert into member(idx, loginid, password, name, email, insertdt) values(member_sequence.nextval, 'loginId1', 'password1', '관리자', 'a1@b.com', current_timestamp());
 insert into member(idx, loginid, password, name, email, insertdt) values(member_sequence.nextval, 'loginId2', 'password2', '까페회원', 'a2@b.com', current_timestamp());
 insert into member(idx, loginid, password, name, email, insertdt) values(member_sequence.nextval, 'loginId3', 'password3', '일반회원', 'a3@b.com', current_timestamp());
+*/
 
 insert into authority(idx, authority_name, authority_desc) values(authority_sequence.nextval, 'ADMIN', '관리자');
 insert into authority(idx, authority_name, authority_desc) values(authority_sequence.nextval, 'CAFEMEMBER', '까페회원');
