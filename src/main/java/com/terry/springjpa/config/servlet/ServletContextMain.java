@@ -11,7 +11,8 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.SortHandlerMethodArgumentResolver;
-import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+import org.springframework.security.web.bind.support.AuthenticationPrincipalArgumentResolver;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -136,12 +137,22 @@ public class ServletContextMain extends WebMvcConfigurerAdapter{
 	public SortHandlerMethodArgumentResolver sortResolver() {
 		return new SortHandlerMethodArgumentResolver();
 	}
+	
+	/**
+	 * Spring Security 사용시 Controller 에서 @AuthenticationPrincipal 어노테이션을 사용해서 사용자 로그인 정보를 가져오는 작업을 하는 ArgumentResolver
+	 * @return
+	 */
+	@Bean
+    public AuthenticationPrincipalArgumentResolver authenticationPrincipalArgumentResolver(){
+        return new AuthenticationPrincipalArgumentResolver();
+    }
 
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
 		// TODO Auto-generated method stub
 		argumentResolvers.add(pageableResolver());
 		argumentResolvers.add(sortResolver());
+		argumentResolvers.add(authenticationPrincipalArgumentResolver());
 		super.addArgumentResolvers(argumentResolvers);
 	}
 	
