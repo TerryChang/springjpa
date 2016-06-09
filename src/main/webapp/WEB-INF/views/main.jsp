@@ -32,7 +32,8 @@
 			</sec:authorize>
 			<sec:authorize access="isAuthenticated()">
 			로그인 id : ${member.username}<br/>
-			권한 : ${member.authorities}
+			email : ${member.email}<br/>
+			권한 : ${member.authorities}<br/>
 			<a href="/logout.do">로그아웃</a>
 			</sec:authorize>
 		</div>
@@ -42,7 +43,7 @@
 				<sec:authorize url="/unitedBoard/unitedBoardList.do?boardTypeIdx=1">
 				공지사항
 				</sec:authorize>
-				<sec:authorize url="/unitedBoard/unitedBoardList.do?boardTypeIdx=2">
+				<sec:authorize access="hasRole('MEMBER')">
 				회원게시판
 				</sec:authorize>
 				<sec:authorize url="/unitedBoard/unitedBoardList.do?boardTypeIdx=3">

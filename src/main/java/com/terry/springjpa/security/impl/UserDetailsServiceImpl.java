@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityMessageSource;
@@ -16,12 +15,12 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 
 import com.terry.springjpa.common.converter.MemberToMemberVOConverter;
 import com.terry.springjpa.entity.Authority;
 import com.terry.springjpa.entity.Member;
 import com.terry.springjpa.repository.LoginAuthorities;
+import com.terry.springjpa.vo.MemberVO;
 
 public class UserDetailsServiceImpl implements UserDetailsService {
 	
@@ -60,7 +59,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                     messages.getMessage("JdbcDaoImpl.notFound", new Object[]{username}, "Username {0} not found"));
         }
 
-        UserDetails user = memberToMemberVOConverter.convert(users.get(0)); // contains no GrantedAuthority[]
+        MemberVO user = memberToMemberVOConverter.convert(users.get(0)); // contains no GrantedAuthority[]
 
         Set<GrantedAuthority> dbAuthsSet = new HashSet<GrantedAuthority>();
 
@@ -92,9 +91,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                             new Object[] {username}, "User {0} has no GrantedAuthority"));
         }
 
-        return createUserDetails(username, user, dbAuths);
+        user.setAuthorities(dbAuths);
+        
+        /*
+        return 하는 객체의 타입을 신경써야 한다. 
+        이 타입이 나중에 Spring MVC의 Controller에서 @AuthenticationPrincipal 어노테이션을 이용해서 로그인 한 사용자 정보를 가져올때
+        여기서 return 하는 타입으로 사용자 정보를 가져오기 때문에 
+        Controller에서 @Authentication을 이용해서 로그인 한 사용자 정보를 여기서 return 한 타입의 객체로 받아야 한다
+        주석처리한 createUserDetails 메소드를 이용해서 return 할 경우 Controller에서 @AuthenticationPrincipal 어노테이션을 이용할때 User 클래스로 받아야 한다
+        */
+        return user;
+        // return createUserDetails(username, user, dbAuths);
     }
 
+    /*
     private UserDetails createUserDetails(String username, UserDetails userFromUserQuery,
             List<GrantedAuthority> combinedAuthorities) {
         String returnUsername = userFromUserQuery.getUsername();
@@ -102,6 +112,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new User(returnUsername, userFromUserQuery.getPassword(), userFromUserQuery.isEnabled(),
                 true, true, true, combinedAuthorities);
     }
+    */
 
 	public boolean isEnableAuthorities() {
 		return enableAuthorities;
