@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,6 +24,7 @@ import com.terry.springjpa.service.CRUDService;
 import com.terry.springjpa.service.CommonService;
 import com.terry.springjpa.service.impl.UnitedBoardServiceImpl;
 import com.terry.springjpa.vo.BoardTypeVO;
+import com.terry.springjpa.vo.MemberVO;
 import com.terry.springjpa.vo.SearchVO;
 import com.terry.springjpa.vo.UnitedBoardVO;
 
@@ -59,13 +61,21 @@ public class UnitedBoardController {
 	 * @return
 	 */
 	@RequestMapping(value="/unitedBoard/unitedBoardInsertUpdate", method=RequestMethod.GET)
-	public String unitedBoardInsertUpdate(@RequestParam(value="boardTypeIdx") Long boardTypeIdx, @RequestParam(value="idx", required=false) Long idx, @ModelAttribute(value="searchVO") SearchVO searchVO, Model model){
+	public String unitedBoardInsertUpdate(@RequestParam(value="boardTypeIdx") Long boardTypeIdx
+			, @RequestParam(value="idx", required=false) Long idx
+			, @ModelAttribute(value="searchVO") SearchVO searchVO
+			, @AuthenticationPrincipal MemberVO member
+			, Model model){
 		BoardTypeVO boardType = boardTypeService.view(boardTypeIdx);
 		UnitedBoardVO unitedBoardVO = new UnitedBoardVO();
-		if(idx != null){
+		if(idx == null){
+			unitedBoardVO.setMemberIdx(member.getIdx());
+			unitedBoardVO.setMemberLoginId(member.getLoginId());
+		}else{
 			unitedBoardVO = service.view(idx);
 		}
 		model.addAttribute("boardType", boardType);
+		model.addAttribute("member", member);
 		model.addAttribute("unitedBoard", unitedBoardVO);
 		return "/unitedBoard/unitedBoardInsertUpdate";
 	}

@@ -10,6 +10,7 @@
 	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Expires" content="0" />
+	<sec:csrfMetaTags /><!-- Spring Security Meta Tag 추가 -->
 	<!-- 부트스트랩 -->
 	<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<style>
@@ -73,6 +74,7 @@
 				<button id="btnPassword" type="button" class="btn btn-default">패스워드 변환</button>
 			</div>
 		</div>
+		<sec:csrfInput /><!-- Spring Security Input Tag 추가 -->
 		</form>
 	</div>
 </body>

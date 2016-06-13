@@ -10,6 +10,7 @@
 	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Expires" content="0" />
+	<sec:csrfMetaTags /><!-- Spring Security Meta Tag 추가 -->
 	<!-- 부트스트랩 -->
 	<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<style>
@@ -20,6 +21,10 @@
 	<script src="/js/jquery-1.11.2.min.js"></script>
 	<script src="/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
+	
+	var csrfParameter = $("meta[name='_csrf_parameter']").attr("content");
+	var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+	var csrfToken = $("meta[name='_csrf']").attr("content");
 	
 	// ajax 작업시 캐쉬를 사용하지 않도록 한다
 	$.ajaxSetup({ 
@@ -43,7 +48,7 @@
 	        	headers : {"X-Ajax-Call" : "true"},
 	        	type : "POST",
 	        	// data : JSON.stringify({"idx" : idx}),
-	        	data : {"loginId" : loginId, "loginPwd" : loginPwd},
+	        	data : {csrfParameter : csrfToken, "loginId" : loginId, "loginPwd" : loginPwd},
 	        	// contentType: "application/json",	// contentType으로 지정하면 Request Body로 전달되기 때문에 Spring에서 받을때 다르게 접근해야 한다
 	        	dataType : "json",
 	        	beforeSend : function(xhr){
@@ -140,6 +145,7 @@
 				<button id="btnAjaxLogin" type="button" class="btn btn-default">Ajax 로그인</button>
 			</div>
 		</div>
+		<sec:csrfInput /><!-- Spring Security Input Tag 추가 -->
 		</form>
 	</div>
 </body>

@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.DefaultWebInvocationPrivilegeEvaluator;
 import org.springframework.security.web.access.WebInvocationPrivilegeEvaluator;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.terry.springjpa.security.impl.CustomAccessDeniedHandler;
 import com.terry.springjpa.security.impl.CustomAuthenticationFailureHandler;
@@ -29,6 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private UserDetailsServiceImpl userDetailsServiceImpl;
+	
+	@Autowired
+	private AccessDecisionManager accessDecisionManager;
 	
 	@Autowired
 	private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
@@ -56,6 +60,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	/**
+	 * Spring Security를 Java Config 방식으로 설정하려 하는 경우  CSRF 공격에 대한 방어 기능 설정이 default로 이루어지게 된다.
+	 * 그렇기 때문에 이 기능을 끌려면 HttpSecurity 객체에서 csrf() 메소드를 호출한뒤 disable() 메소드를 호출해줘야 CSRF 공격에 대한 방어 기능 설정을 안하게끔 할 수 있다
+	 * 
 	 * loginPage 메소드를 이용해서 로그인 페이지 URL을 따로 지정할 경우 loginPage 메소드가 AbstractAuthenticationFilterConfigurer 클래스의 
 	 * updateAuthenticationDefaults 메소드를 실행시키면서 Spring Security에 기본적으로 설정되는 값을 loginPage 메소드를 통해 입력한 값으로 수정하게 된다.
 	 * 예를 들어 loginPage 메소드를 통해 /login.do로 입력했으면 
@@ -67,13 +74,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * 이렇게 작업을 하게 된다. 때문에 loginPage 메소드를 사용해서 로그인 페이지 URL을 수정할 경우 이러한 기본값 수정 작업을 한다는 생각을 가져야 한다.
 	 * 기본값 수정에 맞춰서 자신의 URL을 수정하거나
 	 * 아니면 일일이 자신이 각 항목의 기본값을 수정하는 식으로 접근해야 한다 
+	 * 
+	 * CSRF 기능이 활성화될 경우 logout을 시도할려면 POST 방식으로 해야 한다. 
+	 * 이 부분을 GET 방식으로 하게끔 할려면 logoutRequestMatcher메소드를 이용해서 메소드와 상관없이 동작하게끔 설정하면 된다
 	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// TODO Auto-generated method stub
 		http
 			.addFilterBefore(filterSecurityInterceptor, FilterSecurityInterceptor.class)
-			.csrf().disable()
+			// .csrf().disable()			// Spring Security를 Java Config 방식으로 설정할 경우 CSRF 공격 방어 기능은 default로 동작한다. 이 설정을 하지 않을려고 할 경우에 사용한다
 			.authorizeRequests().anyRequest().authenticated()
 			.and()
 			.formLogin()
@@ -91,7 +101,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)		// Access Denied Handler 설정
 			.and()
 			.logout()
-				.logoutUrl("/logout.do")
+				// .logoutUrl("/logout.do")
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout.do"))		// CSRF 기능 활성화된 상태에서 logout을 GET 방식으로 하게끔 할려면 logoutRequestMatcher메소드를 이용해서 메소드와 상관없이 동작하게끔 설정하면 된다
 				.logoutSuccessUrl("/main.do").permitAll()
 				.deleteCookies("JSESSIONID");
 	}

@@ -6,10 +6,10 @@
 	<title>
 		<c:choose>
 			<c:when test="${unitedBoard.idx eq null}">
-				${boardType.boardTypeName} 게시판 등록
+				${boardType.boardTypeName} 등록
 			</c:when>
 			<c:otherwise>
-				${boardType.boardTypeName} 게시판 수정
+				${boardType.boardTypeName} 수정
 			</c:otherwise>
 		</c:choose>
 	</title>
@@ -204,7 +204,7 @@
 		<div class="form-group">
 			<label for="name" class="col-xs-2 col-lg-2 control-label">작성자</label>
 			<div class="col-xs-10 col-lg-10">
-				<form:input id="memberIdx" path="memberIdx" cssClass="form-control" placeholder="로그인 아이디" />
+				<form:input id="memberLoginId" path="memberLoginId" cssClass="form-control" placeholder="로그인 아이디" />
 			</div>
 		</div>
 		<div class="form-group">
@@ -234,6 +234,7 @@
 				<button id="btnList" type="button" class="btn btn-default">목록</button>
 			</div>
 		</div>
+		<form:hidden id="memberIdx" path="memberIdx" />
 		<form:hidden id="idx" path="idx" />
 		</form:form>
 		<form:form id="listfrm" commandName="searchVO" method="get" cssClass="form-horizontal" role="form" action="/unitedBoard/unitedBoardList.do">

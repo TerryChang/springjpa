@@ -106,7 +106,7 @@ create sequence groups_sequence start with 1 increment by 1;
 create sequence secured_resources_sequence start with 1 increment by 1;
 
 -- test data insert query boardtype_sequence.nextval, ?, ?, current_timestamp(), null
-insert into boardtype(idx, name, url, insertdt) values(boardtype_sequence.nextval, '공지사항', '/unitedBoard/unitedBoardList.do?boardTypeIdx=1', current_timestamp());
+insert into boardtype(idx, name, url, insertdt) values(boardtype_sequence.nextval, '관리자 게시판', '/unitedBoard/unitedBoardList.do?boardTypeIdx=1', current_timestamp());
 insert into boardtype(idx, name, url, insertdt) values(boardtype_sequence.nextval, '회원 게시판', '/unitedBoard/unitedBoardList.do?boardTypeIdx=2', current_timestamp());
 insert into boardtype(idx, name, url, insertdt) values(boardtype_sequence.nextval, '까페 게시판', '/unitedBoard/unitedBoardList.do?boardTypeIdx=3', current_timestamp());
 insert into boardtype(idx, name, url, insertdt) values(boardtype_sequence.nextval, '질문 게시판', '/unitedBoard/unitedBoardList.do?boardTypeIdx=4', current_timestamp());
@@ -148,9 +148,9 @@ insert into member_authority(member_idx, authority_idx) values(1, 1);
 insert into member_authority(member_idx, authority_idx) values(2, 2);
 insert into member_authority(member_idx, authority_idx) values(3, 3);
 
-insert into secured_resources_authority(resources_idx, authority_idx) values(1, 4);		-- 공지사항 목록, 비회원
-insert into secured_resources_authority(resources_idx, authority_idx) values(2, 4);		-- 공지사항 등록/상세조회/수정, 비회원
-insert into secured_resources_authority(resources_idx, authority_idx) values(3, 4);		-- 공지사항 등록/상세조회/수정, 삭제
+insert into secured_resources_authority(resources_idx, authority_idx) values(1, 1);		-- 관리자 게시판 목록, 관리자
+insert into secured_resources_authority(resources_idx, authority_idx) values(2, 1);		-- 관리자 게시판 등록/상세조회/수정, 관리자
+insert into secured_resources_authority(resources_idx, authority_idx) values(3, 1);		-- 관리자 게시판 삭제, 관리자
 insert into secured_resources_authority(resources_idx, authority_idx) values(4, 3);		-- 회원 게시판 목록, 회원
 insert into secured_resources_authority(resources_idx, authority_idx) values(5, 3);		-- 회원 게시판 등록/상세조회/수정, 회원
 insert into secured_resources_authority(resources_idx, authority_idx) values(6, 3);		-- 회원 게시판 삭제, 회원
