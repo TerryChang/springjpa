@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.DefaultWebInvocationPrivilegeEvaluator;
 import org.springframework.security.web.access.WebInvocationPrivilegeEvaluator;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -49,14 +51,35 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private FilterSecurityInterceptor filterSecurityInterceptor;
 	
+	@Autowired
+	private RoleHierarchy roleHierarchy;
 
+	/**
+	 * jstl을 이용해서 권한 체크를 할때(ex : <sec:authorize access="hasRole('MEMBER')">) 사용하는 것이 SecurityExpressionHandler 인터페이스를 구현한 클래스인데
+	 * 권한에 대한 상위, 하위 개념이 존재할 경우 이 클래스에 RoleHierarchy 를 설정해주면 된다
+	 * 이러한 설정 없이 그냥 사용하면 jstl 사용할 때 찾고자 하는 권한에 대한 상위 하위 개념이 없기 때문에..
+	 * 단순히 이 권한을 가지고 있느냐로만 판단하게 된다.
+	 * 위의 예를 가지고 다시 설명하자면 로그인 한 사람이 ADMIN 권한이 있고 ADMIN이 MEMBER 권한의 상위 권한일 경우 <sec:authorize access="hasRole('MEMBER')">를 만족하기 때문에 이 태그로 감싼것을 보여줘야 하는 것이 올바른 동작이지만
+	 * SecurityExpressionHandler 인터페이스를 구현한 클래스에 RoleHierarchy 를 설정하지 않으면 ADMIN 권한을 갖고 있는 것이지 MEMBER 권한을 가지고 있는 것은 아니라고 판단하고 이 태그로 감싼것을 보여주지 않게 된다.
+	 * SecurityExpressionHandler 인터페이스를 구현한 클래스를 WebSecurity에 설정해주면 되는데 이때 주의사항이 있다
+	 * SecurityExpressionHandler 인터페이스를 구현한 클래스를 Bean으로 설정하지 말고 객체로 만들어서 설정해야 한다.
+	 * AbstractAuthorizeTag 클래스의 getExpressionHandler 메소드를 이용해서 이 SecurityExpressionHandler 인터페이스를 구현한 클래스를 가져오게 되는데..
+	 * Bean으로 만들어서 이를 설정할 경우 getExpressionHandler 메소드에서 내가 Bean으로 만들어서 설정한 것과 Spring Security가 기본적으로 만든것 이렇게 2개가 등록되기 때문에..
+	 * 설정에 오해가 생기는 상황이 오게 된다. 추측엔 Spring Security가 기본적으로 등록하는거와 Bean으로 설정한것 이렇게 자동으로 등록시켜버리는다고 추측된다
+	 * 그래서 bean으로 이 클래스를 등록하지 말고 configure 메소드 안에서 객체로 만들어서 설정하도록 한다
+	 * 
+	 */
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		// TODO Auto-generated method stub
 		// super.configure(web);
+		DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
+		defaultWebSecurityExpressionHandler.setRoleHierarchy(roleHierarchy);
+		
 		web.ignoring().antMatchers("/bootstrap/**/*", "/js/**/*")
 			.and()
-			.privilegeEvaluator(webInvocationPrivilegeEvaluator());	// webInvocationPrivilegeEvaluator() 메소드에 주석으로 설명되어 있으니 참조할 것
+			.privilegeEvaluator(webInvocationPrivilegeEvaluator()) 		// webInvocationPrivilegeEvaluator() 메소드에 주석으로 설명되어 있으니 참조할 것
+			.expressionHandler(defaultWebSecurityExpressionHandler);	
 	}
 	
 	/**

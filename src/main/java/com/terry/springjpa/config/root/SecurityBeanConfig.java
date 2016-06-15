@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.access.vote.AffirmativeBased;
 import org.springframework.security.access.vote.RoleHierarchyVoter;
@@ -70,6 +71,23 @@ public class SecurityBeanConfig {
 	*/
 	
 	@Bean
+	public RoleHierarchy roleHierarchy(SecuredObjectService securedObjectService) throws Exception {
+		RoleHierarchyImpl roleHierarchyImpl = new RoleHierarchyImpl();
+		roleHierarchyImpl.setHierarchy(securedObjectService.getRolesHierarchy());
+		return roleHierarchyImpl;
+	}
+	
+	/*
+	@Bean
+	public DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler(RoleHierarchy roleHierarchy){
+		DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
+		defaultWebSecurityExpressionHandler.setRoleHierarchy(roleHierarchy);
+		return defaultWebSecurityExpressionHandler;
+	}
+	*/
+	
+	/*
+	@Bean
 	public AccessDecisionManager accessDecisionManager(UserDetailsServiceImpl userDetailsServiceImpl, SecuredObjectService securedObjectService) throws Exception{
 		AffirmativeBased affirmativeBased = null;
 		List<AccessDecisionVoter> decisionVoterList = new ArrayList<AccessDecisionVoter>();
@@ -89,6 +107,31 @@ public class SecurityBeanConfig {
 		decisionVoterList.add(roleVoter);
 		decisionVoterList.add(roleHierarchyVoter);
 		decisionVoterList.add(webExpressionVoter);
+		
+		affirmativeBased = new AffirmativeBased(decisionVoterList);
+		affirmativeBased.setAllowIfAllAbstainDecisions(false);		// voter가 모두 기권할 경우 이것을 권한 허용으로 볼지의 여부(true이면 모두 기권할 경우 이것을 권한 허용으로 본다)
+		return affirmativeBased;
+	}
+	*/
+	
+	@Bean
+	public AccessDecisionManager accessDecisionManager(UserDetailsServiceImpl userDetailsServiceImpl, RoleHierarchy roleHierarchy) throws Exception{
+		AffirmativeBased affirmativeBased = null;
+		List<AccessDecisionVoter> decisionVoterList = new ArrayList<AccessDecisionVoter>();
+		RoleVoter roleVoter = new RoleVoter();
+		roleVoter.setRolePrefix(userDetailsServiceImpl.getRolePrefix());
+		
+		RoleHierarchyVoter roleHierarchyVoter = new RoleHierarchyVoter(roleHierarchy);
+		roleHierarchyVoter.setRolePrefix(userDetailsServiceImpl.getRolePrefix());
+		
+		/*
+		WebExpressionVoter webExpressionVoter = new WebExpressionVoter();
+		webExpressionVoter.setExpressionHandler(defaultWebSecurityExpressionHandler);
+		*/
+		
+		decisionVoterList.add(roleVoter);
+		decisionVoterList.add(roleHierarchyVoter);
+		// decisionVoterList.add(webExpressionVoter);
 		
 		affirmativeBased = new AffirmativeBased(decisionVoterList);
 		affirmativeBased.setAllowIfAllAbstainDecisions(false);		// voter가 모두 기권할 경우 이것을 권한 허용으로 볼지의 여부(true이면 모두 기권할 경우 이것을 권한 허용으로 본다)

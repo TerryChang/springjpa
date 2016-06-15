@@ -55,29 +55,13 @@ public class SecuredObjectRepositoryImpl extends QueryDslRepositorySupport {
 												.list(securedResources);
 		*/
 		
-		List<Tuple> tupleResult = from(securedResources).where(securedResources.resourceType.eq("URL"))
+		List<Tuple> tupleResult = from(securedResources)
 										.orderBy(securedResources.sortOrder.asc(), securedResources.resourcePattern.asc())
-										.list(securedResources.resourcePattern, securedResources.securedResourcesAuthorityList.any().authority.authorityName);
+										.list(securedResources.resourcePattern, securedResources.resourceMatchType, securedResources.securedResourcesAuthorityList.any().authority.authorityName);
 		
 		List<Map<String, Object>> result = convertTupleToMap(tupleResult
 														, new Expression[]{securedResources.resourcePattern, securedResources.resourceMatchType, securedResources.securedResourcesAuthorityList.any().authority.authorityName}
-														, new String[]{"url", "matchtype", "authority"});
-		
-		
-		return result;
-	}
-	
-	public List<Map<String, Object>> getSqlRolesAndMethod(){
-		
-		QSecuredResources securedResources = QSecuredResources.securedResources;
-		
-		List<Tuple> tupleResult = from(securedResources).where(securedResources.resourceType.eq("METHOD"))
-										.orderBy(securedResources.sortOrder.asc(), securedResources.resourcePattern.asc())
-										.list(securedResources.resourcePattern, securedResources.securedResourcesAuthorityList.any().authority.authorityName);
-		
-		List<Map<String, Object>> result = convertTupleToMap(tupleResult
-														, new Expression[]{securedResources.resourcePattern, securedResources.securedResourcesAuthorityList.any().authority.authorityName}
-														, new String[]{"method", "authority"});
+														, new String[]{"pattern", "matchtype", "authority"});
 		
 		
 		return result;

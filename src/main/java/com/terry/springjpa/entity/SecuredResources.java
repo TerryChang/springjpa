@@ -24,9 +24,6 @@ public class SecuredResources {
 	@Column(name="RESOURCE_NAME", nullable=false)
 	private String resourceName;
 	
-	@Column(name="RESOURCE_TYPE", nullable=false)
-	private String resourceType;
-	
 	@Column(name="RESOURCE_PATTERN", nullable = false)
 	private String resourcePattern;
 	
@@ -43,10 +40,9 @@ public class SecuredResources {
 		
 	}
 	
-	public SecuredResources(Long idx, String resourceName, String resourceType, String resourcePattern, String resourceMatchType, int sortOrder){
+	public SecuredResources(Long idx, String resourceName, String resourcePattern, String resourceMatchType, int sortOrder){
 		this.idx = idx;
 		this.resourceName = resourceName;
-		this.resourceType = resourceType;
 		this.resourcePattern = resourcePattern;
 		this.resourceMatchType = resourceMatchType;
 		this.sortOrder = sortOrder;
@@ -70,14 +66,6 @@ public class SecuredResources {
 
 	public void setResourceName(String resourceName) {
 		this.resourceName = resourceName;
-	}
-	
-	public String getResourceType() {
-		return resourceType;
-	}
-
-	public void setResourceType(String resourceType) {
-		this.resourceType = resourceType;
 	}
 
 	public String getResourcePattern() {
@@ -120,7 +108,6 @@ public class SecuredResources {
 		result = prime * result + ((resourceMatchType == null) ? 0 : resourceMatchType.hashCode());
 		result = prime * result + ((resourceName == null) ? 0 : resourceName.hashCode());
 		result = prime * result + ((resourcePattern == null) ? 0 : resourcePattern.hashCode());
-		result = prime * result + ((resourceType == null) ? 0 : resourceType.hashCode());
 		result = prime * result
 				+ ((securedResourcesAuthorityList == null) ? 0 : securedResourcesAuthorityList.hashCode());
 		result = prime * result + sortOrder;
@@ -155,11 +142,6 @@ public class SecuredResources {
 			if (other.getResourcePattern() != null)
 				return false;
 		} else if (!resourcePattern.equals(other.getResourcePattern()))
-			return false;
-		if (resourceType == null) {
-			if (other.getResourceType() != null)
-				return false;
-		} else if (!resourceType.equals(other.getResourceType()))
 			return false;
 		if (securedResourcesAuthorityList == null) {
 			if (other.getSecuredResourcesAuthorityList() != null)

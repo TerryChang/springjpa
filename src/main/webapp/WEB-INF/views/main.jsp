@@ -53,6 +53,9 @@
 				<sec:authorize url="/unitedBoard/unitedBoardList.do?boardTypeIdx=4">
 				질문게시판
 				</sec:authorize>
+				<sec:authorize access="hasRole('ADMIN')">
+				관리자 게시판2
+				</sec:authorize>
 			</div>
 		</div>
 	</div>

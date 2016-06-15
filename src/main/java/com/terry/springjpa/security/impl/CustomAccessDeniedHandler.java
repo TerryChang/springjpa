@@ -59,7 +59,11 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 		String ajaxHeader = request.getHeader(ajaxHeaderKey);
 		String result = "";
 		
-		String url = request.getRequestURI() + "?" + request.getQueryString();
+		String url = request.getRequestURI();
+		String queryString = request.getQueryString();
+		if(queryString != null){
+			url += "?" + queryString;
+		}
 		String exceptionClass = accessDeniedException.getClass().getName();
 		String exceptionMessage = accessDeniedException.getMessage();
 		
@@ -88,9 +92,9 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         	
 			ObjectMapper objectMapper = new ObjectMapper();
 	    	if("true".equals(ajaxHeader)){		// true로 값을 받았다는 것은 ajax로 접근했음을 의미한다
-	    		resultMap.put("message", exceptionMessage);
+	    		resultMap.put("securityexceptionmessage", exceptionMessage);
 			}else{								// 헤더 변수는 있으나 값이 틀린 경우이므로 헤더값이 틀렸다는 의미로 돌려준다
-				resultMap.put("message", "Header(" + ajaxHeaderKey + ") Value Mismatch");
+				resultMap.put("securityexceptionmessage", "Header(" + ajaxHeaderKey + ") Value Mismatch");
 			}
 	    	
 	    	commonResultVO.setResultMap(resultMap);

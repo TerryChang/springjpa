@@ -38,7 +38,7 @@ public class SecuredObjectServiceImpl implements SecuredObjectService {
 		LinkedHashMap<RequestMatcher, List<ConfigAttribute>> result = new LinkedHashMap<RequestMatcher, List<ConfigAttribute>>();
 		
 		List<Map<String, Object>> roleResult = securedObjectRepositoryImpl.getSqlRolesAndUrl();
-		LinkedHashMap<Object, List<ConfigAttribute>> rolesAndResources = getRolesAndResources("url", roleResult);
+		LinkedHashMap<Object, List<ConfigAttribute>> rolesAndResources = getRolesAndResources(roleResult);
 		
 		Set<Object> keys = rolesAndResources.keySet();
 		// URL의 경우 AntPathRequestMatcher 또는 RegexRequestMatcher 객체를 사용하기 때문에 
@@ -51,21 +51,6 @@ public class SecuredObjectServiceImpl implements SecuredObjectService {
 			}else{
 			}
 			
-		}
-		return result;
-	}
-
-	@Override
-	public LinkedHashMap<String, List<ConfigAttribute>> getRolesAndMethod() throws Exception {
-		// TODO Auto-generated method stub
-		LinkedHashMap<String, List<ConfigAttribute>> result = new LinkedHashMap<String, List<ConfigAttribute>>();
-		
-		List<Map<String, Object>> roleResult = securedObjectRepositoryImpl.getSqlRolesAndMethod();
-		LinkedHashMap<Object, List<ConfigAttribute>> rolesAndResources = getRolesAndResources("method", roleResult);
-		
-		Set<Object> keys = rolesAndResources.keySet();
-		for(Object key : keys){
-			result.put((String)key, rolesAndResources.get(key));
 		}
 		return result;
 	}
@@ -91,14 +76,8 @@ public class SecuredObjectServiceImpl implements SecuredObjectService {
 		return result;
 	}
 
-	private LinkedHashMap<Object, List<ConfigAttribute>> getRolesAndResources(String resourceType, List<Map<String, Object>> sqlResult) {
+	private LinkedHashMap<Object, List<ConfigAttribute>> getRolesAndResources(List<Map<String, Object>> sqlResult) {
 		LinkedHashMap<Object, List<ConfigAttribute>> resourcesMap = new LinkedHashMap<Object, List<ConfigAttribute>>();
-		
-		boolean isResourcesUrl = true;
-			
-		if("method".equals(resourceType)){	
-			isResourcesUrl = false;
-		}
 		
 		Iterator<Map<String, Object>> itr = sqlResult.iterator();
 		Map<String, Object> tempMap;
@@ -108,18 +87,15 @@ public class SecuredObjectServiceImpl implements SecuredObjectService {
         while (itr.hasNext()) {
         	tempMap = itr.next();
         	
-        	presentResourceStr = (String) tempMap.get(resourceType);
-            // url 인 경우 RequestKey 형식의 key를 Map에 담아야 함
-        	if(isResourcesUrl){
-        		String matchType = (String) tempMap.get("matchtype");
-        		if("ANT".equals(matchType)){
-        			presentResource = new AntPathRequestMatcher(presentResourceStr, null, true);
-        		}else{
-        			presentResource = new RegexRequestMatcher(presentResourceStr, null, true);
-        		}
-        	}else{
-        		presentResource = presentResourceStr;
-        	}
+        	presentResourceStr = (String) tempMap.get("pattern");
+        	
+    		String matchType = (String) tempMap.get("matchtype");
+    		if("ANT".equals(matchType)){
+    			presentResource = new AntPathRequestMatcher(presentResourceStr, null, true);
+    		}else{
+    			presentResource = new RegexRequestMatcher(presentResourceStr, null, true);
+    		}
+        	
             // presentResource = isResourcesUrl ? new AntPathRequestMatcher(presentResourceStr, null, true) : presentResourceStr;
             List<ConfigAttribute> configList = new LinkedList<ConfigAttribute>();
             

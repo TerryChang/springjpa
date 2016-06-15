@@ -43,12 +43,13 @@
 			var loginId = $("#loginId").val();
 			var loginPwd = $("#loginPwd").val();
 			
+			
 			$.ajax({
 	        	url : "/j_spring_security_check",
-	        	headers : {"X-Ajax-Call" : "true"},
+	        	headers : {"X-Ajax-Call" : "true", csrfHeader : csrfToken},
 	        	type : "POST",
 	        	// data : JSON.stringify({"idx" : idx}),
-	        	data : {csrfParameter : csrfToken, "loginId" : loginId, "loginPwd" : loginPwd},
+	        	data : {"loginId" : loginId, "loginPwd" : loginPwd},
 	        	// contentType: "application/json",	// contentType으로 지정하면 Request Body로 전달되기 때문에 Spring에서 받을때 다르게 접근해야 한다
 	        	dataType : "json",
 	        	beforeSend : function(xhr){
@@ -61,8 +62,8 @@
 	        			var redirectUrl = data.resultMap.redirectUrl;
 	        			location.href = redirectUrl;
 	        		}else{
-	        			var securityexceptionmsg = data.resultMap.securityexceptionmsg;
-	        			alert("로그인이 실패했습니다. 다시 시도해주세요\n" + securityexceptionmsg);
+	        			var securityexceptionmessage = data.resultMap.securityexceptionmessage;
+	        			alert("로그인이 실패했습니다. 다시 시도해주세요\n" + securityexceptionmessage);
 	        		}
 	        	},
 	        	error:function(jqXHR, textStatus, errorThrown){
