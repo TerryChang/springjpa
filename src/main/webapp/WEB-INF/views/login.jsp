@@ -43,10 +43,13 @@
 			var loginId = $("#loginId").val();
 			var loginPwd = $("#loginPwd").val();
 			
+			var headers = {};
+			headers["X-Ajax-Call"] = "true";
+			headers[csrfHeader] = csrfToken;
 			
 			$.ajax({
 	        	url : "/j_spring_security_check",
-	        	headers : {"X-Ajax-Call" : "true", csrfHeader : csrfToken},
+	        	headers : headers,
 	        	type : "POST",
 	        	// data : JSON.stringify({"idx" : idx}),
 	        	data : {"loginId" : loginId, "loginPwd" : loginPwd},

@@ -1,8 +1,14 @@
 package com.terry.springjpa.common.util;
 
+import java.util.Enumeration;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+
 import com.terry.springjpa.common.exception.ClassMismatchException;
 
-public class SpringJpaUtil {
+public class Util {
 
 	/**
 	 * 엔티티 클래스 또는 프록시 클래스 객체와 클래스 이름을 받아서 엔티티 클래스 객체인지 프록시 클래스 객체인지를 체크하는 메소드이다.
@@ -32,5 +38,19 @@ public class SpringJpaUtil {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * HttpServletRequest 객체와 이 객체를 사용하는 메소드가 있는 클래스의 Logger 객체를 받아서 이를 로그로 출력하는 기능을 한다
+	 * @param request
+	 * @param logger
+	 */
+	public static void printRequestHeaderAll(HttpServletRequest request, Logger logger){
+		Enumeration<String> e = request.getHeaderNames();
+		while(e.hasMoreElements()){
+			String headerName = e.nextElement();
+			String headerValue = request.getHeader(headerName);
+			logger.debug(headerName + " : " + headerValue);
+		}
 	}
 }

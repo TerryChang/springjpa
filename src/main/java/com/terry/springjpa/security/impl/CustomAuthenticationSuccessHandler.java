@@ -19,6 +19,8 @@ import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.util.StringUtils;
 
+import com.terry.springjpa.common.util.Util;
+
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -84,6 +86,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 		// TODO Auto-generated method stub
+		Util.printRequestHeaderAll(request, logger);
+		
 		clearAuthenticationAttributes(request);
 		
 		int intRedirectStrategy = decideRedirectStrategy(request, response);

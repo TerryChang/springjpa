@@ -43,15 +43,34 @@ public class MainController {
 	
 	/**
 	 * 예외 발생시 에러 페이지를 보여주는 메소드
-	 * @param uri					에러가 발생한 uri
-	 * @param exceptionClass		예외 클래스 이름
-	 * @param exceptionMessage		예외 메시지
-	 * @param username				Spring Security 관련 예외 발생시 로그인 아이디를 보여준다
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value="/error")
 	public String error(Model model){
 		return "/error";
+	}
+	
+	/**
+	 * Spring Security 세션 관련 에러 발생시 에러 페이지를 보여주는 메소드
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value="/sessionError")
+	public String sessionError(@RequestParam(value="error", required=false, defaultValue="") String error, Model model){
+		String errorMessage = "";
+		switch(error){
+			case "expired" :
+				errorMessage = "Expired Session";
+				break;
+			case "invalid" :
+				errorMessage = "Invalid Session";
+				break;
+			default :
+				errorMessage = "Unknown";
+		}
+		
+		model.addAttribute("sessionError", errorMessage);
+		return "/sessionError";
 	}
 }

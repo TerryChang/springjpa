@@ -8,7 +8,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,9 +17,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.terry.springjpa.common.util.Util;
 import com.terry.springjpa.common.vo.CommonResultVO;
 
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private String errorPage;
 	private String ajaxHeaderKey;			// ajax 사용시 Http Header로 넣을 key 값(이 key에 value를 true 로 넣어줘야 동작한다)
@@ -56,6 +60,9 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 	public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
 		// TODO Auto-generated method stub
 		// Ajax를 통해 들어온것인지 파악한다
+		
+		Util.printRequestHeaderAll(request, logger);
+		
 		String ajaxHeader = request.getHeader(ajaxHeaderKey);
 		String result = "";
 		

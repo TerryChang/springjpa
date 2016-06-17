@@ -5,7 +5,7 @@ import javax.persistence.PersistenceUnitUtil;
 
 import org.springframework.core.convert.converter.Converter;
 
-import com.terry.springjpa.common.util.SpringJpaUtil;
+import com.terry.springjpa.common.util.Util;
 import com.terry.springjpa.entity.BoardType;
 import com.terry.springjpa.entity.Member;
 import com.terry.springjpa.entity.UnitedBoard;
@@ -42,7 +42,7 @@ public class UnitedBoardToUnitedBoardVOConverter implements Converter<UnitedBoar
 				result.setBoardTypeIdx(boardType.getIdx());
 				
 				// 게시판 타입 멤버변수가 엔티티이거나 초기화 된 프록시 클래스 객체이면 실제 값을 가져올수 있기 때문에 실제 값을 가져온다
-				if(SpringJpaUtil.checkEntityOrNot(boardType, "BoardType") || persistenceUnitUtil.isLoaded(boardType)){
+				if(Util.checkEntityOrNot(boardType, "BoardType") || persistenceUnitUtil.isLoaded(boardType)){
 					result.setBoardTypeName(boardType.getBoardTypeName());
 					result.setBoardTypeUrl(boardType.getUrl());
 				}
@@ -52,7 +52,7 @@ public class UnitedBoardToUnitedBoardVOConverter implements Converter<UnitedBoar
 			if(member != null){
 				result.setMemberIdx(member.getIdx());
 				
-				if(SpringJpaUtil.checkEntityOrNot(member, "Member") || persistenceUnitUtil.isLoaded(member)){
+				if(Util.checkEntityOrNot(member, "Member") || persistenceUnitUtil.isLoaded(member)){
 					result.setMemberLoginId(member.getLoginId());
 				}
 			}

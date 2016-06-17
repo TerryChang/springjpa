@@ -214,4 +214,73 @@ public class MemberVO implements UserDetails{
 		// TODO Auto-generated method stub
 		return enabled;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (accountNonExpired ? 1231 : 1237);
+		result = prime * result + (accountNonLocked ? 1231 : 1237);
+		result = prime * result + ((authorities == null) ? 0 : authorities.hashCode());
+		result = prime * result + (credentialsNonExpired ? 1231 : 1237);
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + (enabled ? 1231 : 1237);
+		result = prime * result + ((idx == null) ? 0 : idx.hashCode());
+		result = prime * result + ((loginId == null) ? 0 : loginId.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof MemberVO))
+			return false;
+		MemberVO other = (MemberVO) obj;
+		if (accountNonExpired != other.accountNonExpired)
+			return false;
+		if (accountNonLocked != other.accountNonLocked)
+			return false;
+		if (authorities == null) {
+			if (other.authorities != null)
+				return false;
+		} else if (!authorities.equals(other.authorities))
+			return false;
+		if (credentialsNonExpired != other.credentialsNonExpired)
+			return false;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (enabled != other.enabled)
+			return false;
+		if (idx == null) {
+			if (other.idx != null)
+				return false;
+		} else if (!idx.equals(other.idx))
+			return false;
+		if (loginId == null) {
+			if (other.loginId != null)
+				return false;
+		} else if (!loginId.equals(other.loginId))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		} else if (!password.equals(other.password))
+			return false;
+		return true;
+	}
+	
+	
 }

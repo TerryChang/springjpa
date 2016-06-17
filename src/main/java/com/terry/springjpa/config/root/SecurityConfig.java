@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.DefaultWebInvocationPrivilegeEvaluator;
 import org.springframework.security.web.access.WebInvocationPrivilegeEvaluator;
@@ -120,6 +121,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 			.anonymous()
 				.authorities("ANONYMOUS")
+			.and()
+			.sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.NEVER)
+				.maximumSessions(1).expiredUrl("/sessionError.do?error=expired")			// 같은 로그인 아이디로 동시접속 할 수 있는 동시 접속자수를 정했는데 이 동시 접속자수를 초과해서 로그인 하게 되면 이동해야 할 URL을 지정하는 부분
+				.maxSessionsPreventsLogin(true)										// 동시 접속자를 초과했을 경우 기존 로그인 한 사람의 세션을 끊을 것인지 아니면 신규 로그인 한 사람의 세션을 끊을것인지를 결정(true로 설정하면 신규 로그인 한 사람의 세션을 끊게 되고 이때 expiredUrl 메소드로 지정한 URL로 이동한다) 
+				.and()
+				.invalidSessionUrl("/sessionError.do?error=invalid")
 			.and()
 			.exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)		// Access Denied Handler 설정
 			.and()

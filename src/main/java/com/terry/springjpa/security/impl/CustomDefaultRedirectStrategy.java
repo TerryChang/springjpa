@@ -7,13 +7,14 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.util.UrlUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.terry.springjpa.common.util.Util;
 import com.terry.springjpa.common.vo.CommonResultVO;
 
 /**
@@ -24,7 +25,7 @@ import com.terry.springjpa.common.vo.CommonResultVO;
  */
 public class CustomDefaultRedirectStrategy implements RedirectStrategy {
 
-	protected final Log logger = LogFactory.getLog(getClass());
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private boolean contextRelative;
     
@@ -57,6 +58,8 @@ public class CustomDefaultRedirectStrategy implements RedirectStrategy {
 	@Override
 	public void sendRedirect(HttpServletRequest request, HttpServletResponse response, String url) throws IOException {
 		// TODO Auto-generated method stub
+		Util.printRequestHeaderAll(request, logger);
+		
 		String redirectUrl = calculateRedirectUrl(request.getContextPath(), url);
         redirectUrl = response.encodeRedirectURL(redirectUrl);
 

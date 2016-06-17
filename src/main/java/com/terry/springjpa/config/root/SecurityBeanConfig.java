@@ -17,8 +17,6 @@ import org.springframework.security.access.vote.AffirmativeBased;
 import org.springframework.security.access.vote.RoleHierarchyVoter;
 import org.springframework.security.access.vote.RoleVoter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
-import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import com.terry.springjpa.common.converter.MemberToMemberVOConverter;
@@ -76,43 +74,6 @@ public class SecurityBeanConfig {
 		roleHierarchyImpl.setHierarchy(securedObjectService.getRolesHierarchy());
 		return roleHierarchyImpl;
 	}
-	
-	/*
-	@Bean
-	public DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler(RoleHierarchy roleHierarchy){
-		DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
-		defaultWebSecurityExpressionHandler.setRoleHierarchy(roleHierarchy);
-		return defaultWebSecurityExpressionHandler;
-	}
-	*/
-	
-	/*
-	@Bean
-	public AccessDecisionManager accessDecisionManager(UserDetailsServiceImpl userDetailsServiceImpl, SecuredObjectService securedObjectService) throws Exception{
-		AffirmativeBased affirmativeBased = null;
-		List<AccessDecisionVoter> decisionVoterList = new ArrayList<AccessDecisionVoter>();
-		RoleVoter roleVoter = new RoleVoter();
-		roleVoter.setRolePrefix(userDetailsServiceImpl.getRolePrefix());
-		
-		RoleHierarchyImpl roleHierarchyImpl = new RoleHierarchyImpl();
-		roleHierarchyImpl.setHierarchy(securedObjectService.getRolesHierarchy());
-		RoleHierarchyVoter roleHierarchyVoter = new RoleHierarchyVoter(roleHierarchyImpl);
-		roleHierarchyVoter.setRolePrefix(userDetailsServiceImpl.getRolePrefix());
-		
-		WebExpressionVoter webExpressionVoter = new WebExpressionVoter();
-		DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
-		defaultWebSecurityExpressionHandler.setRoleHierarchy(roleHierarchyImpl);
-		webExpressionVoter.setExpressionHandler(defaultWebSecurityExpressionHandler);
-		
-		decisionVoterList.add(roleVoter);
-		decisionVoterList.add(roleHierarchyVoter);
-		decisionVoterList.add(webExpressionVoter);
-		
-		affirmativeBased = new AffirmativeBased(decisionVoterList);
-		affirmativeBased.setAllowIfAllAbstainDecisions(false);		// voter가 모두 기권할 경우 이것을 권한 허용으로 볼지의 여부(true이면 모두 기권할 경우 이것을 권한 허용으로 본다)
-		return affirmativeBased;
-	}
-	*/
 	
 	@Bean
 	public AccessDecisionManager accessDecisionManager(UserDetailsServiceImpl userDetailsServiceImpl, RoleHierarchy roleHierarchy) throws Exception{

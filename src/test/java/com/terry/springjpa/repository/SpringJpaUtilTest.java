@@ -13,7 +13,7 @@ import org.springframework.test.context.testng.AbstractTransactionalTestNGSpring
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.testng.annotations.Test;
 
-import com.terry.springjpa.common.util.SpringJpaUtil;
+import com.terry.springjpa.common.util.Util;
 import com.terry.springjpa.config.root.RootContextMain;
 import com.terry.springjpa.entity.Member;
 
@@ -32,7 +32,7 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 		Member testEntity = em.find(Member.class, 2L);
 		String simpleClassName = testEntity.getClass().getSimpleName();
 		logger.debug("Simple Class Name : " + simpleClassName);
-		boolean check = SpringJpaUtil.checkEntityOrNot(testEntity, "Member");
+		boolean check = Util.checkEntityOrNot(testEntity, "Member");
 		assertEquals(true, check, "checkEntityOrNot_메소드_테스트_Entity체크_테스트 실패");
 	}
 	
@@ -41,7 +41,7 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 		Member testEntity = em.getReference(Member.class, 2L);
 		String simpleClassName = testEntity.getClass().getSimpleName();
 		logger.debug("Simple Class Name : " + simpleClassName);
-		boolean check = SpringJpaUtil.checkEntityOrNot(testEntity, "Member");
+		boolean check = Util.checkEntityOrNot(testEntity, "Member");
 		assertEquals(false, check, "checkEntityOrNot_메소드_테스트_Proxy체크_테스트 실패");
 	}
 }
