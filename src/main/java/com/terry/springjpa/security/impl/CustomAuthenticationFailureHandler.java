@@ -30,7 +30,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 	public CustomAuthenticationFailureHandler(){
 		this.loginidname = "j_username";
 		this.loginpasswdname = "j_password";
-		this.exceptionmsgname = "securityexceptionmsg";
+		this.exceptionmsgname = "securityexceptionmessage";
 		this.defaultFailureUrl = "/login.do";
 		this.ajaxHeaderKey = "X-Ajax-Call";
 	}

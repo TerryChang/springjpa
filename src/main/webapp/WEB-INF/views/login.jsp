@@ -133,12 +133,12 @@
 			</div>
 		</div>
 		
-		<c:if test="${not empty securityexceptionmsg}">
+		<c:if test="${not empty securityexceptionmessage}">
 		<div class="form-group">
 			<div class="col-xs-12 col-lg-12">
 				<font color="red">
 				로그인이 실패했습니다. 다시 시도해주세요<br/>
-				${securityexceptionmsg}
+				${securityexceptionmessage}
 				</font>
 			</div>
 		</div>

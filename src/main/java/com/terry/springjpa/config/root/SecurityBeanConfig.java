@@ -127,7 +127,7 @@ public class SecurityBeanConfig {
 	
 	@Bean
 	public CustomAuthenticationFailureHandler customAuthenticationFailureHandler(){
-		CustomAuthenticationFailureHandler cafh = new CustomAuthenticationFailureHandler("loginId", "loginPwd", "securityexceptionmsg", "/login.do", ajaxHeaderKey);
+		CustomAuthenticationFailureHandler cafh = new CustomAuthenticationFailureHandler("loginId", "loginPwd", "securityexceptionmessage", "/login.do", ajaxHeaderKey);
 		return cafh;
 	}
 	
