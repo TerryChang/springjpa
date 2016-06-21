@@ -24,13 +24,6 @@ create memory table unitedboard(
 	, insertdt timestamp not null
 	, updatedt timestamp
 );
-create memory table unitedboard_comment(
-	idx bigint primary key
-	, unitedboard_idx bigint not null
-	, member_idx bigint not null
-	, comment clob not null
-	, insertdt timestamp not null
-);
 
 create memory table authority (
   idx 				bigint 			primary key,
@@ -64,8 +57,8 @@ create memory table groups_authority (
 create memory table secured_resources (
   idx        			bigint      	primary key, 
   resource_name     	varchar(50)     not null, 
-  resource_pattern  	varchar(100)    not null,		-- ANT 패턴, REGEX 패턴, 메소드 이름
-  resource_match_type	varchar(100)    null,			-- ANT, REGEX(정규식)
+  resource_pattern  	varchar(255)    not null,		-- ANT 패턴, REGEX 패턴, 메소드 이름
+  resource_match_type	varchar(5)    	not null,		-- ANT, REGEX(정규식)
   sort_order        	int				not null		-- 정규표현식이 ANT 식보다 더 우선순위에 오게끔 한다(일치되는 타입은 그냥 정규표현식으로 할것)
 );
 
@@ -83,8 +76,6 @@ create memory table authority_hierarchy (
 
 alter table unitedboard add foreign key(boardtype_idx) references boardtype(idx);
 alter table unitedboard add foreign key(member_idx) references member(idx);
-alter table unitedboard_comment add foreign key(unitedboard_idx) references unitedboard(idx);
-alter table unitedboard_comment add foreign key(member_idx) references member(idx);
 alter table member_authority add foreign key(member_idx) references member(idx);
 alter table member_authority add foreign key(authority_idx) references authority(idx);
 alter table member_groups add foreign key(member_idx) references member(idx);
@@ -99,7 +90,6 @@ alter table authority_hierarchy add foreign key(child_authority_idx) references 
 create sequence boardtype_sequence start with 1 increment by 1;
 create sequence member_sequence start with 1 increment by 1;
 create sequence unitedboard_sequence start with 1 increment by 1;
-create sequence unitedboard_comment_sequence start with 1 increment by 1;
 create sequence authority_sequence start with 1 increment by 1;
 create sequence groups_sequence start with 1 increment by 1;
 create sequence secured_resources_sequence start with 1 increment by 1;
