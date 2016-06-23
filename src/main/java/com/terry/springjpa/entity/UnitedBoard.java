@@ -1,5 +1,7 @@
 package com.terry.springjpa.entity;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -22,11 +24,9 @@ import com.terry.springjpa.entity.embed.InsertUpdateDT;
 @Entity
 @Table(name="UNITEDBOARD")
 @SequenceGenerator(name="UnitedBoardSequenceGenerator", sequenceName="UNITEDBOARD_SEQUENCE", initialValue=1, allocationSize=1)
+@Access(AccessType.FIELD)
 public class UnitedBoard extends Board {
 
-	@Id
-	@Column(name="IDX")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="UnitedBoardSequenceGenerator")
 	private Long idx;
 	
 	@ManyToOne(fetch=FetchType.LAZY, optional=false)
@@ -41,6 +41,10 @@ public class UnitedBoard extends Board {
 	@Embedded
 	private InsertUpdateDT insertUpdateDT;
 
+	@Id
+	@Column(name="IDX")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="UnitedBoardSequenceGenerator")
+	@Access(AccessType.PROPERTY)
 	public Long getIdx() {
 		return idx;
 	}

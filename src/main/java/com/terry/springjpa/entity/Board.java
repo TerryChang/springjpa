@@ -1,5 +1,7 @@
 package com.terry.springjpa.entity;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Lob;
 import javax.persistence.MappedSuperclass;
@@ -10,8 +12,6 @@ public class Board {
 	@Column(name="TITLE")
 	private String title;
 	
-	@Column(name="CONTENTS")
-	@Lob
 	private String contents;
 	
 	@Column(name="VIEWCNT")
@@ -25,6 +25,15 @@ public class Board {
 		this.title = title;
 	}
 
+	/**
+	 * @MappedSuperclass 어노테이션을 이용해서 이 클래스를 상속받는 클래스에 매핑정보만 제공할 경우
+	 * CLOB 타입의 컬럼을 매핑할땐 JPA가 엔티티 데이터에 접근하는 방식을 설정하는 @Access 어노테이션을 프로퍼티 접근만 사용할 수 있는것 같다
+	 * 필드 접근이 되지를 않아서 이 부분을 프로퍼티 접근으로 설정하는 것으로 바꾸었다.
+	 * @return
+	 */
+	@Column(name="CONTENTS")
+	@Lob
+	@Access(AccessType.PROPERTY)
 	public String getContents() {
 		return contents;
 	}

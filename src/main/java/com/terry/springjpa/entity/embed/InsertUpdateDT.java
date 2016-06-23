@@ -72,6 +72,4 @@ public class InsertUpdateDT {
 			return false;
 		return true;
 	}
-	
-	
 }
