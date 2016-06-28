@@ -6,8 +6,6 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.terry.springjpa.common.annotation.ExistCheck;
-
 public class UnitedBoardVO {
 
 	private Long idx;
@@ -191,6 +189,4 @@ public class UnitedBoardVO {
 			return false;
 		return true;
 	}
-	
-	
 }

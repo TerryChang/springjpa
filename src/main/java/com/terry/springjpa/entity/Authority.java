@@ -34,7 +34,7 @@ public class Authority {
 	private List<GroupsAuthority> authorityGroups;
 	
 	@OneToMany(mappedBy="authority")
-	private List<SecuredResourcesAuthority> securedResourcesAuthorityList;
+	private List<SecuredResourcesAuthority> securedResourcesAuthorities;
 	
 	public Authority(){
 		
@@ -90,12 +90,12 @@ public class Authority {
 		this.authorityGroups = authorityGroups;
 	}
 
-	public List<SecuredResourcesAuthority> getSecuredResourcesAuthorityList() {
-		return securedResourcesAuthorityList;
+	public List<SecuredResourcesAuthority> getSecuredResourcesAuthorities() {
+		return securedResourcesAuthorities;
 	}
 
-	public void setSecuredResourcesAuthorityList(List<SecuredResourcesAuthority> securedResourcesAuthorityList) {
-		this.securedResourcesAuthorityList = securedResourcesAuthorityList;
+	public void setSecuredResourcesAuthorities(List<SecuredResourcesAuthority> securedResourcesAuthorities) {
+		this.securedResourcesAuthorities = securedResourcesAuthorities;
 	}
 
 	@Override
@@ -146,7 +146,4 @@ public class Authority {
 			return false;
 		return true;
 	}
-
-	
-	
 }
