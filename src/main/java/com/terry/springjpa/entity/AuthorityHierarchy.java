@@ -8,20 +8,20 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.terry.springjpa.entity.idclass.ParentChildAuthorityId;
+import com.terry.springjpa.entity.idclass.AuthorityHierarchyId;
 
 @Entity
 @Table(name="AUTHORITY_HIERARCHY")
-@IdClass(ParentChildAuthorityId.class)
+@IdClass(AuthorityHierarchyId.class)
 public class AuthorityHierarchy {
 
 	@Id
-	@ManyToOne(fetch=FetchType.LAZY, optional=false)
+	@ManyToOne
 	@JoinColumn(name="PARENT_AUTHORITY_IDX", nullable=false)
 	private Authority parentAuthority;
 	
 	@Id
-	@ManyToOne(fetch=FetchType.LAZY, optional=false)
+	@ManyToOne
 	@JoinColumn(name="CHILD_AUTHORITY_IDX", nullable=false)
 	private Authority childAuthority;
 	
@@ -80,6 +80,4 @@ public class AuthorityHierarchy {
 			return false;
 		return true;
 	}
-	
-	
 }

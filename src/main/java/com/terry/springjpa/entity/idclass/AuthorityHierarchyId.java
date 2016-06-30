@@ -4,12 +4,21 @@ import java.io.Serializable;
 
 import com.terry.springjpa.entity.Authority;
 
-public class ParentChildAuthorityId implements Serializable{
-
+public class AuthorityHierarchyId implements Serializable {
+	
 	private static final long serialVersionUID = -2690084632230206775L;
 
 	private Authority parentAuthority;
 	private Authority childAuthority;
+	
+	public AuthorityHierarchyId(){
+		
+	}
+	
+	public AuthorityHierarchyId(Authority parentAuthority, Authority childAuthority){
+		this.parentAuthority = parentAuthority;
+		this.childAuthority = childAuthority;
+	}
 	
 	public Authority getParentAuthority() {
 		return parentAuthority;
@@ -39,9 +48,9 @@ public class ParentChildAuthorityId implements Serializable{
 			return true;
 		if (obj == null)
 			return false;
-		if (!(obj instanceof ParentChildAuthorityId))
+		if (!(obj instanceof AuthorityHierarchyId))
 			return false;
-		ParentChildAuthorityId other = (ParentChildAuthorityId) obj;
+		AuthorityHierarchyId other = (AuthorityHierarchyId) obj;
 		if (childAuthority == null) {
 			if (other.getChildAuthority() != null)
 				return false;

@@ -12,6 +12,15 @@ public class SecuredResourcesAuthorityId implements Serializable {
 	private SecuredResources securedResources;
 	private Authority authority;
 	
+	public SecuredResourcesAuthorityId(){
+		
+	}
+	
+	public SecuredResourcesAuthorityId(SecuredResources securedResources, Authority authority){
+		this.securedResources = securedResources;
+		this.authority = authority;
+	}
+	
 	public SecuredResources getSecuredResources() {
 		return securedResources;
 	}

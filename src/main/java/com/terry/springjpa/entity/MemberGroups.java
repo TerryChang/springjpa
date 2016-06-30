@@ -79,6 +79,4 @@ public class MemberGroups {
 			return false;
 		return true;
 	}
-	
-	
 }

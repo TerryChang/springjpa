@@ -16,12 +16,12 @@ import com.terry.springjpa.entity.idclass.SecuredResourcesAuthorityId;
 public class SecuredResourcesAuthority {
 	
 	@Id
-	@ManyToOne(fetch=FetchType.LAZY, optional=false)
+	@ManyToOne
 	@JoinColumn(name="RESOURCES_IDX", nullable=false)
 	private SecuredResources securedResources;
 	
 	@Id
-	@ManyToOne(fetch=FetchType.LAZY, optional=false)
+	@ManyToOne
 	@JoinColumn(name="AUTHORITY_IDX", nullable=false)
 	private Authority authority;
 
@@ -65,7 +65,7 @@ public class SecuredResourcesAuthority {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof SecuredResourcesAuthority))
 			return false;
 		SecuredResourcesAuthority other = (SecuredResourcesAuthority) obj;
 		if (authority == null) {

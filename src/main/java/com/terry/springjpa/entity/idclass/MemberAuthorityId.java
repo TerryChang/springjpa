@@ -52,7 +52,7 @@ public class MemberAuthorityId implements Serializable {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof MemberAuthorityId))
 			return false;
 		MemberAuthorityId other = (MemberAuthorityId) obj;
 		if (authority == null) {

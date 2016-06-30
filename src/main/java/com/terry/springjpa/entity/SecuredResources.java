@@ -34,7 +34,7 @@ public class SecuredResources {
 	private int sortOrder;
 	
 	@OneToMany(mappedBy="securedResources")
-	private List<SecuredResourcesAuthority> securedResourcesAuthorityList;
+	private List<SecuredResourcesAuthority> securedResourcesAuthorities;
 	
 	public SecuredResources(){
 		
@@ -92,12 +92,12 @@ public class SecuredResources {
 		this.sortOrder = sortOrder;
 	}
 
-	public List<SecuredResourcesAuthority> getSecuredResourcesAuthorityList() {
-		return securedResourcesAuthorityList;
+	public List<SecuredResourcesAuthority> getSecuredResourcesAuthorities() {
+		return securedResourcesAuthorities;
 	}
 
-	public void setSecuredResourcesAuthorityList(List<SecuredResourcesAuthority> securedResourcesAuthorityList) {
-		this.securedResourcesAuthorityList = securedResourcesAuthorityList;
+	public void setSecuredResourcesAuthorities(List<SecuredResourcesAuthority> securedResourcesAuthorities) {
+		this.securedResourcesAuthorities = securedResourcesAuthorities;
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class SecuredResources {
 		result = prime * result + ((resourceName == null) ? 0 : resourceName.hashCode());
 		result = prime * result + ((resourcePattern == null) ? 0 : resourcePattern.hashCode());
 		result = prime * result
-				+ ((securedResourcesAuthorityList == null) ? 0 : securedResourcesAuthorityList.hashCode());
+				+ ((securedResourcesAuthorities == null) ? 0 : securedResourcesAuthorities.hashCode());
 		result = prime * result + sortOrder;
 		return result;
 	}
@@ -143,16 +143,13 @@ public class SecuredResources {
 				return false;
 		} else if (!resourcePattern.equals(other.getResourcePattern()))
 			return false;
-		if (securedResourcesAuthorityList == null) {
-			if (other.getSecuredResourcesAuthorityList() != null)
+		if (securedResourcesAuthorities == null) {
+			if (other.getSecuredResourcesAuthorities() != null)
 				return false;
-		} else if (!securedResourcesAuthorityList.equals(other.getSecuredResourcesAuthorityList()))
+		} else if (!securedResourcesAuthorities.equals(other.getSecuredResourcesAuthorities()))
 			return false;
 		if (sortOrder != other.getSortOrder())
 			return false;
 		return true;
 	}
-
-	
-	
 }

@@ -16,12 +16,12 @@ public class MemberAuthority {
 
 	@Id
 	@ManyToOne
-	@JoinColumn(name="MEMBER_IDX")
+	@JoinColumn(name="MEMBER_IDX", nullable=false)
 	private Member member;
 	
 	@Id
 	@ManyToOne
-	@JoinColumn(name="AUTHORITY_IDX")
+	@JoinColumn(name="AUTHORITY_IDX", nullable=false)
 	private Authority authority;
 	
 	public MemberAuthority(){

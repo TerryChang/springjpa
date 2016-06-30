@@ -16,12 +16,12 @@ public class GroupsAuthority {
 
 	@Id
 	@ManyToOne
-	@JoinColumn(name="GROUPS_IDX")
+	@JoinColumn(name="GROUPS_IDX", nullable=false)
 	private Groups groups;
 	
 	@Id
 	@ManyToOne
-	@JoinColumn(name="AUTHORITY_IDX")
+	@JoinColumn(name="AUTHORITY_IDX", nullable=false)
 	private Authority authority;
 	
 	public GroupsAuthority(){
@@ -79,6 +79,4 @@ public class GroupsAuthority {
 			return false;
 		return true;
 	}
-	
-	
 }

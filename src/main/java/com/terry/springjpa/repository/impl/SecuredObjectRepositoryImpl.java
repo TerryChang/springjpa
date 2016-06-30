@@ -57,10 +57,10 @@ public class SecuredObjectRepositoryImpl extends QueryDslRepositorySupport {
 		
 		List<Tuple> tupleResult = from(securedResources)
 										.orderBy(securedResources.sortOrder.asc(), securedResources.resourcePattern.asc())
-										.list(securedResources.resourcePattern, securedResources.resourceMatchType, securedResources.securedResourcesAuthorityList.any().authority.authorityName);
+										.list(securedResources.resourcePattern, securedResources.resourceMatchType, securedResources.securedResourcesAuthorities.any().authority.authorityName);
 		
 		List<Map<String, Object>> result = convertTupleToMap(tupleResult
-														, new Expression[]{securedResources.resourcePattern, securedResources.resourceMatchType, securedResources.securedResourcesAuthorityList.any().authority.authorityName}
+														, new Expression[]{securedResources.resourcePattern, securedResources.resourceMatchType, securedResources.securedResourcesAuthorities.any().authority.authorityName}
 														, new String[]{"pattern", "matchtype", "authority"});
 		
 		

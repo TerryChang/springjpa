@@ -52,7 +52,7 @@ public class MemberGroupsId implements Serializable {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof MemberGroupsId))
 			return false;
 		MemberGroupsId other = (MemberGroupsId) obj;
 		if (groups == null) {
@@ -67,6 +67,4 @@ public class MemberGroupsId implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
 }
