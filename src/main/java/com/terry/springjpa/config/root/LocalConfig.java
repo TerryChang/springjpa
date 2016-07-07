@@ -29,17 +29,7 @@ import net.sf.log4jdbc.sql.jdbcapi.DataSourceSpy;
 @PropertySource(value={"classpath:/com/terry/springjpa/resources/local/properties/root/environment.properties"})
 public class LocalConfig {
 
-private Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	/*
-	config.setDataSourceClassName("org.h2.jdbcx.JdbcDataSource");
-        config.setConnectionTestQuery("SELECT NOW()");
-        config.addDataSourceProperty("URL", "jdbc:h2:~/someDatabase;MODE=MySQL");
-        config.addDataSourceProperty("user", "someUser");
-        config.addDataSourceProperty("password", "somePassword");
-	 */
-
-
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	/**
 	 * 개발용 DataSource

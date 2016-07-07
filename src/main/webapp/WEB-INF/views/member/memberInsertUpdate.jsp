@@ -10,6 +10,7 @@
 	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Expires" content="0" />
+	<sec:csrfMetaTags /><!-- Spring Security Meta Tag 추가 -->
 	<!-- 부트스트랩 -->
 	<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<style>
@@ -20,6 +21,11 @@
 	<script src="/js/jquery-1.11.2.min.js"></script>
 	<script src="/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
+	
+	var csrfParameter = $("meta[name='_csrf_parameter']").attr("content");
+	var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+	var csrfToken = $("meta[name='_csrf']").attr("content");
+	
 	$(document).ready(function(){
 		var checkLoginId = false;
 		
@@ -43,8 +49,14 @@
 		
 		$("#btnDelete").click(function(){
 			var idx = $("#idx").val();
+			
+			var headers = {};
+			headers["X-Ajax-Call"] = "true";
+			headers[csrfHeader] = csrfToken;
+			
 			$.ajax({
 	        	url : "/member/memberDelete.do",
+	        	headers : headers,
 	        	type : "POST",
 	        	// data : JSON.stringify({"idx" : idx}),
 	        	data : {"idx" : idx},
@@ -88,8 +100,13 @@
 		$("#existchkbtn").click(function(){
 			var loginId = $("#loginId").val();
 			
+			var headers = {};
+			headers["X-Ajax-Call"] = "true";
+			headers[csrfHeader] = csrfToken;
+			
 			$.ajax({
 	        	url : "/member/checkLoginId.do",
+	        	headers : headers,
 	        	type : "POST",
 	        	data : {"loginId" : loginId},
 	        	// contentType: "application/json",	// contentType으로 지정하면 Request Body로 전달되기 때문에 Spring에서 받을때 다르게 접근해야 한다
@@ -166,6 +183,10 @@
 		var name = $("#name").val();
 		var email = $("#email").val();
 		
+		var headers = {};
+		headers["X-Ajax-Call"] = "true";
+		headers[csrfHeader] = csrfToken;
+		
 		var sendData = null;
 		if(blInsert){
 			sendData = JSON.stringify({"loginId" : loginId, "password" : password, "name" : name, "email" : email});
@@ -176,6 +197,7 @@
 		
 		$.ajax({
         	url : "/member/memberInsertUpdate.do",
+        	headers : headers,
         	type : "POST",
         	// data : JSON.stringify({"idx" : idx, "boardTypeName" : boardTypeName, "url" : url}),
         	data : sendData,
