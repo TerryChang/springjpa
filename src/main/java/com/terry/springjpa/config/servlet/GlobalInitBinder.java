@@ -12,7 +12,6 @@ public class GlobalInitBinder {
 	
 	@InitBinder
 	public void binder(WebDataBinder binder) {
-		// binder.registerCustomEditor(MultipartFile.class, new MultipartFilePropertyEditor());
 		
 	}
 }
