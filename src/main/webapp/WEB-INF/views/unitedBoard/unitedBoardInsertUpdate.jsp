@@ -19,6 +19,7 @@
 	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Expires" content="0" />
+	<sec:csrfMetaTags /><!-- Spring Security Meta Tag 추가 -->
 	<!-- 부트스트랩 -->
 	<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<style>
@@ -29,7 +30,12 @@
 	<script src="/js/jquery-1.11.2.min.js"></script>
 	<script src="/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
+	var csrfParameter = $("meta[name='_csrf_parameter']").attr("content");
+	var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+	var csrfToken = $("meta[name='_csrf']").attr("content");
+	
 	$(document).ready(function(){
+		
 		var checkLoginId = false;
 		
 		// ajax 작업시 캐쉬를 사용하지 않도록 한다
@@ -51,9 +57,14 @@
 		});
 		
 		$("#btnDelete").click(function(){
+			var headers = {};
+			headers["X-Ajax-Call"] = "true";
+			headers[csrfHeader] = csrfToken;
+			
 			var idx = $("#idx").val();
 			$.ajax({
 	        	url : "/unitedBoard/unitedBoardDelete.do",
+	        	headers : headers,
 	        	type : "POST",
 	        	// data : JSON.stringify({"idx" : idx}),
 	        	data : {"idx" : idx},
@@ -100,6 +111,9 @@
 	});
 	
 	function processjob(blInsert){
+		var headers = {};
+		headers["X-Ajax-Call"] = "true";
+		headers[csrfHeader] = csrfToken;
 		
 		var boardTypeIdx = $("#boardTypeIdx").val();
 		var memberIdx = $("#memberIdx").val();
@@ -116,6 +130,7 @@
 		
 		$.ajax({
         	url : "/unitedBoard/unitedBoardInsertUpdate.do",
+        	headers : headers,
         	type : "POST",
         	// data : JSON.stringify({"idx" : idx, "boardTypeName" : boardTypeName, "url" : url}),
         	data : sendData,
