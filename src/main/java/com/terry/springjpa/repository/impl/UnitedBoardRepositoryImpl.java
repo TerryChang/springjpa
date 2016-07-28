@@ -57,7 +57,6 @@ public class UnitedBoardRepositoryImpl extends QueryDslRepositorySupport impleme
 				query = query.where((unitedBoard.member.loginId.eq(searchWrd)).or(unitedBoard.title.contains(searchWrd)).or(unitedBoard.contents.contains(searchWrd)));
 			}else if(searchCnd.equals("loginId")){			// 아이디 검색
 				query = query.where(unitedBoard.member.loginId.eq(searchWrd));
-				// query = query.where(unitedBoard.member.idx.eq(1L));
 			}else if(searchCnd.equals("title")){			// 제목 검색
 				query = query.where(unitedBoard.title.contains(searchWrd));
 			}else if(searchCnd.equals("contents")){			// 내용 검색
@@ -82,10 +81,14 @@ public class UnitedBoardRepositoryImpl extends QueryDslRepositorySupport impleme
 	 * 게시물 조회수를 1 증가시키는 메소드이다.
 	 * Mybatis를 사용하기 때문에 @FirstEntityManagerFlush 어노테이션을 붙여서 이 메소드를 호출하기 전에 영속성 컨켁스트에 작업했던것을 DB에 반영하도록 했다
 	 * 고민한 것은 Mybatis를 이용한 Update이다 보니 영속성 컨텍스트를 거치지 않고 DB를 직접 억세스 하는 작업이어서..
-	 * 이렇게 작업할 경우 영속성 컨텍스트에 이 Update 작업이 반영이 안된 상태가 된다.
-	 * 이로 인해 원래는 이 메소드를 호출한 뒤에 EntityManager의 clear 메소드를 이용해서 초기화를 시켜야 하지만 이렇게 할 경우 뒤에 이어서 영속성 컨텍스트를 이용해서 작업하는 것에 대해서는..
-	 * 기존에 영속성 컨텍스트가 가지고 있던 엔티티 및 이와 연관된 작업들이 모두 날라간 뒤에 다시 작업을 하게 되어서 문제의 소지가 있다
-	 * 그래서 영속성 컨텍스트 초기화에 대해선 이 메소드를 호출한 쪽에서 초기화를 제어해주는 것이 나을것 같아서 @FirstEntityManagerFlush 같은 별도의 AOP 작업을 설정하는 것은 없게끔 했다
+	 * 이렇게 작업할 경우 Mybatis를 사용한 Update 한 작업이 영속성 컨텍스트에서는 본인이 직접 반영시켜주지 않는 한에는 자동으로 반영이 되질 않는다.
+	 * 이러한 문제 땜에 Mybatis를 사용한 Update 작업(이 작업은 내부적으로 Update 작업이 들어가기 전에 EntityManager 의 flush 메소드를 호출하여 DB 작업을 Mybatis가 하기 전에 
+	 * 영속성 컨텍스트의 작업 내용을 DB에 반영시켜 동기화를 맞춰준다)을 한 뒤에..
+	 * 영속성 컨텍스트를 초기화(EntityManager 의 clear 메소드)작업을 거쳐 해당 엔티티에 대한 작업을 다시 하고자 할때 다시 DB에서 조회하게끔 하는 것이 맞지만..
+	 * 영속성 컨텍스트 초기화까지 AOP에다가 반영할 경우 초기화가 빈번하게 발생할 소지가 있다.
+	 * 그리고 Mybatis 작업을 한 뒤에 영속성 컨텍스트에 대한 그 어떤 작업을 할 일이 없다면 초기화 작업을 할 필요도 없다.
+	 * 그래서 영속성 컨텍스트의 초기화는 AOP에서 하지 않고 이 메소드를 호출한 쪽에서 초기화를 제어해주는 것이 나을것 같아서 
+	 * @FirstEntityManagerFlush 같은 별도의 AOP 작업에서 EntityManager 클래스의 clear 메소드를 호출하지는 않는것으로 없게끔 했다
 	 */
 	@FirstEntityManagerFlush
 	@Override
@@ -93,6 +96,4 @@ public class UnitedBoardRepositoryImpl extends QueryDslRepositorySupport impleme
 		// TODO Auto-generated method stub
 		sqlSession.update("unitedBoard.updateViewCnt", idx);
 	}
-
-	
 }
