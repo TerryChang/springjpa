@@ -88,7 +88,7 @@ public class UnitedBoardRepositoryImpl extends QueryDslRepositorySupport impleme
 	 * 영속성 컨텍스트 초기화까지 AOP에다가 반영할 경우 초기화가 빈번하게 발생할 소지가 있다.
 	 * 그리고 Mybatis 작업을 한 뒤에 영속성 컨텍스트에 대한 그 어떤 작업을 할 일이 없다면 초기화 작업을 할 필요도 없다.
 	 * 그래서 영속성 컨텍스트의 초기화는 AOP에서 하지 않고 이 메소드를 호출한 쪽에서 초기화를 제어해주는 것이 나을것 같아서 
-	 * @FirstEntityManagerFlush 같은 별도의 AOP 작업에서 EntityManager 클래스의 clear 메소드를 호출하지는 않는것으로 없게끔 했다
+	 * @FirstEntityManagerFlush 같은 별도의 AOP 작업에서 EntityManager 클래스의 clear 메소드를 호출하지는 않는것으로 방향을 잡았다
 	 */
 	@FirstEntityManagerFlush
 	@Override
